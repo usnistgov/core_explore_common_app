@@ -1,0 +1,8 @@
+<!-- Iterate through list of explore apps declared in the settings -->
+{% for app in DATA_SOURCES_EXPLORE_APPS %}
+    <!-- get path to the data sources list template of the app -->
+    {% with app|add:"/user/data_sources/list.html" as list_template %}
+        <!-- include data sources list template -->
+        {% include list_template %}
+    {% endwith %}
+{% endfor %}
