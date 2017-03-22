@@ -1,0 +1,10 @@
+{% for data_source in query.data_sources %}
+
+<div class="results-container" url="{% url 'core_explore_common_data_source_results' query.id forloop.counter0 %}">
+    <b>From {{ data_source.name }}</b>
+    <div class="results-page">
+    </div>
+</div>
+{% endfor %}
+
+<div id="query_id" style="display: none;">{{ query.id }}</div>

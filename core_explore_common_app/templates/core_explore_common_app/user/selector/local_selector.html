@@ -1,0 +1,22 @@
+{% extends "core_explore_common_app/user/selector/list_selector_base.html" %}
+{% load staticfiles %}
+
+
+{% block title%}{% if not default %}Local Results{% endif %}{% endblock %}
+
+{% block data_sources_list %}
+<div id="list-local-data-source-content">
+</div>
+{% endblock %}
+
+{% block raw_js %}
+<script type="application/javascript">
+    // can't be in raw file, initialisation here to be use in list.js
+    var getLocalDataSourceUrl = "{% url 'core_explore_common_get_local_data_source' %}";
+    var updateLocalDataSourceUrl = "{% url 'core_explore_common_update_local_data_source' %}";
+</script>
+{% endblock %}
+
+{% block app_js %}
+<script src="{% static 'core_explore_common_app/user/js/local_selector.js' %}"></script>
+{% endblock %}

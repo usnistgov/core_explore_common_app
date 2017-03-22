@@ -1,0 +1,1 @@
+var getDataSourcesHTMLUrl = "{% url 'core_explore_common_data_sources_html' %}";

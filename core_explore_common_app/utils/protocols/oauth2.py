@@ -7,6 +7,39 @@ HEADER = {'content-type': 'application/x-www-form-urlencoded'}
 TOKEN_SUFFIX = "/o/token/"
 
 
+def send_get_request(url, access_token):
+    """Sends a GET request to an Oauth2 endpoint
+
+    Args:
+        url:
+        access_token:
+
+    Returns:
+
+    """
+    # Builds header
+    headers = {'Authorization': 'Bearer ' + access_token}
+    # post request
+    return requests.get(url, headers=headers)
+
+
+def send_post_request(url, data, access_token):
+    """Sends a POST request to an Oauth2 endpoint
+
+    Args:
+        url:
+        data:
+        access_token:
+
+    Returns:
+
+    """
+    # Builds header
+    headers = {'Authorization': 'Bearer ' + access_token}
+    # post request
+    return requests.post(url, data=data, headers=headers)
+
+
 def post_request_token(url, client_id, client_secret, timeout, username, password):
     """ Request token
 

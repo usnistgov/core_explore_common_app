@@ -1,0 +1,11 @@
+{% load staticfiles %}
+
+<b>{% block title %}{% endblock %}</b>
+
+{% block data_sources_list %}{% endblock %}
+
+{% block raw_js %}{% endblock %}
+
+<script src="{% static 'core_explore_common_app/common/js/tools.js' %}"></script>
+{% block app_js %}
+{% endblock %}
