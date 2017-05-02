@@ -153,7 +153,7 @@ def get_data_source_results(request, query_id, data_source_index, page=1):
         # render html
         results_html = html_template.render(context)
         # set response with html results
-        response_dict = {'results': results_html}
+        response_dict = {'results': results_html, 'nb_results': len(results_list)}
         return HttpResponse(json.dumps(response_dict), content_type='application/json')
     except Exception, e:
         return HttpResponseBadRequest(e.message)

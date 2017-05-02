@@ -57,6 +57,8 @@ var get_data_source_results = function(result_page, data_source_url){
         url: data_source_url,
         type : "GET",
         success: function(data){
+            var nb_results_id = result_page.attr('nb_results_id');
+            $("#" + nb_results_id).html(data.nb_results);
             result_page.html(data.results);
         },
         error: function(data){
