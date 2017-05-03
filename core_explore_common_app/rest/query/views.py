@@ -8,6 +8,7 @@ from core_main_app.components.data.api import execute_query
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
+from core_explore_common_app.utils.result import result as result_utils
 import json
 
 
@@ -48,10 +49,18 @@ def execute_local_query(request):
 
             # Build list of results
             results = []
+            # Template info
+            template_info = dict()
             for data in data_list:
+                # get data's template
+                template = data.template
+                # get and store data's template information
+                if template not in template_info:
+                    template_info[template] = result_utils.get_template_info(template)
+
                 results.append(Result(title=data.title,
                                       xml_content=data.xml_file,
-                                      origin=data.template.filename,
+                                      template_info=template_info[template],
                                       detail_url="{0}?id={1}".format(detail_url_base, str(data.id))
                                       )
                                )

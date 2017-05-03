@@ -1,6 +1,14 @@
 """Result models
 """
-from django_mongoengine import fields, Document
+from django_mongoengine import fields, Document, EmbeddedDocument
+
+
+class TemplateInfo(EmbeddedDocument):
+    """Template information class
+    """
+    id = fields.StringField(blank=True)
+    name = fields.StringField(blank=False)
+    hash = fields.StringField(blank=False)
 
 
 class Result(Document):
@@ -8,5 +16,5 @@ class Result(Document):
     """
     title = fields.StringField(blank=False)
     xml_content = fields.StringField(blank=False)
-    origin = fields.StringField(blank=True)
+    template_info = fields.EmbeddedDocumentField(TemplateInfo)
     detail_url = fields.StringField(blank=True)

@@ -1,0 +1,14 @@
+<div name="result">
+    <span class="expand" style='cursor:pointer;' onclick="showhideResult(event);"></span>
+    <span style='font-weight:bold;'>
+        {% if result.detail_url %}
+        <a href="{{ result.detail_url }}">{{ result.title }}</a>
+        {% else %}
+        {{ result.title }}
+        {% endif %}
+    </span>
+    <span style='color:grey;'>{{result.template_info.name}}</span>
+    <div class='xmlResult' readonly='true' style="display:none;">
+    {{ xml_representation }}
+    </div>
+</div>

@@ -1,50 +1,9 @@
 {% load xsl_transform_tag %}
 
 {% for result in results %}
-    <div name="result">
-        <span class="expand" style='cursor:pointer;' onclick="showhideResult(event);"></span>
-        <span style='font-weight:bold;'>
-            {% if result.detail_url %}
-            <a href="{{ result.detail_url }}">{{ result.title }}</a>
-            {% else %}
-            {{ result.title }}
-            {% endif %}
-        </span>
-        <span style='color:grey;'>{{result.origin}}</span>
-        <div class='xmlResult' readonly='true' style="display:none;">
-        {{ result.xml_content|xsl_transform|safe}}
-        </div>
-    </div>
+    {% include 'core_explore_common_app/user/results/data_source_info.html' with xml_representation=result.xml_content|xsl_transform|safe %}
 {% empty %}
 <span style="font-style:italic; color:red;"> No Results found... </span>
 {% endfor %}
 
-{% if results.has_other_pages %}
-<ul class="pagination">
-    {% if results.has_previous %}
-        <li>
-            <span onclick="getResultsPage(event)" url="{% url 'core_explore_common_data_source_results' query_id data_source_index results.previous_page_number %}">&laquo;</span>
-        </li>
-    {% else %}
-        <li class="disabled"><span>&laquo;</span></li>
-    {% endif %}
-    {% for i in results.paginator.page_range %}
-        {% if results.number == i %}
-            <li class="active">
-                <span>{{ i }} <span class="sr-only">(current)</span></span>
-            </li>
-        {% else %}
-            <li>
-                <span onclick="getResultsPage(event)" url="{% url 'core_explore_common_data_source_results' query_id data_source_index i %}">{{ i }}</span>
-            </li>
-        {% endif %}
-    {% endfor %}
-    {% if results.has_next %}
-        <li>
-            <span onclick="getResultsPage(event)" url="{% url 'core_explore_common_data_source_results' query_id data_source_index results.next_page_number %}">&raquo;</span>
-        </li>
-    {% else %}
-        <li class="disabled"><span>&raquo;</span></li>
-    {% endif %}
-</ul>
-{% endif %}
+{% include 'core_explore_common_app/user/results/data_source_pagination.html'%}
