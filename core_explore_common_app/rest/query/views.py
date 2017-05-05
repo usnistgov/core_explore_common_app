@@ -59,7 +59,7 @@ def execute_local_query(request):
                     template_info[template] = result_utils.get_template_info(template)
 
                 results.append(Result(title=data.title,
-                                      xml_content=data.xml_file,
+                                      xml_content=data.xml_content,
                                       template_info=template_info[template],
                                       detail_url="{0}?id={1}".format(detail_url_base, str(data.id))
                                       )
