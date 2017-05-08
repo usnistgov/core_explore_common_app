@@ -1,7 +1,8 @@
 {% load xsl_transform_tag %}
 
 {% for result in results %}
-    {% include 'core_explore_common_app/user/results/data_source_info.html' with xml_representation=result.xml_content|xsl_transform|safe %}
+    {% xsl_transform_list xml_content=result.xml_content template_id=result.template_info.id template_hash=result.template_info.hash as xml_representation%}
+    {% include 'core_explore_common_app/user/results/data_source_info.html' with xml_representation=xml_representation|safe %}
 {% empty %}
 <span style="font-style:italic; color:red;"> No Results found... </span>
 {% endfor %}
