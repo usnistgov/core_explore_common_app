@@ -18,3 +18,4 @@ class Result(Document):
     xml_content = fields.StringField(blank=False)
     template_info = fields.EmbeddedDocumentField(TemplateInfo)
     detail_url = fields.StringField(blank=True)
+    access_data_url = fields.StringField(blank=True)

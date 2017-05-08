@@ -7,10 +7,11 @@ from django.template.context import RequestContext
 from core_explore_common_app.components.query.models import Authentication, DataSource
 from core_explore_common_app.components.query import api as query_api
 from os.path import join
-import json
 from core_explore_common_app.settings import DATA_SOURCES_EXPLORE_APPS
 from core_explore_common_app.utils.query.query import send as send_query
 from core_explore_common_app.utils.pagination.results_paginator import ResultsPaginator
+from core_explore_common_app.settings import INSTALLED_APPS
+import json
 
 
 def get_local_data_source(request):
@@ -143,6 +144,7 @@ def get_data_source_results(request, query_id, data_source_index, page=1):
             'results': results,
             'query_id': query_id,
             'data_source_index': data_source_index,
+            'exporter_app': 'core_exporters_app' in INSTALLED_APPS
         }
 
         # create context

@@ -46,6 +46,7 @@ def execute_local_query(request):
             # FIXME: See if can use reverse to include data id, and avoid format
             # Get detail view base url (to be completed with data id)
             detail_url_base = reverse("core_main_app_data_detail")
+            url_access_data = reverse("core_explore_common_app_get_result_from_data_id")
 
             # Build list of results
             results = []
@@ -61,7 +62,8 @@ def execute_local_query(request):
                 results.append(Result(title=data.title,
                                       xml_content=data.xml_content,
                                       template_info=template_info[template],
-                                      detail_url="{0}?id={1}".format(detail_url_base, str(data.id))
+                                      detail_url="{0}?id={1}".format(detail_url_base, str(data.id)),
+                                      access_data_url="{0}?id={1}".format(url_access_data, str(data.id))
                                       )
                                )
             # Serialize results

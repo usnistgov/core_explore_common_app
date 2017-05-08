@@ -1,4 +1,7 @@
 <div name="result">
+    {% if exporter_app %}
+        <input type="checkbox" value="{{ result.access_data_url }}">
+    {% endif %}
     <span class="expand" style='cursor:pointer;' onclick="showhideResult(event);"></span>
     <span style='font-weight:bold;'>
         {% if result.detail_url %}
