@@ -1,13 +1,29 @@
 """Result serializers
 """
+from rest_framework_mongoengine.serializers import DocumentSerializer, EmbeddedDocumentSerializer
+from core_explore_common_app.components.result.models import Result, TemplateInfo
 
-from rest_framework_mongoengine.serializers import DocumentSerializer
-from core_explore_common_app.components.result.models import Result
+
+class TemplateInfoSerializer(EmbeddedDocumentSerializer):
+    """ Template info serializer
+    """
+    class Meta:
+        """ Meta
+        """
+        model = TemplateInfo
+        fields = "__all__"
+        extra_kwargs = {
+            'id': {
+                'allow_blank': True,
+            }
+        }
 
 
 class ResultSerializer(DocumentSerializer):
     """ Result serializer
     """
+    template_info = TemplateInfoSerializer(many=False)
+
     class Meta:
         """ Meta
         """

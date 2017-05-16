@@ -20,9 +20,12 @@ def get_template_info(template, include_template_id=True):
     version_manager = version_manager_api.get_from_version(template)
     version_number = version_manager_api.get_version_number(version_manager, template.id)
 
-    return {'id': template.id if include_template_id else '',
-            'name': "{0} (Version {1})".format(version_manager.title,version_number),
-            'hash': template.hash}
+    # Here the id need to be set anyway because is expected by the serializer
+    return_value = {'id': template.id if include_template_id else '',
+                    'name': "{0} (Version {1})".format(version_manager.title, version_number),
+                    'hash': template.hash}
+
+    return return_value
 
 
 def get_result_from_rest_data_response(response):
@@ -39,7 +42,8 @@ def get_result_from_rest_data_response(response):
     # Validate data (don't need all information of data, so don't need to throw an exception)
     data_serialized.is_valid()
     # Build a Result
-    result = Result(title=data_serialized.data['title'], xml_content=data_serialized.data['xml_content'])
+    result = Result(title=data_serialized.initial_data['title'],
+                    xml_content=data_serialized.initial_data['xml_content'])
     # Serialize results
     return_value = ResultSerializer(result)
     # Returns the response
