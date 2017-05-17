@@ -29,3 +29,14 @@ class ResultSerializer(DocumentSerializer):
         """
         model = Result
         fields = "__all__"
+
+
+class ResultBaseSerializer(DocumentSerializer):
+    """ Result Serializer
+    """
+
+    class Meta:
+        """ Meta
+        """
+        model = Result
+        fields = ('title', 'xml_content')

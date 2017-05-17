@@ -1,9 +1,8 @@
 """Explore Common result utils
 """
 from core_main_app.components.version_manager import api as version_manager_api
-from core_main_app.rest.data.serializers import DataSerializer
 from core_explore_common_app.components.result.models import Result
-from core_explore_common_app.rest.result.serializers import ResultSerializer
+from core_explore_common_app.rest.result.serializers import ResultSerializer, ResultBaseSerializer
 import json
 
 
@@ -37,13 +36,13 @@ def get_result_from_rest_data_response(response):
     Returns:
 
     """
-    # Data serialization
-    data_serialized = DataSerializer(data=json.loads(response.text))
-    # Validate data (don't need all information of data, so don't need to throw an exception)
-    data_serialized.is_valid()
+    # data serialization
+    result_serialized = ResultBaseSerializer(data=json.loads(response.text))
+    # Validate data
+    result_serialized.is_valid(True)
     # Build a Result
-    result = Result(title=data_serialized.initial_data['title'],
-                    xml_content=data_serialized.initial_data['xml_content'])
+    result = Result(title=result_serialized.data['title'],
+                    xml_content=result_serialized.data['xml_content'])
     # Serialize results
     return_value = ResultSerializer(result)
     # Returns the response
