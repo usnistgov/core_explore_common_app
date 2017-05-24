@@ -1,8 +1,8 @@
 {% load staticfiles %}
 
-<b>{% block title %}{% endblock %}</b>
+<div class="panel-heading">{% block title %}{% endblock %}</div>
 
-{% block data_sources_list %}{% endblock %}
+<div class="panel-body">{% block data_sources_list %}{% endblock %}</div>
 
 {% block raw_js %}{% endblock %}
 
