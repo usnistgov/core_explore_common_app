@@ -7,11 +7,12 @@ from django.template.context import RequestContext
 from core_explore_common_app.components.query.models import Authentication, DataSource
 from core_explore_common_app.components.query import api as query_api
 from os.path import join
-from core_explore_common_app.settings import DATA_SOURCES_EXPLORE_APPS
+from core_explore_common_app.settings import DATA_SOURCES_EXPLORE_APPS, RESULTS_PER_PAGE
+from core_explore_common_app.utils.pagination.rest_framework_paginator.rest_framework_paginator import get_page_number
 from core_explore_common_app.utils.query.query import send as send_query
-from core_explore_common_app.utils.pagination.results_paginator import ResultsPaginator
 from core_explore_common_app.settings import INSTALLED_APPS
 import json
+import math
 
 
 def get_local_data_source(request):
@@ -134,14 +135,15 @@ def get_data_source_results(request, query_id, data_source_index, page=1):
         query = query_api.get_by_id(query_id)
 
         # send query, and get results from data source
-        results_list = send_query(query, int(data_source_index))
-
-        # paginate results
-        results = ResultsPaginator.get_results(results_list, page)
-
+        results = send_query(query, int(data_source_index), page)
         # set results in context
         context_data = {
-            'results': results,
+            'page': int(page),
+            'page_range': range(1, int(math.ceil(float(results['count']) / RESULTS_PER_PAGE)) + 1),
+            'has_other_pages': results['count'] > RESULTS_PER_PAGE,
+            'previous': get_page_number(results['previous']),
+            'next': get_page_number(results['next']),
+            'results': results['results'],
             'query_id': query_id,
             'data_source_index': data_source_index,
             'exporter_app': 'core_exporters_app' in INSTALLED_APPS
@@ -155,7 +157,7 @@ def get_data_source_results(request, query_id, data_source_index, page=1):
         # render html
         results_html = html_template.render(context)
         # set response with html results
-        response_dict = {'results': results_html, 'nb_results': len(results_list)}
+        response_dict = {'results': results_html, 'nb_results': results['count']}
         return HttpResponse(json.dumps(response_dict), content_type='application/json')
     except Exception, e:
         return HttpResponseBadRequest(e.message)

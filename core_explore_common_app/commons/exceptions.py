@@ -22,3 +22,14 @@ class ExploreRequestError(Exception):
 
     def __str__(self):
         return repr(self.message)
+
+
+class PaginationError(Exception):
+    """
+        Exception raised when an error occurs during pagination
+    """
+    def __init__(self, message):
+        self.message = message
+
+    def __str__(self):
+        return repr(self.message)

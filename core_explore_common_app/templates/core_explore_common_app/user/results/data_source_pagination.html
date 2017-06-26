@@ -1,29 +1,29 @@
-{% if results.has_other_pages %}
-<ul class="pagination">
-    {% if results.has_previous %}
-        <li>
-            <span onclick="getResultsPage(event)" url="{% url 'core_explore_common_data_source_results' query_id data_source_index results.previous_page_number %}">&laquo;</span>
-        </li>
-    {% else %}
-        <li class="disabled"><span>&laquo;</span></li>
-    {% endif %}
-    {% for i in results.paginator.page_range %}
-        {% if results.number == i %}
-            <li class="active">
-                <span>{{ i }} <span class="sr-only">(current)</span></span>
+{% if has_other_pages %}
+    <ul class="pagination">
+        {% if previous %}
+            <li>
+                <span onclick="getResultsPage(event)" url="{% url 'core_explore_common_data_source_results' query_id data_source_index previous %}">&laquo;</span>
             </li>
         {% else %}
-            <li>
-                <span onclick="getResultsPage(event)" url="{% url 'core_explore_common_data_source_results' query_id data_source_index i %}">{{ i }}</span>
-            </li>
+            <li class="disabled"><span>&laquo;</span></li>
         {% endif %}
-    {% endfor %}
-    {% if results.has_next %}
-        <li>
-            <span onclick="getResultsPage(event)" url="{% url 'core_explore_common_data_source_results' query_id data_source_index results.next_page_number %}">&raquo;</span>
-        </li>
-    {% else %}
-        <li class="disabled"><span>&raquo;</span></li>
-    {% endif %}
-</ul>
+        {% for i in page_range %}
+            {% if page == i %}
+                <li class="active">
+                    <span>{{ i }} <span class="sr-only">(current)</span></span>
+                </li>
+            {% else %}
+                <li>
+                    <span onclick="getResultsPage(event)" url="{% url 'core_explore_common_data_source_results' query_id data_source_index i %}">{{ i }}</span>
+                </li>
+            {% endif %}
+        {% endfor %}
+        {% if next %}
+            <li>
+                <span onclick="getResultsPage(event)" url="{% url 'core_explore_common_data_source_results' query_id data_source_index next %}">&raquo;</span>
+            </li>
+        {% else %}
+            <li class="disabled"><span>&raquo;</span></li>
+        {% endif %}
+    </ul>
 {% endif %}

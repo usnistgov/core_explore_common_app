@@ -1,14 +1,17 @@
 """ REST views for the query API
 """
-from django.core.urlresolvers import reverse
-from core_explore_common_app.components.result.models import Result
 from core_explore_common_app.rest.result.serializers import ResultSerializer
+from django.core.urlresolvers import reverse
+
+from core_explore_common_app.components.result.models import Result
+from core_explore_common_app.utils.pagination.rest_framework_paginator.pagination import StandardResultsSetPagination
 from core_explore_common_app.utils.query.mongo.query_builder import QueryBuilder
 from core_main_app.components.data.api import execute_query
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
 from core_explore_common_app.utils.result import result as result_utils
+
 import json
 
 
@@ -24,7 +27,7 @@ def execute_local_query(request):
     """
     try:
         # get query
-        query = request.POST.get('query', None)
+        query = request.data.get('query', None)
 
         if query is not None:
             # build query builder
@@ -42,6 +45,10 @@ def execute_local_query(request):
 
             # execute query
             data_list = execute_query(raw_query)
+            # get paginator
+            paginator = StandardResultsSetPagination()
+            # get requested page from list of results
+            page = paginator.paginate_queryset(data_list, request)
 
             # FIXME: See if can use reverse to include data id, and avoid format
             # Get detail view base url (to be completed with data id)
@@ -52,7 +59,7 @@ def execute_local_query(request):
             results = []
             # Template info
             template_info = dict()
-            for data in data_list:
+            for data in page:
                 # get data's template
                 template = data.template
                 # get and store data's template information
@@ -66,10 +73,11 @@ def execute_local_query(request):
                                       access_data_url="{0}?id={1}".format(url_access_data, str(data.id))
                                       )
                                )
-            # Serialize results
-            return_value = ResultSerializer(results, many=True)
 
-            return Response(return_value.data, status=status.HTTP_200_OK)
+            # serialize results
+            serialized_results = ResultSerializer(results, many=True)
+            # return http response
+            return paginator.get_paginated_response(serialized_results.data)
         else:
             content = {'message': 'Expected parameters not provided.'}
             return Response(content, status=status.HTTP_400_BAD_REQUEST)
