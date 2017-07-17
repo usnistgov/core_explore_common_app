@@ -1,2 +1,2 @@
-core-main-app==1.0.0-alpha2
+core-main-app==1.0.0-alpha3
 requests==2.3.0
