@@ -17,7 +17,8 @@ var initLocalProvider = function(){
         url: getLocalDataSourceUrl,
         type : "GET",
         data: {
-            query_id: query_id
+            query_id: query_id,
+            local_query_url: local_query_url,
         },
         success: function(data){
             // Display federated search's data sources
@@ -45,7 +46,8 @@ var updateLocalDataSource = function(){
         type : "GET",
         data: {
             'query_id': query_id,
-            'selected': selected
+            'selected': selected,
+            'local_query_url': local_query_url,
         },
         success: function(data){
             if(data.selected){

@@ -26,13 +26,14 @@ def get_local_data_source(request):
     """
     try:
         id_query = request.GET.get('query_id', None)
+        local_query_url = request.GET.get('local_query_url', None)
 
         if id_query is not None:
             # Get query from id
             query = query_api.get_by_id(id_query)
 
             local_name = "Local"
-            local_query_url = request.build_absolute_uri(reverse("core_explore_common_local_query"))
+            local_query_url = request.build_absolute_uri(reverse(local_query_url))
 
             context_params = {
                 'enabled': True,
@@ -69,11 +70,12 @@ def update_local_data_source(request):
     try:
         query_id = request.GET['query_id']
         selected = json.loads(request.GET['selected'])
+        local_query_url = request.GET.get('local_query_url', None)
 
         # Get query from id
         query = query_api.get_by_id(query_id)
         local_name = "Local"
-        local_query_url = request.build_absolute_uri(reverse("core_explore_common_local_query"))
+        local_query_url = request.build_absolute_uri(reverse(local_query_url))
 
         if selected:
             # Local data source is selected, add it to the query as a data source
