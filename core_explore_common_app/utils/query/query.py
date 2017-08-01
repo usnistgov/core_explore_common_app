@@ -7,10 +7,11 @@ import requests
 import json
 
 
-def send(query, data_source_index, page):
+def send(request, query, data_source_index, page):
     """
 
     Args:
+        request:
         query:
         data_source_index:
         page:
@@ -27,7 +28,7 @@ def send(query, data_source_index, page):
         query_url = _get_paginated_url(data_source.url_query, page)
         # send query to data source
         if data_source.authentication.type == "session":
-            response = requests.post(query_url, data=json_query)
+            response = requests.get(query_url, data=json_query, cookies={"sessionid": request.session.session_key})
         elif data_source.authentication.type == "oauth2":
             response = oauth2_request(query_url, json_query, data_source.authentication.params['access_token'])
         else:

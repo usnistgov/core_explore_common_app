@@ -15,7 +15,7 @@ from core_explore_common_app.utils.result import result as result_utils
 import json
 
 
-@api_view(['POST'])
+@api_view(['GET'])
 def execute_local_query(request):
     """Executes query on local instance and returns results
 

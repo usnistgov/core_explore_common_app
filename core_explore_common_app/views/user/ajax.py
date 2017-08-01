@@ -135,7 +135,7 @@ def get_data_source_results(request, query_id, data_source_index, page=1):
         query = query_api.get_by_id(query_id)
 
         # send query, and get results from data source
-        results = send_query(query, int(data_source_index), page)
+        results = send_query(request, query, int(data_source_index), page)
         # set results in context
         context_data = {
             'page': int(page),
