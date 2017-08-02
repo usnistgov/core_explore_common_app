@@ -6,7 +6,7 @@ from django.core.urlresolvers import reverse
 from core_explore_common_app.components.result.models import Result
 from core_explore_common_app.utils.pagination.rest_framework_paginator.pagination import StandardResultsSetPagination
 from core_explore_common_app.utils.query.mongo.query_builder import QueryBuilder
-from core_main_app.components.data.api import execute_query
+from core_main_app.components.data import api as data_api
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
@@ -44,7 +44,7 @@ def execute_local_query(request):
             raw_query = query_builder.get_raw_query()
 
             # execute query
-            data_list = execute_query(raw_query)
+            data_list = data_api.execute_query(raw_query, request.user)
             # get paginator
             paginator = StandardResultsSetPagination()
             # get requested page from list of results
