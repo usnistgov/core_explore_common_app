@@ -1,18 +1,19 @@
 """AJAX Explore common user views
 """
-from django.template import loader
-from django.core.urlresolvers import reverse
-from django.http.response import HttpResponse, HttpResponseBadRequest
-from django.template.context import RequestContext
-from core_explore_common_app.components.query.models import Authentication, DataSource
-from core_explore_common_app.components.query import api as query_api
-from os.path import join
-from core_explore_common_app.settings import DATA_SOURCES_EXPLORE_APPS, RESULTS_PER_PAGE
-from core_explore_common_app.utils.pagination.rest_framework_paginator.rest_framework_paginator import get_page_number
-from core_explore_common_app.utils.query.query import send as send_query
-from core_explore_common_app.settings import INSTALLED_APPS
 import json
 import math
+from os.path import join
+
+from django.core.urlresolvers import reverse
+from django.http.response import HttpResponse, HttpResponseBadRequest
+from django.template import loader
+
+from core_explore_common_app.components.query import api as query_api
+from core_explore_common_app.components.query.models import Authentication, DataSource
+from core_explore_common_app.settings import DATA_SOURCES_EXPLORE_APPS, RESULTS_PER_PAGE
+from core_explore_common_app.settings import INSTALLED_APPS
+from core_explore_common_app.utils.pagination.rest_framework_paginator.rest_framework_paginator import get_page_number
+from core_explore_common_app.utils.query.query import send as send_query
 
 
 def get_local_data_source(request):
@@ -48,13 +49,15 @@ def get_local_data_source(request):
                 if data_source.name == local_name and data_source.url_query == local_query_url:
                     context_params['selected'] = True
 
-            context = RequestContext(request, context_params)
+            context = {}
+            context.update(request)
+            context.update(context_params)
             template = loader.get_template('core_explore_common_app/user/selector/local_content.html')
             html_data_source = template.render(context)
             return HttpResponse(html_data_source)
         else:
             return HttpResponseBadRequest("Expected query_id parameter is missing.")
-    except:
+    except Exception as e:
         return HttpResponseBadRequest("An unexpected error occurred while getting local data source selector.")
 
 
@@ -107,9 +110,12 @@ def get_data_sources_html(request):
         query = query_api.get_by_id(query_id)
 
         # set query in context
-        context = RequestContext(request, {
+        context = {}
+        context.update(request)
+        context.update({
             'query': query
         })
+
         # render html results
         html_template = loader.get_template(join('core_explore_common_app', 'user', 'results', 'data_sources_results.html'))
         html_results_holders = html_template.render(context)
@@ -152,7 +158,10 @@ def get_data_source_results(request, query_id, data_source_index, page=1):
         }
 
         # create context
-        context = RequestContext(request, context_data)
+        context = {}
+        context.update(request)
+        context.update(context_data)
+
         # generate html with context
         html_template = loader.get_template(join('core_explore_common_app', 'user', 'results',
                                                  'data_source_results.html'))
