@@ -1,4 +1,4 @@
 include README.rst
-include requirements.txt
+include requirements.core.txt
 recursive-include core_explore_common_app/static *
 recursive-include core_explore_common_app/templates *
