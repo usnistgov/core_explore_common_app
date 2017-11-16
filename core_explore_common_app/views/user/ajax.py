@@ -144,6 +144,7 @@ def get_data_source_results(request, query_id, data_source_index, page=1):
 
         # send query, and get results from data source
         results = send_query(request, query, int(data_source_index), page)
+
         # set results in context
         context_data = {
             'page': int(page),
