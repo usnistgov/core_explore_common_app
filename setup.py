@@ -1,6 +1,12 @@
 from os import chdir, pardir
 from os.path import join, exists, dirname, normpath, abspath
 from setuptools import find_packages, setup
+from re import sub
+
+
+def req_link(external_url):
+    egg_link = sub(r'https://[^=]+=', '', external_url)
+    return "==".join(egg_link.rsplit("-", 1))
 
 reqs_default = join(dirname(__file__), "requirements.txt")
 reqs_core = join(dirname(__file__), "requirements.core.txt")
@@ -20,6 +26,9 @@ with open(join(dirname(__file__), "README.rst")) as f:
 # Allow setup.py to be run from any path
 chdir(normpath(join(abspath(__file__), pardir)))
 
+dep_links = [r for r in required if r.startswith("https://")]
+required = [req_link(r) if r.startswith("https://") else r for r in required]
+
 setup(
     name="core_explore_common_app",
     version="1.0.0-alpha5",
@@ -31,4 +40,5 @@ setup(
     packages=find_packages(),
     include_package_data=True,
     install_requires=required,
+    dependency_links=dep_links,
 )
