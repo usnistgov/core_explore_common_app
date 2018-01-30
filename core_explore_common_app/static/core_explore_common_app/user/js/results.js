@@ -62,6 +62,7 @@ var get_data_source_results = function(result_page, data_source_url){
             result_page.html(data.results);
         },
         error: function(data){
+            result_page.html(data.responseText);
         }
     });
 };

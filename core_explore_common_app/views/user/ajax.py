@@ -8,6 +8,7 @@ from django.core.urlresolvers import reverse
 from django.http.response import HttpResponse, HttpResponseBadRequest
 from django.template import loader
 
+from core_explore_common_app.commons.exceptions import ExploreRequestError
 from core_explore_common_app.components.query import api as query_api
 from core_explore_common_app.components.query.models import Authentication, DataSource
 from core_explore_common_app.settings import DATA_SOURCES_EXPLORE_APPS, RESULTS_PER_PAGE
@@ -117,7 +118,8 @@ def get_data_sources_html(request):
         })
 
         # render html results
-        html_template = loader.get_template(join('core_explore_common_app', 'user', 'results', 'data_sources_results.html'))
+        html_template = loader.get_template(
+            join('core_explore_common_app', 'user', 'results', 'data_sources_results.html'))
         html_results_holders = html_template.render(context)
 
         response_dict = {'results': html_results_holders}
@@ -171,8 +173,10 @@ def get_data_source_results(request, query_id, data_source_index, page=1):
         # set response with html results
         response_dict = {'results': results_html, 'nb_results': results['count']}
         return HttpResponse(json.dumps(response_dict), content_type='application/json')
+    except ExploreRequestError, e:
+        return HttpResponseBadRequest("An error occurred while sending the query: " + e.message)
     except Exception, e:
-        return HttpResponseBadRequest(e.message)
+        return HttpResponseBadRequest("An unexpected error occurred: " + e.message)
 
 
 def _add_local_data_source(query, local_name, local_query_url):
