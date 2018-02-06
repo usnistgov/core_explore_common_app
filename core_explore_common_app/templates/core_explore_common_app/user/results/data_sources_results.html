@@ -1,17 +1,15 @@
 <div class="row">
-    <div>
-        <ul class="nav nav-pills nav-stacked"role="tablist">
-            {% for data_source in query.data_sources %}
-            <li role="presentation" class="{% if forloop.counter0 == 0 %} active {% endif %}">
-                <a href="#results_{{forloop.counter0}}" id="tab_results_{{forloop.counter0}}" aria-controls="profile" role="tab" data-toggle="tab">
-                    From {{ data_source.name }}
-                    <span class="badge" id="results_infos_{{forloop.counter0}}">-</span>
-                </a>
-            </li>
-            {% endfor %}
-        </ul>
-    </div>
-    <div class="tab-content">
+    <ul class="nav nav-pills nav-stacked col-md-3"role="tablist">
+        {% for data_source in query.data_sources %}
+        <li role="presentation" class="{% if forloop.counter0 == 0 %} active {% endif %}">
+            <a href="#results_{{forloop.counter0}}" id="tab_results_{{forloop.counter0}}" aria-controls="profile" role="tab" data-toggle="tab">
+                From {{ data_source.name }}
+                <span class="badge" id="results_infos_{{forloop.counter0}}">-</span>
+            </a>
+        </li>
+        {% endfor %}
+    </ul>
+    <div class="tab-content col-md-9">
     {% for data_source in query.data_sources %}
         <div role="tabpanel" class="results-container tab-pane {% if forloop.counter0 == 0 %} active {% endif %} results-page"
              id="results_{{forloop.counter0}}"
