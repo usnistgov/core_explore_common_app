@@ -1,10 +1,13 @@
 """Explore Common query utils
 """
+import json
+
+import requests
+from requests import ConnectionError
+
 from core_explore_common_app.commons.exceptions import ExploreRequestError
 from core_explore_common_app.rest.result.serializers import ResultSerializer
 from core_explore_common_app.utils.protocols.oauth2 import send_post_request as oauth2_request
-import requests
-import json
 
 
 def send(request, query, data_source_index, page):
@@ -48,6 +51,8 @@ def send(request, query, data_source_index, page):
         else:
             raise ExploreRequestError("Data source {0} responded with status code {1}.".
                                       format(data_source.name, str(response.status_code)))
+    except ConnectionError:
+        raise ExploreRequestError("Unable to contact the remote server.")
     except Exception, e:
         raise ExploreRequestError(e.message)
 

@@ -173,8 +173,8 @@ def get_data_source_results(request, query_id, data_source_index, page=1):
         # set response with html results
         response_dict = {'results': results_html, 'nb_results': results['count']}
         return HttpResponse(json.dumps(response_dict), content_type='application/json')
-    except ExploreRequestError, e:
-        return HttpResponseBadRequest("An error occurred while sending the query: " + e.message)
+    except ExploreRequestError, ex:
+        return HttpResponseBadRequest("An error occurred while sending the query: " + ex.message)
     except Exception, e:
         return HttpResponseBadRequest("An unexpected error occurred: " + e.message)
 
