@@ -149,14 +149,19 @@ def get_data_source_results(request, query_id, data_source_index, page=1):
 
         # set results in context
         context_data = {
-            'page': int(page),
-            'page_range': range(1, int(math.ceil(float(results['count']) / RESULTS_PER_PAGE)) + 1),
-            'has_other_pages': results['count'] > RESULTS_PER_PAGE,
-            'previous': get_page_number(results['previous']),
-            'next': get_page_number(results['next']),
             'results': results['results'],
             'query_id': query_id,
             'data_source_index': data_source_index,
+            'pagination': {
+                'number': int(page),
+                'paginator': {'num_pages': int(math.ceil(float(results['count']) / RESULTS_PER_PAGE))},
+                'has_other_pages': results['count'] > RESULTS_PER_PAGE,
+                'previous_page_number': get_page_number(results['previous']),
+                'next_page_number': get_page_number(results['next']),
+                'has_previous': get_page_number(results['previous']) is not None,
+                'has_next': get_page_number(results['next']) >
+                            int(math.ceil(float(results['count']) / RESULTS_PER_PAGE)),
+            },
             'exporter_app': 'core_exporters_app' in INSTALLED_APPS
         }
 
