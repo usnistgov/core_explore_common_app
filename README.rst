@@ -1,4 +1,5 @@
-core_explore_common_app
+=======================
+Core Explore Common App
 =======================
 
 Base exploration function for the curator core project.
