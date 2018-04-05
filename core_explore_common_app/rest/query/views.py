@@ -5,10 +5,9 @@ from django.core.urlresolvers import reverse
 
 from core_explore_common_app.components.result.models import Result
 from core_explore_common_app.rest.result.serializers import ResultSerializer
-from core_explore_common_app.utils.pagination.rest_framework_paginator.pagination import \
-    StandardResultsSetPagination
 from core_explore_common_app.utils.result import result as result_utils
 from core_main_app.rest.data.abstract_views import AbstractExecuteLocalQueryView
+from core_main_app.utils.pagination.rest_framework_paginator.pagination import StandardResultsSetPagination
 
 
 class ExecuteLocalQueryView(AbstractExecuteLocalQueryView):
