@@ -1,6 +1,7 @@
 """ Unit Test Query
 """
-from core_explore_common_app.components.query.models import Query, Authentication, DataSource
+from core_explore_common_app.components.abstract_query.models import Authentication, DataSource
+from core_explore_common_app.components.query.models import Query
 from core_explore_common_app.components.query import api as query_api
 from core_main_app.commons import exceptions
 from unittest.case import TestCase

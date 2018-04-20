@@ -1,40 +1,17 @@
 """
 Query models
 """
-from django_mongoengine import fields, Document, EmbeddedDocument
 from mongoengine import errors as mongoengine_errors
+
+from core_explore_common_app.components.abstract_query.models import AbstractQuery
 from core_main_app.commons import exceptions
-from core_main_app.components.template.models import Template
 
 
 # TODO: remove old queries from database
 
-AUTH_TYPES = ('session', 'oauth2')
-
-
-class Authentication(EmbeddedDocument):
-    """Authentication class
-    """
-    type = fields.StringField(choices=AUTH_TYPES)
-    params = fields.DictField(blank=True)
-
-
-class DataSource(EmbeddedDocument):
-    """Data Source class
-    """
-    name = fields.StringField(blank=False)
-    url_query = fields.StringField(blank=False)
-    query_options = fields.DictField(blank=True)
-    authentication = fields.EmbeddedDocumentField(Authentication)
-
-
-class Query(Document):
+class Query(AbstractQuery):
     """Query class
     """
-    user_id = fields.StringField(blank=False)
-    content = fields.StringField(blank=True)
-    templates = fields.ListField(fields.ReferenceField(Template, blank=True), blank=True, default=[])
-    data_sources = fields.ListField(fields.EmbeddedDocumentField(DataSource, blank=True), blank=True, default=[])
 
     @staticmethod
     def get_by_id(query_id):

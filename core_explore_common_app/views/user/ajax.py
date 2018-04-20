@@ -9,8 +9,8 @@ from django.http.response import HttpResponse, HttpResponseBadRequest
 from django.template import loader
 
 from core_explore_common_app.commons.exceptions import ExploreRequestError
+from core_explore_common_app.components.abstract_query.models import Authentication, DataSource
 from core_explore_common_app.components.query import api as query_api
-from core_explore_common_app.components.query.models import Authentication, DataSource
 from core_explore_common_app.settings import DATA_SOURCES_EXPLORE_APPS, RESULTS_PER_PAGE
 from core_explore_common_app.settings import INSTALLED_APPS
 from core_explore_common_app.utils.query.query import send as send_query
