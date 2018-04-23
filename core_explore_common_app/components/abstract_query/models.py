@@ -25,7 +25,7 @@ class DataSource(EmbeddedDocument):
 
 
 class AbstractQuery(Document):
-    """ AbstractData object
+    """ Abstract Query
     """
     user_id = fields.StringField(blank=False)
     content = fields.StringField(blank=True)
@@ -35,3 +35,6 @@ class AbstractQuery(Document):
     meta = {
         'abstract': True,
     }
+
+
+

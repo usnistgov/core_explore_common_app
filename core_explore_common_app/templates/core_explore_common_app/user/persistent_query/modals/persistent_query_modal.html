@@ -1,0 +1,12 @@
+{% extends 'core_main_app/_render/admin/theme/tools/modal.html' %}
+
+{% block modal_id %}persistent-query-modal{% endblock %}
+{% block modal_title %}Shareable link{% endblock %}
+
+{% block modal_body %}
+<input type="text" id="shareable-link" />
+{% endblock %}
+
+{% block modal_footer %}
+<a id="shareable-link-button" class="btn btn-default" href="#"><i class="fa fa-check"></i> Copy and close</a>
+{% endblock %}
