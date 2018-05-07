@@ -15,6 +15,7 @@ from core_explore_common_app.settings import DATA_SOURCES_EXPLORE_APPS, RESULTS_
 from core_explore_common_app.settings import INSTALLED_APPS
 from core_explore_common_app.utils.query.query import send as send_query
 from core_main_app.utils.pagination.rest_framework_paginator.rest_framework_paginator import get_page_number
+from core_explore_common_app.constants import LOCAL_QUERY_NAME, LOCAL_QUERY_URL
 
 
 def get_local_data_source(request):
@@ -28,26 +29,23 @@ def get_local_data_source(request):
     """
     try:
         id_query = request.GET.get('query_id', None)
-        local_query_url = request.GET.get('local_query_url', None)
 
         if id_query is not None:
             # Get query from id
             query = query_api.get_by_id(id_query)
-
-            local_name = "Local"
-            local_query_url = request.build_absolute_uri(reverse(local_query_url))
 
             context_params = {
                 'enabled': True,
                 'selected': False,
             }
             if len(DATA_SOURCES_EXPLORE_APPS) == 0:
-                _add_local_data_source(query, local_name, local_query_url)
+                add_local_data_source(request, query)
                 context_params['enabled'] = False
 
             # check query to see if local data source was selected
+            local_query_url = _get_local_query_absolute_url(request)
             for data_source in query.data_sources:
-                if data_source.name == local_name and data_source.url_query == local_query_url:
+                if data_source.name == LOCAL_QUERY_NAME and data_source.url_query == local_query_url:
                     context_params['selected'] = True
 
             context = {}
@@ -74,19 +72,18 @@ def update_local_data_source(request):
     try:
         query_id = request.GET['query_id']
         selected = json.loads(request.GET['selected'])
-        local_query_url = request.GET.get('local_query_url', None)
 
         # Get query from id
         query = query_api.get_by_id(query_id)
-        local_name = "Local"
-        local_query_url = request.build_absolute_uri(reverse(local_query_url))
 
         if selected:
             # Local data source is selected, add it to the query as a data source
-            _add_local_data_source(query, local_name, local_query_url)
+            add_local_data_source(request, query)
         else:
             # Local data source is not selected, remove it from the query
-            data_source = query_api.get_data_source_by_name_and_url_query(query, local_name, local_query_url)
+            local_query_url = _get_local_query_absolute_url(request)
+            data_source = query_api.get_data_source_by_name_and_url_query(query, LOCAL_QUERY_NAME,
+                                                                          local_query_url)
             query_api.remove_data_source(query, data_source)
 
         return HttpResponse()
@@ -184,20 +181,35 @@ def get_data_source_results(request, query_id, data_source_index, page=1):
         return HttpResponseBadRequest("An unexpected error occurred: " + e.message)
 
 
-def _add_local_data_source(query, local_name, local_query_url):
-    """Adds local data source to query
+def add_local_data_source(request, query):
+    """Add local data source to query
 
     Args:
+        request:
         query:
-        local_name:
-        local_query_url:
 
     Returns:
 
     """
-    # Local data source is selected, add it to the query as a data source
+    # Add Local to the query as a data source
+    local_name = LOCAL_QUERY_NAME
+    local_query_url = _get_local_query_absolute_url(request)
     authentication = Authentication(type='session')
     data_source = DataSource(name=local_name,
                              url_query=local_query_url,
                              authentication=authentication)
     query_api.add_data_source(query, data_source)
+
+
+def _get_local_query_absolute_url(request):
+    """ Return local query absolute URL.
+
+    Args:
+        request:
+        query:
+
+    Returns:
+        String: Absolute URL
+
+    """
+    return request.build_absolute_uri(reverse(LOCAL_QUERY_URL))
