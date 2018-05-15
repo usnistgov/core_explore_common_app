@@ -2,20 +2,24 @@
 """
 import json
 import math
+from abc import ABCMeta, abstractmethod
 from os.path import join
 
 from django.core.urlresolvers import reverse
 from django.http.response import HttpResponse, HttpResponseBadRequest
 from django.template import loader
+from django.views import View
 
+import core_explore_common_app.components.abstract_persistent_query.api as abstract_persistent_query_api
 from core_explore_common_app.commons.exceptions import ExploreRequestError
 from core_explore_common_app.components.abstract_query.models import Authentication, DataSource
 from core_explore_common_app.components.query import api as query_api
+from core_explore_common_app.constants import LOCAL_QUERY_NAME, LOCAL_QUERY_URL
 from core_explore_common_app.settings import DATA_SOURCES_EXPLORE_APPS, RESULTS_PER_PAGE
 from core_explore_common_app.settings import INSTALLED_APPS
 from core_explore_common_app.utils.query.query import send as send_query
+from core_main_app.commons.exceptions import DoesNotExist
 from core_main_app.utils.pagination.rest_framework_paginator.rest_framework_paginator import get_page_number
-from core_explore_common_app.constants import LOCAL_QUERY_NAME, LOCAL_QUERY_URL
 
 
 def get_local_data_source(request):
@@ -213,3 +217,51 @@ def _get_local_query_absolute_url(request):
 
     """
     return request.build_absolute_uri(reverse(LOCAL_QUERY_URL))
+
+
+class CreatePersistentQueryUrlView(View):
+    """ Create the persistent url from a Query
+    """
+    __metaclass__ = ABCMeta
+    view_to_reverse = None
+
+    def post(self, request):
+        """ Create a persistent query
+            Args:
+                request:
+
+            Returns:
+
+            """
+        try:
+            # get parameter
+            query_id = request.POST.get('queryId', None)
+
+            # get the matching query
+            try:
+                query = query_api.get_by_id(query_id)
+            except DoesNotExist:
+                return HttpResponseBadRequest("The query does not exist anymore.")
+
+            # create the persistent query
+            persistent_query = abstract_persistent_query_api.upsert(self._create_persistent_query(query))
+            # reverse to the url
+            url_reversed = request.build_absolute_uri(reverse(self.view_to_reverse,
+                                                              kwargs={'persistent_query_id': persistent_query.id}))
+            # context
+            return HttpResponse(json.dumps({'url': url_reversed}), content_type='application/javascript')
+        except Exception, e:
+            return HttpResponseBadRequest(e.message, content_type='application/javascript')
+
+    @staticmethod
+    @abstractmethod
+    def _create_persistent_query(query):
+        """ Create the persistent query
+
+        Args:
+            query:
+
+        Returns:
+
+        """
+        raise NotImplementedError("_create_persistent_query method is not implemented.")
