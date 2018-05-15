@@ -1,23 +1,24 @@
-<div class="row">
-    <ul class="nav nav-pills nav-stacked col-md-3"role="tablist">
+<div>
+    {% if query.data_sources|length > 0 %}
+        <ul class="nav nav-tabs"role="tablist">
+            {% for data_source in query.data_sources %}
+            <li role="presentation" class="{% if forloop.counter0 == 0 %} active {% endif %}">
+                <a href="#results_{{forloop.counter0}}" id="tab_results_{{forloop.counter0}}" aria-controls="profile" role="tab" data-toggle="tab">
+                    From {{ data_source.name }}
+                    <span class="badge" id="results_infos_{{forloop.counter0}}">-</span>
+                </a>
+            </li>
+            {% endfor %}
+        </ul>
+        <div class="tab-content">
         {% for data_source in query.data_sources %}
-        <li role="presentation" class="{% if forloop.counter0 == 0 %} active {% endif %}">
-            <a href="#results_{{forloop.counter0}}" id="tab_results_{{forloop.counter0}}" aria-controls="profile" role="tab" data-toggle="tab">
-                From {{ data_source.name }}
-                <span class="badge" id="results_infos_{{forloop.counter0}}">-</span>
-            </a>
-        </li>
+            <div role="tabpanel" class="results-container tab-pane {% if forloop.counter0 == 0 %} active {% endif %} results-page"
+                 id="results_{{forloop.counter0}}"
+                 url="{% url 'core_explore_common_data_source_results' query.id forloop.counter0 %}">
+                <div class="results-page" style="margin-top: 1em;" nb_results_id="results_infos_{{forloop.counter0}}"/>
+            </div>
         {% endfor %}
-    </ul>
-    <div class="tab-content col-md-9">
-    {% for data_source in query.data_sources %}
-        <div role="tabpanel" class="results-container tab-pane {% if forloop.counter0 == 0 %} active {% endif %} results-page"
-             id="results_{{forloop.counter0}}"
-             url="{% url 'core_explore_common_data_source_results' query.id forloop.counter0 %}">
-            <div class="results-page" nb_results_id="results_infos_{{forloop.counter0}}"/>
         </div>
-    {% endfor %}
-    </div>
+    {% endif %}
     <div id="query_id" style="display: none;">{{ query.id }}</div>
 </div>
-
