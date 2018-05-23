@@ -2,7 +2,7 @@
 """
 from abc import ABCMeta, abstractmethod
 
-from django.http.response import HttpResponseBadRequest
+from django.contrib import messages
 from django.views.generic import RedirectView
 
 from core_explore_common_app.components.query import api as query_api
@@ -29,7 +29,9 @@ class ResultQueryRedirectView(RedirectView):
             # then redirect to the result page core_explore_example_results with /<template_id>/<query_id>
             return self._get_reversed_url(query)
         except Exception, e:
-            return HttpResponseBadRequest(e.message, content_type='application/javascript')
+            # add success message
+            messages.add_message(self.request, messages.ERROR, 'The given URL is not valid.')
+            return self._get_reversed_url_if_failed()
 
     @staticmethod
     @abstractmethod
@@ -40,3 +42,9 @@ class ResultQueryRedirectView(RedirectView):
     @abstractmethod
     def _get_reversed_url(query):
         raise NotImplementedError("_get_reversed_url method is not implemented.")
+
+    @staticmethod
+    @abstractmethod
+    def _get_reversed_url_if_failed():
+        raise NotImplementedError("_get_reversed_url_if_failed method is not implemented.")
+
