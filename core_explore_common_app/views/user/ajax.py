@@ -196,13 +196,25 @@ def add_local_data_source(request, query):
 
     """
     # Add Local to the query as a data source
+    data_source = create_local_data_source(request)
+    query_api.add_data_source(query, data_source)
+
+
+def create_local_data_source(request):
+    """  Create local datasource
+
+    Args:
+        request
+
+    Returns:
+    """
     local_name = LOCAL_QUERY_NAME
     local_query_url = _get_local_query_absolute_url(request)
     authentication = Authentication(type='session')
     data_source = DataSource(name=local_name,
                              url_query=local_query_url,
                              authentication=authentication)
-    query_api.add_data_source(query, data_source)
+    return data_source
 
 
 def _get_local_query_absolute_url(request):
