@@ -3,10 +3,16 @@
 import json
 
 import requests
+from django.core.urlresolvers import reverse
 from requests import ConnectionError
 
 from core_explore_common_app.commons.exceptions import ExploreRequestError
+from core_explore_common_app.components.abstract_query.models import Authentication, DataSource
+from core_explore_common_app.components.query import api as query_api
+from core_explore_common_app.components.query.models import Query
+from core_explore_common_app.constants import LOCAL_QUERY_NAME, LOCAL_QUERY_URL
 from core_explore_common_app.rest.result.serializers import ResultSerializer
+from core_explore_common_app.settings import EXPLORE_ADD_DEFAULT_LOCAL_DATA_SOURCE_TO_QUERY
 from core_explore_common_app.utils.protocols.oauth2 import send_post_request as oauth2_request
 
 
@@ -55,6 +61,72 @@ def send(request, query, data_source_index, page):
         raise ExploreRequestError("Unable to contact the remote server.")
     except Exception, e:
         raise ExploreRequestError(e.message)
+
+
+def add_local_data_source(request, query):
+    """Add local data source to query
+
+    Args:
+        request:
+        query:
+
+    Returns:
+
+    """
+    # Add Local to the query as a data source
+    data_source = create_local_data_source(request)
+    query_api.add_data_source(query, data_source)
+
+
+def create_local_data_source(request):
+    """  Create local datasource
+
+    Args:
+        request
+
+    Returns:
+    """
+    local_name = LOCAL_QUERY_NAME
+    local_query_url = get_local_query_absolute_url(request)
+    authentication = Authentication(type='session')
+    data_source = DataSource(name=local_name,
+                             url_query=local_query_url,
+                             authentication=authentication)
+    return data_source
+
+
+def get_local_query_absolute_url(request):
+    """ Return local query absolute URL.
+
+    Args:
+        request:
+        query:
+
+    Returns:
+        String: Absolute URL
+
+    """
+    return request.build_absolute_uri(reverse(LOCAL_QUERY_URL))
+
+
+def create_default_query(request, template_ids):
+    """ create a new Query object
+
+    Args:
+        request:
+        template_ids:
+
+    Returns:
+
+    """
+    # create new query object
+    query = Query(user_id=str(request.user.id), templates=template_ids)
+    if EXPLORE_ADD_DEFAULT_LOCAL_DATA_SOURCE_TO_QUERY:
+        # add the local data source by default
+        add_local_data_source(request, query)
+    # add a default empty query content
+    query.content = "{}"
+    return query
 
 
 # TODO: see if can be done using a Serializer

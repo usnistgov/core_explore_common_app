@@ -12,12 +12,12 @@ from django.views import View
 
 import core_explore_common_app.components.abstract_persistent_query.api as abstract_persistent_query_api
 from core_explore_common_app.commons.exceptions import ExploreRequestError
-from core_explore_common_app.components.abstract_query.models import Authentication, DataSource
 from core_explore_common_app.components.query import api as query_api
-from core_explore_common_app.constants import LOCAL_QUERY_NAME, LOCAL_QUERY_URL
+from core_explore_common_app.constants import LOCAL_QUERY_NAME
 from core_explore_common_app.settings import DATA_SOURCES_EXPLORE_APPS, RESULTS_PER_PAGE
 from core_explore_common_app.settings import INSTALLED_APPS
-from core_explore_common_app.utils.query.query import send as send_query
+from core_explore_common_app.utils.query.query import send as send_query, add_local_data_source, \
+    get_local_query_absolute_url
 from core_main_app.commons.exceptions import DoesNotExist
 from core_main_app.utils.pagination.rest_framework_paginator.rest_framework_paginator import get_page_number
 
@@ -47,7 +47,7 @@ def get_local_data_source(request):
                 context_params['enabled'] = False
 
             # check query to see if local data source was selected
-            local_query_url = _get_local_query_absolute_url(request)
+            local_query_url = get_local_query_absolute_url(request)
             for data_source in query.data_sources:
                 if data_source.name == LOCAL_QUERY_NAME and data_source.url_query == local_query_url:
                     context_params['selected'] = True
@@ -85,7 +85,7 @@ def update_local_data_source(request):
             add_local_data_source(request, query)
         else:
             # Local data source is not selected, remove it from the query
-            local_query_url = _get_local_query_absolute_url(request)
+            local_query_url = get_local_query_absolute_url(request)
             data_source = query_api.get_data_source_by_name_and_url_query(query, LOCAL_QUERY_NAME,
                                                                           local_query_url)
             query_api.remove_data_source(query, data_source)
@@ -183,52 +183,6 @@ def get_data_source_results(request, query_id, data_source_index, page=1):
         return HttpResponseBadRequest("An error occurred while sending the query: " + ex.message)
     except Exception, e:
         return HttpResponseBadRequest("An unexpected error occurred: " + e.message)
-
-
-def add_local_data_source(request, query):
-    """Add local data source to query
-
-    Args:
-        request:
-        query:
-
-    Returns:
-
-    """
-    # Add Local to the query as a data source
-    data_source = create_local_data_source(request)
-    query_api.add_data_source(query, data_source)
-
-
-def create_local_data_source(request):
-    """  Create local datasource
-
-    Args:
-        request
-
-    Returns:
-    """
-    local_name = LOCAL_QUERY_NAME
-    local_query_url = _get_local_query_absolute_url(request)
-    authentication = Authentication(type='session')
-    data_source = DataSource(name=local_name,
-                             url_query=local_query_url,
-                             authentication=authentication)
-    return data_source
-
-
-def _get_local_query_absolute_url(request):
-    """ Return local query absolute URL.
-
-    Args:
-        request:
-        query:
-
-    Returns:
-        String: Absolute URL
-
-    """
-    return request.build_absolute_uri(reverse(LOCAL_QUERY_URL))
 
 
 class CreatePersistentQueryUrlView(View):
