@@ -6,4 +6,4 @@ djangorestframework==3.7.3
 django-rest-framework-mongoengine==3.3.1
 mock==2.0.0
 mongoengine==0.11.0
-requests==2.18.4
+requests==2.20.0
