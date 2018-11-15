@@ -1,17 +1,13 @@
 """ REST views for the data API
 """
-from urlparse import urljoin
 
-from core_explore_common_app.components.result.models import Result
-from django.core.urlresolvers import reverse
+from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
-from core_explore_common_app.rest.result.serializers import ResultSerializer
-from core_explore_common_app.utils.result.result import get_result_from_rest_data_response
-from rest_framework import status
 import core_main_app.components.data.api as data_api
-import requests
+from core_explore_common_app.components.result.models import Result
+from core_explore_common_app.rest.result.serializers import ResultSerializer
 
 
 @api_view(['GET'])

@@ -2,7 +2,6 @@
 """
 import json
 
-import requests
 from django.core.urlresolvers import reverse
 from requests import ConnectionError
 
@@ -14,6 +13,7 @@ from core_explore_common_app.constants import LOCAL_QUERY_NAME, LOCAL_QUERY_URL
 from core_explore_common_app.rest.result.serializers import ResultSerializer
 from core_explore_common_app.settings import EXPLORE_ADD_DEFAULT_LOCAL_DATA_SOURCE_TO_QUERY
 from core_explore_common_app.utils.protocols.oauth2 import send_post_request as oauth2_request
+from core_main_app.utils.requests_utils.requests_utils import send_get_request
 
 
 def send(request, query, data_source_index, page):
@@ -37,7 +37,7 @@ def send(request, query, data_source_index, page):
         query_url = _get_paginated_url(data_source.url_query, page)
         # send query to data source
         if data_source.authentication.type == "session":
-            response = requests.get(query_url, data=json_query, cookies={"sessionid": request.session.session_key})
+            response = send_get_request(query_url, data=json_query, cookies={"sessionid": request.session.session_key})
         elif data_source.authentication.type == "oauth2":
             response = oauth2_request(query_url, json_query, data_source.authentication.params['access_token'])
         else:

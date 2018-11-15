@@ -1,7 +1,7 @@
 """ oauth2 utils
 """
 from core_explore_common_app.commons.exceptions import UsernamePasswordRequiredError
-import requests
+from core_main_app.utils.requests_utils import requests_utils
 
 HEADER = {'content-type': 'application/x-www-form-urlencoded'}
 TOKEN_SUFFIX = "/o/token/"
@@ -20,7 +20,7 @@ def send_get_request(url, access_token):
     # Builds header
     headers = {'Authorization': 'Bearer ' + access_token}
     # post request
-    return requests.get(url, headers=headers)
+    return requests_utils.send_get_request(url, headers=headers)
 
 
 def send_post_request(url, data, access_token):
@@ -37,7 +37,7 @@ def send_post_request(url, data, access_token):
     # Builds header
     headers = {'Authorization': 'Bearer ' + access_token}
     # post request
-    return requests.post(url, data=data, headers=headers)
+    return requests_utils.send_post_request(url, data=data, headers=headers)
 
 
 def post_request_token(url, client_id, client_secret, timeout, username, password):
@@ -59,7 +59,7 @@ def post_request_token(url, client_id, client_secret, timeout, username, passwor
 
     data = _get_data_for_request(client_id, client_secret, username=username, password=password)
 
-    return requests.post(url=token_url, data=data, headers=HEADER, timeout=int(timeout))
+    return requests_utils.send_post_request(url=token_url, data=data, headers=HEADER, timeout=int(timeout))
 
 
 def post_refresh_token(url, client_id, client_secret, timeout, refresh_token):
@@ -80,7 +80,7 @@ def post_refresh_token(url, client_id, client_secret, timeout, refresh_token):
 
     data = _get_data_for_request(client_id, client_secret, refresh_token=refresh_token)
 
-    return requests.post(url=token_url, data=data, headers=HEADER, timeout=int(timeout))
+    return requests_utils.send_post_request(url=token_url, data=data, headers=HEADER, timeout=int(timeout))
 
 
 def _get_data_for_request(client_id, client_secret,
