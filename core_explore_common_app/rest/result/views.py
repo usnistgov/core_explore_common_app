@@ -12,13 +12,24 @@ from core_explore_common_app.rest.result.serializers import ResultSerializer
 
 @api_view(['GET'])
 def get_result_from_data_id(request):
-    """ Access data, Returns Result, Expects a data ID
+    """ Retrieve a Result
+
+    Parameters:
+
+        {
+            "id": data_id
+        }
 
     Args:
-        request:
+
+        request: HTTP request
 
     Returns:
 
+        - code: 200
+          content: Result
+        - code: 500
+          content: Internal server error
     """
     try:
         # get parameters

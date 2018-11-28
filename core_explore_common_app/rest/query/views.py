@@ -1,6 +1,5 @@
 """ REST views for the query API
 """
-
 from django.core.urlresolvers import reverse
 
 from core_explore_common_app.components.result.models import Result
@@ -12,14 +11,15 @@ from core_main_app.utils.pagination.rest_framework_paginator.pagination import S
 
 class ExecuteLocalQueryView(AbstractExecuteLocalQueryView):
     def build_response(self, data_list):
-        """ Build the paginated response.
+        """ Build the paginated list of data
 
         Args:
-            data_list: List of data.
+
+            data_list: List of data
 
         Returns:
-            The response.
 
+            Paginated list of data
         """
         # get paginator
         paginator = StandardResultsSetPagination()
