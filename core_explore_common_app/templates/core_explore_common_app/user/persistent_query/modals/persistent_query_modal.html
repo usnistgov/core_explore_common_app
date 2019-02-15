@@ -4,9 +4,11 @@
 {% block modal_title %}Shareable link{% endblock %}
 
 {% block modal_body %}
-<input type="text" id="shareable-link" />
+<input type="text" id="shareable-link" disabled="disabled"/>
 {% endblock %}
 
 {% block modal_footer %}
-<a id="shareable-link-button" class="btn btn-default" href="#"><i class="fa fa-check"></i> Copy and close</a>
+<a id="shareable-link-button" class="btn btn-default" href="#">
+    <i class="fa fa-check"></i> Copy and close
+</a>
 {% endblock %}
