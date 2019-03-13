@@ -4,5 +4,6 @@
 	max-height:400px;
 	overflow:auto;
 	cursor:text;
-	background-color: #F8F8F8 ;
+	background-color: #F8F8F8;
+	display:none;
 }

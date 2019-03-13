@@ -2,3 +2,15 @@ div.results-container{
     padding-top:1 0 0 0;
     margin:0;
 }
+
+span.expand{
+    cursor:pointer;
+}
+
+.template-info-name{
+    color:#555;
+}
+
+.result-title{
+    font-weight:bold;
+}
