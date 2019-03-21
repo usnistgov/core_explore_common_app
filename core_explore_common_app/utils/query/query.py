@@ -46,7 +46,7 @@ def send(request, query, data_source_index, page):
         # if got a response from data source
         if response.status_code == 200:
             # transform response to json
-            json_response = json.loads(response.text)
+            json_response = response.json()
             # Build serializer
             results_serializer = ResultSerializer(data=json_response['results'], many=True)
 
