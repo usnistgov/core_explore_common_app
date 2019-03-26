@@ -37,8 +37,10 @@ getPersistentUrl = function(event){
 copyAndCloseModal = function(event){
     event.preventDefault();
     var link = $("#shareable-link");
+    link.prop('disabled', false);
     link.focus();
     link.select();
     document.execCommand('copy');
+    link.prop('disabled', true);
     $("#persistent-query-modal").modal("hide");
 }
