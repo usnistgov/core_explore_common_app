@@ -163,7 +163,8 @@ def get_data_source_results(request, query_id, data_source_index, page=1):
                 'has_next': get_page_number(results['next']) >
                             int(math.ceil(float(results['count']) / RESULTS_PER_PAGE)),
             },
-            'exporter_app': 'core_exporters_app' in INSTALLED_APPS
+            'exporter_app': 'core_exporters_app' in INSTALLED_APPS,
+            'blobs_preview': 'core_file_preview_app' in INSTALLED_APPS,
         }
 
         # create context
