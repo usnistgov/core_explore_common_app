@@ -1,8 +1,5 @@
 {% load xsl_transform_tag %}
-
-{% if blobs_preview %}
-    {% load html_file_preview_tag %}
-{% endif %}
+{% load blob_tags %}
 
 {% for result in results %}
     {% xsl_transform_list xml_content=result.xml_content template_id=result.template_info.id template_hash=result.template_info.hash as xml_representation%}
