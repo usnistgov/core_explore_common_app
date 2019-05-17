@@ -1,7 +1,10 @@
-"""Query api
+""" Query api
 """
 from core_explore_common_app.components.query.models import Query
+from core_explore_common_app.constants import LOCAL_QUERY_NAME
+from core_explore_common_app import settings
 from core_main_app.commons.exceptions import DoesNotExist
+from core_main_app.utils.query.constants import VISIBILITY_OPTION
 
 
 def upsert(query):
@@ -76,3 +79,21 @@ def get_data_source_by_name_and_url_query(query, name, url_query):
 
     """
     return query.get_data_source_by_name_and_url_query(name, url_query)
+
+
+def set_visibility_to_query(query):
+    """ Set visibility with the visibility defined in settings
+
+    Args:
+        query:
+
+    Returns:
+
+    """
+    # Set visibility option for local data source
+    for data_source in query.data_sources:
+        # find local data source
+        if data_source.name == LOCAL_QUERY_NAME:
+            # set visibility to public
+            data_source.query_options = {VISIBILITY_OPTION: settings.QUERY_VISIBILITY}
+            break
