@@ -28,7 +28,7 @@ class ResultQueryRedirectView(RedirectView):
 
             # then redirect to the result page core_explore_example_results with /<template_id>/<query_id>
             return self._get_reversed_url(query)
-        except Exception, e:
+        except Exception as e:
             # add success message
             messages.add_message(self.request, messages.ERROR, 'The given URL is not valid.')
             return self._get_reversed_url_if_failed()

@@ -125,7 +125,7 @@ def get_data_sources_html(request):
 
         response_dict = {'results': html_results_holders}
         return HttpResponse(json.dumps(response_dict), content_type='application/json')
-    except Exception, e:
+    except Exception as e:
         return HttpResponseBadRequest(e.message)
 
 
@@ -180,9 +180,9 @@ def get_data_source_results(request, query_id, data_source_index, page=1):
         # set response with html results
         response_dict = {'results': results_html, 'nb_results': results['count']}
         return HttpResponse(json.dumps(response_dict), content_type='application/json')
-    except ExploreRequestError, ex:
+    except ExploreRequestError as ex:
         return HttpResponseBadRequest("An error occurred while sending the query: " + ex.message)
-    except Exception, e:
+    except Exception as e:
         return HttpResponseBadRequest("An unexpected error occurred: " + e.message)
 
 
@@ -217,7 +217,7 @@ class CreatePersistentQueryUrlView(View):
                                                               kwargs={'persistent_query_id': persistent_query.id}))
             # context
             return HttpResponse(json.dumps({'url': url_reversed}), content_type='application/javascript')
-        except Exception, e:
+        except Exception as e:
             return HttpResponseBadRequest(e.message, content_type='application/javascript')
 
     @staticmethod

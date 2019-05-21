@@ -59,7 +59,7 @@ def send(request, query, data_source_index, page):
                                       format(data_source.name, str(response.status_code)))
     except ConnectionError:
         raise ExploreRequestError("Unable to contact the remote server.")
-    except Exception, e:
+    except Exception as e:
         raise ExploreRequestError(e.message)
 
 
