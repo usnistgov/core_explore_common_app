@@ -1,6 +1,7 @@
 """ Explore Common App tasks
 """
 import logging
+from builtins import str
 from datetime import timedelta
 
 from celery.schedules import crontab
@@ -29,4 +30,4 @@ def delete_old_queries():
             logger.info("Periodic task: delete query {}.".format(str(query.id)))
             query.delete()
     except Exception as e:
-        logger.error("An error occurred while deleting old queries ({}).".format(e.message))
+        logger.error("An error occurred while deleting old queries ({}).".format(str(e)))

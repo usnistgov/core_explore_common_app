@@ -1,5 +1,7 @@
 """ oauth2 utils
 """
+from builtins import str
+
 from core_explore_common_app.commons.exceptions import UsernamePasswordRequiredError
 from core_main_app.utils.requests_utils import requests_utils
 

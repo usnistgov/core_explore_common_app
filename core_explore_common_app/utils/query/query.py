@@ -1,6 +1,7 @@
 """Explore Common query utils
 """
 import json
+from builtins import str
 
 from django.core.urlresolvers import reverse
 from requests import ConnectionError
@@ -60,7 +61,7 @@ def send(request, query, data_source_index, page):
     except ConnectionError:
         raise ExploreRequestError("Unable to contact the remote server.")
     except Exception as e:
-        raise ExploreRequestError(e.message)
+        raise ExploreRequestError(str(e))
 
 
 def add_local_data_source(request, query):

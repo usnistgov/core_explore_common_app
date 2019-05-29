@@ -1,6 +1,8 @@
 """
 Query models
 """
+from builtins import str
+
 from mongoengine import errors as mongoengine_errors
 
 from core_explore_common_app.components.abstract_query.models import AbstractQuery
@@ -26,9 +28,9 @@ class Query(AbstractQuery):
         try:
             return Query.objects.get(pk=str(query_id))
         except mongoengine_errors.DoesNotExist as e:
-            raise exceptions.DoesNotExist(e.message)
+            raise exceptions.DoesNotExist(str(e))
         except Exception as ex:
-            raise exceptions.ModelError(ex.message)
+            raise exceptions.ModelError(str(ex))
 
     def get_data_source_by_name_and_url_query(self, name, url_query):
         """Returns a data source from given name and url of query

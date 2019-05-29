@@ -20,6 +20,7 @@ from core_explore_common_app.utils.query.query import send as send_query, add_lo
     get_local_query_absolute_url
 from core_main_app.commons.exceptions import DoesNotExist
 from core_main_app.utils.pagination.rest_framework_paginator.rest_framework_paginator import get_page_number
+from future.utils import with_metaclass
 
 
 def get_local_data_source(request):
@@ -92,7 +93,7 @@ def update_local_data_source(request):
 
         return HttpResponse()
     except Exception as e:
-        return HttpResponseBadRequest(e.message)
+        return HttpResponseBadRequest(str(e))
 
 
 def get_data_sources_html(request):
@@ -126,7 +127,7 @@ def get_data_sources_html(request):
         response_dict = {'results': html_results_holders}
         return HttpResponse(json.dumps(response_dict), content_type='application/json')
     except Exception as e:
-        return HttpResponseBadRequest(e.message)
+        return HttpResponseBadRequest(str(e))
 
 
 def get_data_source_results(request, query_id, data_source_index, page=1):
@@ -181,15 +182,14 @@ def get_data_source_results(request, query_id, data_source_index, page=1):
         response_dict = {'results': results_html, 'nb_results': results['count']}
         return HttpResponse(json.dumps(response_dict), content_type='application/json')
     except ExploreRequestError as ex:
-        return HttpResponseBadRequest("An error occurred while sending the query: " + ex.message)
+        return HttpResponseBadRequest("An error occurred while sending the query: " + str(ex))
     except Exception as e:
-        return HttpResponseBadRequest("An unexpected error occurred: " + e.message)
+        return HttpResponseBadRequest("An unexpected error occurred: " + str(e))
 
 
-class CreatePersistentQueryUrlView(View):
+class CreatePersistentQueryUrlView(with_metaclass(ABCMeta, View)):
     """ Create the persistent url from a Query
     """
-    __metaclass__ = ABCMeta
     view_to_reverse = None
 
     def post(self, request):
@@ -218,7 +218,7 @@ class CreatePersistentQueryUrlView(View):
             # context
             return HttpResponse(json.dumps({'url': url_reversed}), content_type='application/javascript')
         except Exception as e:
-            return HttpResponseBadRequest(e.message, content_type='application/javascript')
+            return HttpResponseBadRequest(str(e), content_type='application/javascript')
 
     @staticmethod
     @abstractmethod

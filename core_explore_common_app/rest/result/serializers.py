@@ -1,13 +1,16 @@
 """Result serializers
 """
+from builtins import object
+
 from rest_framework_mongoengine.serializers import DocumentSerializer, EmbeddedDocumentSerializer
+
 from core_explore_common_app.components.result.models import Result, TemplateInfo
 
 
 class TemplateInfoSerializer(EmbeddedDocumentSerializer):
     """ Template info serializer
     """
-    class Meta:
+    class Meta(object):
         """ Meta
         """
         model = TemplateInfo
@@ -24,7 +27,7 @@ class ResultSerializer(DocumentSerializer):
     """
     template_info = TemplateInfoSerializer(many=False)
 
-    class Meta:
+    class Meta(object):
         """ Meta
         """
         model = Result
@@ -35,7 +38,7 @@ class ResultBaseSerializer(DocumentSerializer):
     """ Result Serializer
     """
 
-    class Meta:
+    class Meta(object):
         """ Meta
         """
         model = Result

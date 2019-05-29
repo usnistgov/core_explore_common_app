@@ -1,5 +1,6 @@
 """ Common tools for protocols
 """
+from builtins import str
 
 
 def get_url(protocol, address, port):

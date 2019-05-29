@@ -53,5 +53,5 @@ def get_result_from_data_id(request):
 
     except Exception as e:
         # if something went wrong, return an internal server error
-        content = {'message': e.message}
+        content = {'message': str(e)}
         return Response(content, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
