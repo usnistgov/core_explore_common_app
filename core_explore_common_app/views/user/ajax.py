@@ -149,6 +149,16 @@ def get_data_source_results(request, query_id, data_source_index, page=1):
         # send query, and get results from data source
         results = send_query(request, query, int(data_source_index), page)
 
+        # pagination has other pages?
+        has_other_pages = results['count'] > RESULTS_PER_PAGE
+
+        # pagination has previous?
+        has_previous = get_page_number(results['previous']) is not None
+
+        # pagination has next?
+        has_next = get_page_number(results['next']) > int(math.ceil(float(results['count']) / RESULTS_PER_PAGE)) \
+            if results['next'] is not None else False
+
         # set results in context
         context_data = {
             'results': results['results'],
@@ -157,12 +167,11 @@ def get_data_source_results(request, query_id, data_source_index, page=1):
             'pagination': {
                 'number': int(page),
                 'paginator': {'num_pages': int(math.ceil(float(results['count']) / RESULTS_PER_PAGE))},
-                'has_other_pages': results['count'] > RESULTS_PER_PAGE,
+                'has_other_pages': has_other_pages,
                 'previous_page_number': get_page_number(results['previous']),
                 'next_page_number': get_page_number(results['next']),
-                'has_previous': get_page_number(results['previous']) is not None,
-                'has_next': get_page_number(results['next']) >
-                            int(math.ceil(float(results['count']) / RESULTS_PER_PAGE)),
+                'has_previous': has_previous,
+                'has_next': has_next
             },
             'exporter_app': 'core_exporters_app' in INSTALLED_APPS,
             'blobs_preview': 'core_file_preview_app' in INSTALLED_APPS,
