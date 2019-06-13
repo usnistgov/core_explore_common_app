@@ -1,7 +1,6 @@
 """Explore Common query utils
 """
 import json
-from builtins import str
 
 from django.core.urlresolvers import reverse
 from requests import ConnectionError

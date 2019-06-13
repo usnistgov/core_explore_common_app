@@ -1,7 +1,6 @@
 """
 Query models
 """
-from builtins import str
 
 from mongoengine import errors as mongoengine_errors
 

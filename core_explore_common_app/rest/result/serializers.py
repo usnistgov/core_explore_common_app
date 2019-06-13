@@ -1,6 +1,5 @@
 """Result serializers
 """
-from builtins import object
 
 from rest_framework_mongoengine.serializers import DocumentSerializer, EmbeddedDocumentSerializer
 

@@ -1,17 +1,15 @@
 """ Explore Common Views
 """
 from abc import ABCMeta, abstractmethod
-from builtins import str
 
 from django.contrib import messages
 from django.views.generic import RedirectView
-from future.utils import with_metaclass
 
 from core_explore_common_app.components.query import api as query_api
 from core_explore_common_app.components.query.models import Query
 
 
-class ResultQueryRedirectView(with_metaclass(ABCMeta, RedirectView)):
+class ResultQueryRedirectView(RedirectView, metaclass=ABCMeta):
     def get_redirect_url(self, *args, **kwargs):
         try:
             # here we receive a PersistentQuery id

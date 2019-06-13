@@ -1,6 +1,5 @@
 """ REST views for the query API
 """
-from builtins import str
 
 from django.core.urlresolvers import reverse
 

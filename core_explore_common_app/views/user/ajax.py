@@ -20,7 +20,6 @@ from core_explore_common_app.utils.query.query import send as send_query, add_lo
     get_local_query_absolute_url
 from core_main_app.commons.exceptions import DoesNotExist
 from core_main_app.utils.pagination.rest_framework_paginator.rest_framework_paginator import get_page_number
-from future.utils import with_metaclass
 
 
 def get_local_data_source(request):
@@ -201,7 +200,7 @@ def get_data_source_results(request, query_id, data_source_index, page=1):
         return HttpResponseBadRequest("An unexpected error occurred: " + str(e))
 
 
-class CreatePersistentQueryUrlView(with_metaclass(ABCMeta, View)):
+class CreatePersistentQueryUrlView(View, metaclass=ABCMeta):
     """ Create the persistent url from a Query
     """
     view_to_reverse = None
