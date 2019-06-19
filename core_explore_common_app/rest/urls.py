@@ -1,6 +1,7 @@
 """Url router for the REST API
 """
 from django.conf.urls import url
+
 from core_explore_common_app.rest.query import views as query_views
 from core_explore_common_app.rest.result import views as result_views
 

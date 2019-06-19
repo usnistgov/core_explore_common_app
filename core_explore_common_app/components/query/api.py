@@ -1,8 +1,8 @@
 """ Query api
 """
+from core_explore_common_app import settings
 from core_explore_common_app.components.query.models import Query
 from core_explore_common_app.constants import LOCAL_QUERY_NAME
-from core_explore_common_app import settings
 from core_main_app.commons.exceptions import DoesNotExist
 from core_main_app.utils.query.constants import VISIBILITY_OPTION
 

@@ -1,6 +1,7 @@
 """ Url router for the Explore Common application
 """
 from django.conf.urls import url, include
+
 from core_explore_common_app.views.user import ajax as user_ajax
 
 urlpatterns = [

@@ -1,8 +1,9 @@
 """Explore Common result utils
 """
+import json
+
 from core_explore_common_app.components.result.models import Result
 from core_explore_common_app.rest.result.serializers import ResultSerializer, ResultBaseSerializer
-import json
 
 
 def get_template_info(template, include_template_id=True):
