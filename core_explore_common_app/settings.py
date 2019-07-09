@@ -14,3 +14,8 @@ EXPLORE_ADD_DEFAULT_LOCAL_DATA_SOURCE_TO_QUERY = getattr(settings,
                                                          'EXPLORE_ADD_DEFAULT_LOCAL_DATA_SOURCE_TO_QUERY',
                                                          True)
 QUERY_VISIBILITY = getattr(settings, 'QUERY_VISIBILITY', VISIBILITY_PUBLIC)
+
+"""The default sorting fields displayed on the GUI, Data model field Array"""
+DATA_DISPLAYED_SORTING_FIELDS = getattr(settings, 'DATA_DISPLAYED_SORTING_FIELDS', [{'field': 'title', 'display': 'Title'},
+                                                                                 {'field': 'last_modification_date', 'display': 'Last modification date'},
+                                                                                 {'field': 'template', 'display': 'Template'}])

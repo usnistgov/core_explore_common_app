@@ -1,6 +1,7 @@
 """Explore Common query utils
 """
 import json
+import urllib
 
 from django.core.urlresolvers import reverse
 from requests import ConnectionError
@@ -14,6 +15,7 @@ from core_explore_common_app.rest.result.serializers import ResultSerializer
 from core_explore_common_app.settings import EXPLORE_ADD_DEFAULT_LOCAL_DATA_SOURCE_TO_QUERY
 from core_explore_common_app.utils.protocols.oauth2 import send_post_request as oauth2_request
 from core_main_app.utils.requests_utils.requests_utils import send_get_request
+from core_main_app.settings import DATA_SORTING_FIELDS
 
 
 def send(request, query, data_source_index, page):
@@ -120,7 +122,7 @@ def create_default_query(request, template_ids):
 
     """
     # create new query object
-    query = Query(user_id=str(request.user.id), templates=template_ids)
+    query = Query(user_id=str(request.user.id), templates=template_ids, order_by_field=','.join(DATA_SORTING_FIELDS))
     if EXPLORE_ADD_DEFAULT_LOCAL_DATA_SOURCE_TO_QUERY:
         # add the local data source by default
         add_local_data_source(request, query)
@@ -135,6 +137,7 @@ def _serialize_query(query, data_source):
         "query": query.content,
         "templates": json.dumps([{'id': str(template.id), 'hash': template.hash} for template in query.templates]),
         "options": json.dumps(data_source.query_options),
+        "order_by_field": query.order_by_field
     }
 
 

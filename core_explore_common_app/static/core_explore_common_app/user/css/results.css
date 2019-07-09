@@ -23,3 +23,26 @@ span.expand {
     position: relative;
     top: -2px;
 }
+
+.filter {
+    float: right !important;
+    margin-top: 5px;
+}
+
+.filter ul {
+    padding: 0;
+}
+
+.filter button {
+    webkit-border-radius: 5px 5px 5px 5px;
+    border-radius: 5px 5px 5px 5px;
+    border: 1px solid #a7a7a7;
+}
+
+.filter ul>li {
+    cursor: pointer;
+}
+
+.filter ul>li:hover {
+  background-color: #cacaca;
+}

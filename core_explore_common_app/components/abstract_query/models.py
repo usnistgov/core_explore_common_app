@@ -31,6 +31,7 @@ class AbstractQuery(Document):
     content = fields.StringField(blank=True)
     templates = fields.ListField(fields.ReferenceField(Template, blank=True), blank=True, default=[])
     data_sources = fields.ListField(fields.EmbeddedDocumentField(DataSource, blank=True), blank=True, default=[])
+    order_by_field = fields.StringField(blank=True)
 
     meta = {
         'abstract': True,
