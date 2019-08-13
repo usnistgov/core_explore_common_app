@@ -121,11 +121,11 @@ var refreshFilterPanel = function() {
  *  @param jQueryClickEvent
  */
 var toggleFilter = function(event) {
-
     // Stop the event propagation to avoid default behavior: close dropdown on click
     event.stopPropagation();
 
-    var clickedButtonValue = event.target.id.replace('sort_', '');
+    var clickedButtonElementId = $(event.target).closest('li')[0]
+    var clickedButtonValue = clickedButtonElementId.replace('sort_', '');
 
     // update the sorting order in the sorting structure ( ex. ['+title', 'last_modification_date', '-template'] )
     data_sorting_fields.forEach(function(field, index) {
