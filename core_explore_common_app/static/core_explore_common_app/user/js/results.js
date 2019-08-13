@@ -124,7 +124,7 @@ var toggleFilter = function(event) {
     // Stop the event propagation to avoid default behavior: close dropdown on click
     event.stopPropagation();
 
-    var clickedButtonElementId = $(event.target).closest('li')[0]
+    var clickedButtonElementId = $(event.target).closest('li')[0].id;
     var clickedButtonValue = clickedButtonElementId.replace('sort_', '');
 
     // update the sorting order in the sorting structure ( ex. ['+title', 'last_modification_date', '-template'] )
