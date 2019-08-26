@@ -18,10 +18,7 @@ def send_get_request(url, access_token):
     Returns:
 
     """
-    # Builds header
-    headers = {'Authorization': 'Bearer ' + access_token}
-    # post request
-    return requests_utils.send_get_request(url, headers=headers)
+    return requests_utils.send_get_request_with_access_token(url, access_token)
 
 
 def send_post_request(url, data, access_token):
