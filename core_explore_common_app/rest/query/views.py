@@ -1,7 +1,7 @@
 """ REST views for the query API
 """
 
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 
 from core_explore_common_app.components.result.models import Result
 from core_explore_common_app.rest.result.serializers import ResultSerializer
