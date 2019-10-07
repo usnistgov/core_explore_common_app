@@ -52,10 +52,3 @@ span.expand {
 .filter ul>li:hover {
   background-color: #cacaca;
 }
-
-.pagination {
-    margin-left: 50%;
-    padding-top: 20px;
-    -ms-transform: translate(-50%, -50%);
-    transform: translate(-50%, -50%);
-}
