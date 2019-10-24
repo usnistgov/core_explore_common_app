@@ -5,7 +5,7 @@ import math
 from abc import ABCMeta, abstractmethod
 from os.path import join
 
-from django.urls import reverse
+from django.core.urlresolvers import reverse
 from django.http.response import HttpResponse, HttpResponseBadRequest
 from django.template import loader
 from django.views import View

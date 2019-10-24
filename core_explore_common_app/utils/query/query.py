@@ -3,7 +3,7 @@
 import json
 import urllib
 
-from django.urls import reverse
+from django.core.urlresolvers import reverse
 from requests import ConnectionError
 
 from core_explore_common_app.commons.exceptions import ExploreRequestError
