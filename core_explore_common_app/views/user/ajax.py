@@ -9,6 +9,7 @@ from django.core.urlresolvers import reverse
 from django.http.response import HttpResponse, HttpResponseBadRequest
 from django.template import loader
 from django.views import View
+from django.shortcuts import render as django_render
 
 import core_explore_common_app.components.abstract_persistent_query.api as abstract_persistent_query_api
 from core_explore_common_app.commons.exceptions import ExploreRequestError
@@ -21,6 +22,7 @@ from core_explore_common_app.utils.query.query import send as send_query, add_lo
     get_local_query_absolute_url
 from core_main_app.commons.exceptions import DoesNotExist
 from core_main_app.utils.pagination.rest_framework_paginator.rest_framework_paginator import get_page_number
+
 
 
 def get_local_data_source(request):
@@ -56,9 +58,7 @@ def get_local_data_source(request):
             context = {}
             context.update(request)
             context.update(context_params)
-            template = loader.get_template('core_explore_common_app/user/selector/local_content.html')
-            html_data_source = template.render(context)
-            return HttpResponse(html_data_source)
+            return django_render(request, 'core_explore_common_app/user/selector/local_content.html', context=context)
         else:
             return HttpResponseBadRequest("Expected query_id parameter is missing.")
     except Exception as e:

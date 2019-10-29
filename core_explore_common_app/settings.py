@@ -5,6 +5,9 @@ from core_main_app.utils.query.constants import VISIBILITY_PUBLIC
 if not settings.configured:
     settings.configure()
 
+CUSTOM_NAME = getattr(settings, 'CUSTOM_NAME', 'Local')
+""" :py:class:`str`: Name of the local instance
+"""
 
 DATA_SOURCES_EXPLORE_APPS = getattr(settings, 'DATA_SOURCES_EXPLORE_APPS', [])
 RESULTS_PER_PAGE = getattr(settings, 'RESULTS_PER_PAGE', 10)

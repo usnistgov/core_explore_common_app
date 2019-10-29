@@ -10,3 +10,7 @@ INSTALLED_APPS = [
     # Local apps
     "tests",
 ]
+
+CUSTOM_NAME = 'Local'
+""" :py:class:`str`: Name of the local instance
+"""
