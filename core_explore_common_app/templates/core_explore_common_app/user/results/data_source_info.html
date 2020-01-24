@@ -1,23 +1,32 @@
-<div name="result">
-    {% if exporter_app %}
-        <input data-template-id="{{result.template_info.id}}" data-template-hash="{{result.template_info.hash}}"
-               type="checkbox" value="{{ result.access_data_url }}" />
-    {% endif %}
-    <span class="expand" onclick="showhideResult(event);"></span>
-    <span class="result-title">
-        {% if result.detail_url %}
-            <a href="{{ result.detail_url }}">{{ result.title }}</a>
-        {% else %}
-        {{ result.title }}
+{% load json_date %}
+
+<div {% if display_last_modification_date %}class="result-line-main-container"{% endif %} name="result">
+    <div class="result-line-title-container">
+        <div class="data-info-left-container">
+            {% if exporter_app %}
+                <input data-template-id="{{result.template_info.id}}" data-template-hash="{{result.template_info.hash}}"
+                       type="checkbox" value="{{ result.access_data_url }}" />
+            {% endif %}
+            <span class="expand" onclick="showhideResult(event);"></span>
+            <span class="result-title">
+                {% if result.detail_url %}
+                <a href="{{ result.detail_url }}">{{ result.title }}</a>
+                {% else %}
+                {{ result.title }}
+                {% endif %}
+            </span>
+            <span class="template-info-name">{{result.template_info.name}}</span>
+            {% if result.permission_url and display_edit_button %}
+                <input class="input-permission-url" type="hidden" value="{{result.permission_url}}">
+                <a class="permissions-link" href="#">
+                    <i class="fa fa-pencil permissions-icon edit" aria-hidden="true"></i>
+                </a>
+            {% endif %}
+        </div>
+        {% if display_last_modification_date %}
+            <div title="Last modification date" class="data-info-right-container">{{result.last_modification_date|json_date:"N d Y g:iA"}}</div>
         {% endif %}
-    </span>
-    <span class="template-info-name">{{result.template_info.name}}</span>
-        {% if result.permission_url and display_edit_button %}
-            <input class="input-permission-url" type="hidden" value="{{result.permission_url}}">
-            <a class="permissions-link" href="#">
-                <i class="fa fa-pencil permissions-icon edit" aria-hidden="true"></i>
-            </a>
-        {% endif %}
+    </div>
     <div class='xmlResult' readonly='true'>
     {{ xml_representation }}
     </div>

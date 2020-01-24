@@ -20,13 +20,22 @@
                     {% endfor %}
                 </ul>
             </li>
+            <li class="filter">
+                <div id="date-toggle" class="toggle-container">
+                    <label class="switch">
+                    <input id="date-switch-input" type="checkbox" class="switch-input" />
+                    <span class="switch-label" data-on="Date" data-off="Hide"></span>
+                    <span class="handle"></span>
+                  </label>
+                </div>
+            </li>
         </ul>
         <div class="tab-content">
         {% for data_source in query.data_sources %}
             <div role="tabpanel" class="results-container tab-pane {% if forloop.counter0 == 0 %} active {% endif %} results-page"
                  id="results_{{forloop.counter0}}"
                  url="{% url 'core_explore_common_data_source_results' query.id forloop.counter0 %}">
-                <div class="results-page" style="margin-top: 1em;" nb_results_id="results_infos_{{forloop.counter0}}"/>
+                <div class="results-page" nb_results_id="results_infos_{{forloop.counter0}}"/>
             </div>
         {% endfor %}
         </div>

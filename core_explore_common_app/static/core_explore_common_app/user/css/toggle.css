@@ -1,0 +1,158 @@
+/*
+ * Style for the date toggle button
+ */
+:root {
+    /*Background color when it's turned off*/
+    --off-color: #d1d3d4;
+    /*Background color when it's turned on*/
+    --on-color: #35b1e6;
+    /*Animation speed and type*/
+    --animation-speed: 0.15s ease-out;
+    /*Font used by the text*/
+    --font-family: Arial;
+    /*The size used*/
+    --font-size: 11px;
+    /*The font weight*/
+    --font-weight: 300;
+    /*Font color when the switch is on*/
+    --on-font-color: white;
+    /*Font color when the switch is off*/
+    --off-font-color: white;
+    /*How far the OFF text is from the right side*/
+    --label-position-off: 12px;
+    /*How far the ON text is from the left side*/
+    --label-position-on: 11px;
+    /*Small switch width*/
+    --width: 60px;
+    /*Small switch height*/
+    --height: 25px;
+    /*Border radius for the handle*/
+    --handle-border-radius: 20px;
+    /*Border radius for the box*/
+    --box-border-radius: 18px;
+    /*Shadow for the handle*/
+    --handle-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
+    /*Handle color*/
+    --handle-color: white;
+    /*Handle width*/
+    --handle-width: 15px;
+    /*Handle height*/
+    --handle-height: 15px;
+    /*The handle's width while the toggle is clicked*/
+    --onclick-width: 30px;
+    /*Handle's distance from the top*/
+    --handle-top: 10px;
+}
+
+.toggle-container * {
+    padding-top: 5px;
+    font-family: var(--font-family);
+    -webkit-transition: var(--animation-speed);
+    -moz-transition: var(--animation-speed);
+    -o-transition: var(--animation-speed);
+    transition: var(--animation-speed);
+}
+
+.switch {
+    width: var(--width);
+    height: var(--height);
+}
+
+.toggle-container label {
+    position: relative;
+    display: inline-block;
+    vertical-align: top;
+    border-radius: var(--box-border-radius);
+    cursor: pointer;
+}
+
+.switch-input {
+    display: none;
+}
+
+.switch-label {
+    position: relative;
+    display: block;
+    height: inherit;
+    font-size: var(--font-size);
+    font-weight: var(--font-weight);
+    background: var(--off-color);
+    border-radius: inherit;
+}
+
+.switch-label:before,
+.switch-label:after {
+    position: absolute;
+    top: 50%;
+    margin-top: -0.5em;
+    line-height: 1.1;
+}
+
+.switch-label:before {
+    content: attr(data-off);
+    color: var(--on-font-color);
+}
+
+.switch-label:after {
+    content: attr(data-on);
+    color: var(--off-font-color);
+    opacity: 0;
+}
+
+.switch-label:before {
+    right: var(--label-position-off);
+    ;
+}
+
+.switch-label:after {
+    left: var(--label-position-on);
+    ;
+}
+
+.switch-input:checked~.switch-label {
+    background: var(--on-color);
+}
+
+.switch-input:checked~.switch-label:before {
+    opacity: 0;
+}
+
+.switch-input:checked~.switch-label:after {
+    opacity: 1;
+}
+
+.handle {
+    position: absolute !important;
+    top: var(--handle-top);
+    left: 5px;
+    background: var(--handle-color);
+    border-radius: var(--handle-border-radius);
+    box-shadow: var(--handle-shadow);
+}
+
+.handle {
+    width: var(--handle-width);
+    height: var(--handle-height);
+}
+
+.handle:before {
+    content: "";
+    top: 50%;
+    left: 50%;
+    position: absolute !important;
+    margin: -6px 0 0 -6px;
+    width: 12px;
+    height: 12px;
+    border-radius: 6px;
+}
+
+.switch-label:active~.handle,
+.handle:active {
+    width: var(--onclick-width);
+}
+
+.switch-input:checked~.handle {
+    left: unset;
+    right: 5px;
+}
+/****** Toggle button end ******/

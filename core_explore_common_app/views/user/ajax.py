@@ -15,7 +15,7 @@ import core_explore_common_app.components.abstract_persistent_query.api as abstr
 from core_explore_common_app.commons.exceptions import ExploreRequestError
 from core_explore_common_app.components.query import api as query_api
 from core_explore_common_app.constants import LOCAL_QUERY_NAME
-from core_explore_common_app.settings import DATA_SOURCES_EXPLORE_APPS, RESULTS_PER_PAGE
+from core_explore_common_app.settings import DATA_SOURCES_EXPLORE_APPS, RESULTS_PER_PAGE, DISPLAY_LAST_MODIFICATION_DATE
 from core_explore_common_app.settings import INSTALLED_APPS
 from core_explore_common_app.settings import DATA_DISPLAYED_SORTING_FIELDS, DISPLAY_EDIT_BUTTON
 from core_explore_common_app.utils.query.query import send as send_query, add_local_data_source, \
@@ -168,6 +168,7 @@ def get_data_source_results(request, query_id, data_source_index, page=1):
         # set results in context
         context_data = {
             'results': results['results'],
+            'display_last_modification_date': DISPLAY_LAST_MODIFICATION_DATE,
             'query_id': query_id,
             'data_source_index': data_source_index,
             'pagination': {

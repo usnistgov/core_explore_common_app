@@ -1,11 +1,17 @@
+.result-line-main-container {
+    border-bottom: solid 1px #d4d4d4;
+}
+
+.result-line-title-container {
+    height: 45px;
+}
+
 .results-page div {
-    overflow: hidden;
     position: relative;
-    width: 100%;
 }
 
 div.results-container {
-    padding-top:1 0 0 0;
+    padding-top: 10px;
     margin:0;
 }
 
@@ -44,16 +50,17 @@ span.expand {
 }
 
 .filter button {
-    webkit-border-radius: 5px 5px 5px 5px;
-    border-radius: 5px 5px 5px 5px;
-    border: 1px solid #a7a7a7;
+    margin-left: 5px;
+    border-radius: 5px;
+    background: none;
+    border: none
 }
 
 .filter ul>li {
     cursor: pointer;
 }
 
-.filter ul>li:hover {
+.filter button:hover {
   background-color: #cacaca;
 }
 
@@ -65,4 +72,19 @@ span.expand {
     font-size: 20px;
     color: #007aa7;
     cursor: pointer;
+}
+
+.data-info-right-container {
+    float:right;
+    width: auto;
+    text-align: end;
+}
+
+.data-info-left-container {
+    float: left;
+}
+
+.xmlResult {
+    width: 100%;
+    overflow: auto;
 }

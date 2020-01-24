@@ -123,7 +123,7 @@ var refreshFilterPanel = function() {
 var toggleFilter = function(event) {
     // Stop the event propagation to avoid default behavior: close dropdown on click
     event.stopPropagation();
-
+    $('#result-button-filter>i')[0].classList = 'fa fa-spinner fa-spin'
     var clickedButtonElementId = $(event.target).closest('li')[0].id;
     var clickedButtonValue = clickedButtonElementId.replace('sort_', '');
 
@@ -215,6 +215,8 @@ var get_data_source_results = function(result_page, data_source_url, order_by_fi
             var nb_results_id = result_page.attr('nb_results_id');
             $("#" + nb_results_id).html(data.nb_results);
             result_page.html(data.results);
+            // when the results and the tab are displayed we can init the toggle
+            initDisplayDateToggle();
             getDataPermission();
         },
         error: function(data) {
@@ -278,14 +280,46 @@ openEditRecord = function(id) {
 };
 
 
+/*
+ * Init the display date toggle
+ */
+var initDisplayDateToggle = function() {
+    // add date toggle listener or delete the toggle
+    if (displayLastModificationDate == 'true') {
+        // set the checkbox to "checked"
+        $('.switch-input').prop('checked', true);
+        // create change listener
+        $("#date-switch-input").change(function() {
+            toggleDate($(this).is(":checked"));
+        });
+    } else {
+        $('#date-toggle').remove();
+    }
+}
+
+/*
+ * Show / Hide the dates on the results list
+ * @param: {boolean} value of the checkbox
+ */
+var toggleDate = function(value) {
+    var dateContainers = $('.data-info-right-container');
+    if(value) {
+        dateContainers.show();
+        $( "div[name='result']" ).addClass( "result-line-main-container" )
+
+    } else {
+        dateContainers.hide();
+        $( "div[name='result']" ).removeClass( "result-line-main-container" )
+    }
+}
+
+
 /**
  * Shows/hides a result of the results page
  * @param event
  */
-showhideResult = function(event) {
-    var button = event.target;
-    var parent = $(event.target).parent();
-    $(parent.children('.xmlResult')).toggle("blind", 500);
+showhideResult = function(event, selector) {
+    $(selector).toggle("blind", 500);
     if ($(button).attr("class") == "expand") {
         $(button).attr("class", "collapse");
     } else {

@@ -1,6 +1,7 @@
 """ REST views for the query API
 """
 
+import pytz
 from django.urls import reverse
 
 from core_explore_common_app.components.result.models import Result
@@ -51,7 +52,8 @@ class ExecuteLocalQueryView(AbstractExecuteLocalQueryView):
                                   permission_url="{0}?ids={1}".format(url_permission_data, f'%5B"{str(data.id)}"%5D'),
                                   detail_url="{0}?id={1}".format(detail_url_base, str(data.id)),
                                   access_data_url="{0}?id={1}".format(url_access_data,
-                                                                      str(data.id))
+                                                                      str(data.id)),
+                                  last_modification_date=pytz.utc.localize(data.last_modification_date)
                                   )
                            )
 

@@ -20,3 +20,4 @@ class Result(Document):
     permission_url = fields.StringField(blank=True, null=True)
     detail_url = fields.StringField(blank=True)
     access_data_url = fields.StringField(blank=True)
+    last_modification_date = fields.DateTimeField(blank=True, default=None)
