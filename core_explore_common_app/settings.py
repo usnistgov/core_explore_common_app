@@ -22,3 +22,7 @@ QUERY_VISIBILITY = getattr(settings, 'QUERY_VISIBILITY', VISIBILITY_PUBLIC)
 DATA_DISPLAYED_SORTING_FIELDS = getattr(settings, 'DATA_DISPLAYED_SORTING_FIELDS', [{'field': 'title', 'display': 'Title'},
                                                                                  {'field': 'last_modification_date', 'display': 'Last modification date'},
                                                                                  {'field': 'template', 'display': 'Template'}])
+
+"""Display the edit button on the result page"""
+DISPLAY_EDIT_BUTTON = getattr(settings, 'DISPLAY_EDIT_BUTTON', False)
+

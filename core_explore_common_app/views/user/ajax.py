@@ -17,7 +17,7 @@ from core_explore_common_app.components.query import api as query_api
 from core_explore_common_app.constants import LOCAL_QUERY_NAME
 from core_explore_common_app.settings import DATA_SOURCES_EXPLORE_APPS, RESULTS_PER_PAGE
 from core_explore_common_app.settings import INSTALLED_APPS
-from core_explore_common_app.settings import DATA_DISPLAYED_SORTING_FIELDS
+from core_explore_common_app.settings import DATA_DISPLAYED_SORTING_FIELDS, DISPLAY_EDIT_BUTTON
 from core_explore_common_app.utils.query.query import send as send_query, add_local_data_source, \
     get_local_query_absolute_url
 from core_main_app.commons.exceptions import DoesNotExist
@@ -181,6 +181,7 @@ def get_data_source_results(request, query_id, data_source_index, page=1):
             },
             'exporter_app': 'core_exporters_app' in INSTALLED_APPS,
             'blobs_preview': 'core_file_preview_app' in INSTALLED_APPS,
+            'display_edit_button': DISPLAY_EDIT_BUTTON
         }
 
         # create context

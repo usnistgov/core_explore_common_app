@@ -215,9 +215,64 @@ var get_data_source_results = function(result_page, data_source_url, order_by_fi
             var nb_results_id = result_page.attr('nb_results_id');
             $("#" + nb_results_id).html(data.nb_results);
             result_page.html(data.results);
+            getDataPermission();
         },
         error: function(data) {
             result_page.html(data.responseText);
+        }
+    });
+};
+
+/*
+ * Display the edit icon according to the user permissions
+ */
+var getDataPermission = function() {
+
+    $("input.input-permission-url").map(function(){
+        var inputElement = $(this);
+        var data_permission_url = inputElement.attr("value");
+        $.ajax({
+            url: data_permission_url,
+            type: "GET",
+            contentType:"application/json; charset=utf-8",
+            success: function(data) {
+                for(id in data) {
+                    if (data[id]) {
+                        // show the edit icon
+                        var editLinkElement = inputElement.siblings(".permissions-link");
+                        editLinkElement.css('display', "inline");
+                        // create the click event listener
+                        $(editLinkElement).click(function() {
+                          openEditRecord(id);
+                        });
+                    }
+                }
+            },
+            error: function(data) {
+                console.log(data)
+            }
+        });
+    });
+}
+
+/*
+ * Navigate to the edit page with the correct record id
+ * @param {string} id of the clicked record
+ */
+openEditRecord = function(id) {
+
+    $.ajax({
+        url : editRecordUrl,
+        type : "POST",
+        dataType: "json",
+        data : {
+            "id": id
+        },
+        success: function(data){
+            window.location = data.url;
+        },
+        error:function(data){
+            $.notify("Error while opening the edit page.", {style: 'error'});
         }
     });
 };

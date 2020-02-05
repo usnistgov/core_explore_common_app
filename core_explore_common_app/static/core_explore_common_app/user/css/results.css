@@ -21,6 +21,10 @@ span.expand {
     font-weight:bold;
 }
 
+.result-title:hover {
+    color: #37c0fb;
+}
+
 .tab-selector td {
     padding: 5px;
 }
@@ -51,4 +55,14 @@ span.expand {
 
 .filter ul>li:hover {
   background-color: #cacaca;
+}
+
+.permissions-link {
+    display: none;
+}
+
+.permissions-icon {
+    font-size: 20px;
+    color: #007aa7;
+    cursor: pointer;
 }

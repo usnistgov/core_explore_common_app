@@ -17,5 +17,6 @@ class Result(Document):
     title = fields.StringField(blank=False)
     xml_content = fields.StringField(blank=False)
     template_info = fields.EmbeddedDocumentField(TemplateInfo)
+    permission_url = fields.StringField(blank=True, null=True)
     detail_url = fields.StringField(blank=True)
     access_data_url = fields.StringField(blank=True)

@@ -31,6 +31,7 @@ class ExecuteLocalQueryView(AbstractExecuteLocalQueryView):
         # Get detail view base url (to be completed with data id)
         detail_url_base = reverse("core_main_app_data_detail")
         url_access_data = reverse("core_explore_common_app_get_result_from_data_id")
+        url_permission_data = reverse("core_main_app_rest_data_permissions")
 
         # Build list of results
         results = []
@@ -43,9 +44,11 @@ class ExecuteLocalQueryView(AbstractExecuteLocalQueryView):
             if template not in template_info:
                 template_info[template] = result_utils.get_template_info(template)
 
-            results.append(Result(title=data.title,
+            results.append(Result(
+                                  title=data.title,
                                   xml_content=data.xml_content,
                                   template_info=template_info[template],
+                                  permission_url="{0}?ids={1}".format(url_permission_data, f'%5B"{str(data.id)}"%5D'),
                                   detail_url="{0}?id={1}".format(detail_url_base, str(data.id)),
                                   access_data_url="{0}?id={1}".format(url_access_data,
                                                                       str(data.id))

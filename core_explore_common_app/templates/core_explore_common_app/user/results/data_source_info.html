@@ -6,12 +6,18 @@
     <span class="expand" onclick="showhideResult(event);"></span>
     <span class="result-title">
         {% if result.detail_url %}
-        <a href="{{ result.detail_url }}">{{ result.title }}</a>
+            <a href="{{ result.detail_url }}">{{ result.title }}</a>
         {% else %}
         {{ result.title }}
         {% endif %}
     </span>
     <span class="template-info-name">{{result.template_info.name}}</span>
+        {% if result.permission_url and display_edit_button %}
+            <input class="input-permission-url" type="hidden" value="{{result.permission_url}}">
+            <a class="permissions-link" href="#">
+                <i class="fa fa-pencil permissions-icon edit" aria-hidden="true"></i>
+            </a>
+        {% endif %}
     <div class='xmlResult' readonly='true'>
     {{ xml_representation }}
     </div>
