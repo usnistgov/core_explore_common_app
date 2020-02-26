@@ -22,6 +22,7 @@ class DataSource(EmbeddedDocument):
     url_query = fields.StringField(blank=False)
     query_options = fields.DictField(blank=True)
     authentication = fields.EmbeddedDocumentField(Authentication)
+    order_by_field = fields.StringField(blank=True, default='')
 
 
 class AbstractQuery(Document):
@@ -31,7 +32,6 @@ class AbstractQuery(Document):
     content = fields.StringField(blank=True)
     templates = fields.ListField(fields.ReferenceField(Template, blank=True), blank=True, default=[])
     data_sources = fields.ListField(fields.EmbeddedDocumentField(DataSource, blank=True), blank=True, default=[])
-    order_by_field = fields.StringField(blank=True)
 
     meta = {
         'abstract': True,

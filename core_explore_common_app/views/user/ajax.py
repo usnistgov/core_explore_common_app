@@ -15,7 +15,8 @@ import core_explore_common_app.components.abstract_persistent_query.api as abstr
 from core_explore_common_app.commons.exceptions import ExploreRequestError
 from core_explore_common_app.components.query import api as query_api
 from core_explore_common_app.constants import LOCAL_QUERY_NAME
-from core_explore_common_app.settings import DATA_SOURCES_EXPLORE_APPS, RESULTS_PER_PAGE, DISPLAY_LAST_MODIFICATION_DATE
+from core_explore_common_app.settings import DATA_SOURCES_EXPLORE_APPS, RESULTS_PER_PAGE, DEFAULT_DATE_TOGGLE_VALUE, \
+    SORTING_DISPLAY_TYPE
 from core_explore_common_app.settings import INSTALLED_APPS
 from core_explore_common_app.settings import DATA_DISPLAYED_SORTING_FIELDS, DISPLAY_EDIT_BUTTON
 from core_explore_common_app.utils.query.query import send as send_query, add_local_data_source, \
@@ -118,7 +119,6 @@ def get_data_sources_html(request):
         context.update({
             'query': query
         })
-        context['data_displayed_sorting_fields'] = DATA_DISPLAYED_SORTING_FIELDS
 
         # render html results
         html_template = loader.get_template(
@@ -168,7 +168,6 @@ def get_data_source_results(request, query_id, data_source_index, page=1):
         # set results in context
         context_data = {
             'results': results['results'],
-            'display_last_modification_date': DISPLAY_LAST_MODIFICATION_DATE,
             'query_id': query_id,
             'data_source_index': data_source_index,
             'pagination': {
@@ -182,7 +181,11 @@ def get_data_source_results(request, query_id, data_source_index, page=1):
             },
             'exporter_app': 'core_exporters_app' in INSTALLED_APPS,
             'blobs_preview': 'core_file_preview_app' in INSTALLED_APPS,
-            'display_edit_button': DISPLAY_EDIT_BUTTON
+            'display_edit_button': DISPLAY_EDIT_BUTTON,
+            'sorting_display_type': SORTING_DISPLAY_TYPE,
+            'data_displayed_sorting_fields': DATA_DISPLAYED_SORTING_FIELDS,
+            'get_shareable_link_url': reverse("core_explore_keyword_get_persistent_query_url"),
+            'default_date_toggle_value': DEFAULT_DATE_TOGGLE_VALUE
         }
 
         # create context

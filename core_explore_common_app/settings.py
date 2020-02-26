@@ -23,9 +23,11 @@ DATA_DISPLAYED_SORTING_FIELDS = getattr(settings, 'DATA_DISPLAYED_SORTING_FIELDS
                                                                                  {'field': 'last_modification_date', 'display': 'Last modification date'},
                                                                                  {'field': 'template', 'display': 'Template'}])
 
-"""Display the last modification date"""
-DISPLAY_LAST_MODIFICATION_DATE = getattr(settings, 'DISPLAY_LAST_MODIFICATION_DATE', False)
+"""Set the toggle default value in the records list"""
+DEFAULT_DATE_TOGGLE_VALUE = getattr(settings, 'DEFAULT_DATE_TOGGLE_VALUE', False)
 
 """Display the edit button on the result page"""
 DISPLAY_EDIT_BUTTON = getattr(settings, 'DISPLAY_EDIT_BUTTON', False)
 
+"""Result sorting graphical display type ('multi' / 'single')"""
+SORTING_DISPLAY_TYPE = getattr(settings, 'SORTING_DISPLAY_TYPE', 'multi')

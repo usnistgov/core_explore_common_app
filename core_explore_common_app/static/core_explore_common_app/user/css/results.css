@@ -11,7 +11,6 @@
 }
 
 div.results-container {
-    padding-top: 10px;
     margin:0;
 }
 
@@ -41,19 +40,13 @@ span.expand {
 }
 
 .filter {
-    float: right !important;
-    margin-top: 5px;
+    position: relative;
+    display: inline-flex;
+    width: auto !important;
 }
 
 .filter ul {
     padding: 0;
-}
-
-.filter button {
-    margin-left: 5px;
-    border-radius: 5px;
-    background: none;
-    border: none
 }
 
 .filter ul>li {
@@ -62,6 +55,60 @@ span.expand {
 
 .filter button:hover {
   background-color: #cacaca;
+}
+
+.filter-left-padding {
+    padding-left: 22px;
+}
+
+.result-toolbar {
+    display: flex;
+    margin-bottom: 7px;
+    padding-top: 7px;
+    height: 42px;
+    background-color: #f1f1f1;
+    border-bottom: 1px solid #cacaca;
+    border-left: 1px solid #cacaca;
+    border-right: 1px solid #cacaca;
+    border-radius: 0 0 5px 5px;
+    -webkit-border-radius: 0 0 5px 5px;
+    -webkit-box-shadow: 0 8px 7px -7px #949494;
+    box-shadow: 0 8px 7px -7px #949494;
+}
+
+.result-toolbar button>a {
+    color: #474747;
+}
+
+.result-toolbar-button {
+    background: #e0e0e0;
+    border: 1px solid #8e8e8e;
+    border-radius: 15px;
+    webkit-border-radius: 15px;
+    font-size: 13px;
+    margin: 0 0 0 5px;
+    padding: 0 10px 0 10px;
+    line-height: 26px;
+    height: 26px;
+}
+
+.tools-menu {
+    min-width: 180px;
+}
+
+
+.tools-menu li {
+    padding-top: 0;
+    padding-bottom: 0;
+    padding-left: 10px;
+}
+
+.tools-menu i {
+    padding-right: 5px;
+}
+
+.tools-menu a {
+    display: contents !important;
 }
 
 .permissions-link {

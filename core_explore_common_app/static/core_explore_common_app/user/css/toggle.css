@@ -41,11 +41,15 @@
     /*The handle's width while the toggle is clicked*/
     --onclick-width: 30px;
     /*Handle's distance from the top*/
-    --handle-top: 10px;
+    --handle-top: 5px;
+}
+
+.toggle-container {
+    padding-top: 1px;
+    margin: 0px 0 0 5px;
 }
 
 .toggle-container * {
-    padding-top: 5px;
     font-family: var(--font-family);
     -webkit-transition: var(--animation-speed);
     -moz-transition: var(--animation-speed);
@@ -78,6 +82,7 @@
     font-weight: var(--font-weight);
     background: var(--off-color);
     border-radius: inherit;
+    border: 1px solid #8e8e8e;
 }
 
 .switch-label:before,
@@ -101,7 +106,6 @@
 
 .switch-label:before {
     right: var(--label-position-off);
-    ;
 }
 
 .switch-label:after {

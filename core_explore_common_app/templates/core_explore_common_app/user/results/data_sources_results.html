@@ -9,26 +9,6 @@
                 </a>
             </li>
             {% endfor %}
-            <li class="filter">
-                <button id="result-button-filter" data-toggle="dropdown" aria-haspopup="true"
-                        aria-expanded="false">
-                    <i class="fa fa-sort-amount-desc"></i>
-                </button>
-                <ul class="dropdown-menu tools-menu filter-dropdown-menu" aria-labelledby="result-button-filter">
-                    {% for item in data_displayed_sorting_fields %}
-                    <li id="sort_{{item.field}}"><i class="fa fa-random" aria-hidden="true"></i> {{item.display}}</li>
-                    {% endfor %}
-                </ul>
-            </li>
-            <li class="filter">
-                <div id="date-toggle" class="toggle-container">
-                    <label class="switch">
-                    <input id="date-switch-input" type="checkbox" class="switch-input" />
-                    <span class="switch-label" data-on="Date" data-off="Hide"></span>
-                    <span class="handle"></span>
-                  </label>
-                </div>
-            </li>
         </ul>
         <div class="tab-content">
         {% for data_source in query.data_sources %}

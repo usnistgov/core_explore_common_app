@@ -84,7 +84,7 @@ def create_local_data_source(request):
     """  Create local datasource
 
     Args:
-        request
+        request:
 
     Returns:
     """
@@ -93,7 +93,8 @@ def create_local_data_source(request):
     authentication = Authentication(type='session')
     data_source = DataSource(name=local_name,
                              url_query=local_query_url,
-                             authentication=authentication)
+                             authentication=authentication,
+                             order_by_field=','.join(DATA_SORTING_FIELDS))
     return data_source
 
 
@@ -122,7 +123,7 @@ def create_default_query(request, template_ids):
 
     """
     # create new query object
-    query = Query(user_id=str(request.user.id), templates=template_ids, order_by_field=','.join(DATA_SORTING_FIELDS))
+    query = Query(user_id=str(request.user.id), templates=template_ids)
     if EXPLORE_ADD_DEFAULT_LOCAL_DATA_SOURCE_TO_QUERY:
         # add the local data source by default
         add_local_data_source(request, query)
@@ -137,7 +138,7 @@ def _serialize_query(query, data_source):
         "query": query.content,
         "templates": json.dumps([{'id': str(template.id), 'hash': template.hash} for template in query.templates]),
         "options": json.dumps(data_source.query_options),
-        "order_by_field": query.order_by_field
+        "order_by_field": data_source.order_by_field
     }
 
 

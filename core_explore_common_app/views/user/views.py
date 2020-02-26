@@ -21,7 +21,6 @@ class ResultQueryRedirectView(RedirectView, metaclass=ABCMeta):
             query = Query(user_id=str(self.request.user.id),
                           content=persistent_query_example.content,
                           templates=persistent_query_example.templates,
-                          order_by_field=persistent_query_example.order_by_field,
                           data_sources=persistent_query_example.data_sources)
             query = query_api.upsert(query)
 

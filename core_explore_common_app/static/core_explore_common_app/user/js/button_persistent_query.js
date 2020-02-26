@@ -2,18 +2,13 @@
 * button persistent query js file
 */
 
-$(document).ready(function() {
-    $("#btn-persistent-query").on('click', getPersistentUrl);
-    $("#shareable-link-button").on('click', copyAndCloseModal);
-})
-
 /**
  * AJAX call, get persistent Url with the hidden url
  */
 getPersistentUrl = function(event){
     event.preventDefault();
 
-    var url = $("#btn-persistent-query").attr('href');
+    var url = $(event.target).attr('href');
     var queryId = $("#query_id").html();
 
     $.ajax({

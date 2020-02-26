@@ -1,5 +1,6 @@
 var getDataSourcesHTMLUrl = "{% url 'core_explore_common_data_sources_html' %}";
-var data_sorting_fields = "{{data.data_sorting_fields}}".trim().split(',');
-var displayLastModificationDate = '{{data.display_last_modification_date}}'
-var data_permissions_url = "{% url 'core_main_app_rest_data_permissions' %}"
+var dataSortingFields = "{{data.data_sorting_fields}}";
+var displayPersistentQueryButton = '{{display_persistent_query_button}}';
+var defaultDataSortingFields = '{{data.default_data_sorting_fields}}';
+var defaultDateToggleValue = '{{data.default_date_toggle_value}}'
 var editRecordUrl = "{% url 'core_dashboard_edit_record' %}";
