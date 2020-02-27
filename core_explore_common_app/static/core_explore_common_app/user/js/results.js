@@ -218,6 +218,8 @@ var get_data_source_results = function(result_page, data_source_url, order_by_fi
             // when the results and the tab are displayed we can init the toggle
             initDisplayDateToggle();
             getDataPermission();
+            // Add leave notice on links from loaded data
+            leaveNotice($("#results_" + nb_results_id.match(/(\d+)/)[0] + " a"));
         },
         error: function(data) {
             result_page.html(data.responseText);
