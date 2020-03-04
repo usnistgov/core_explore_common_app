@@ -1,0 +1,14 @@
+<div class="filter">
+    <button id="result-button-filter{{data_source_index}}" class="result-toolbar-button" data-toggle="dropdown" aria-haspopup="true"
+            aria-expanded="false">
+        <i class="fa fa-sort-amount-desc"></i> Sort
+    </button>
+    <ul class="dropdown-menu tools-menu filter-dropdown-menu" aria-labelledby="result-button-filter{{data_source_index}}">
+        {% for item in data_displayed_sorting_fields %}
+            <li data-filter-value="{{item.field}}" data-filter-order="{{item.ordering}}">
+                <i class="fa fa-check" aria-hidden="true"></i>
+                <span class="filter-left-padding">{{item.display}}</span>
+            </li>
+        {% endfor %}
+    </ul>
+</div>

@@ -2,7 +2,11 @@
 {% load blob_tags %}
 {% load get_attribute %}
 <div class="result-toolbar">
-    {% include "core_explore_common_app/user/ordering_menu/multi_criteria_sorting_menu.html" %}
+    {% if sorting_display_type == 'single' %}
+        {% include "core_explore_common_app/user/ordering_menu/single_criteria_sorting_menu.html" %}
+    {% elif sorting_display_type == 'multi' %}
+        {% include "core_explore_common_app/user/ordering_menu/multi_criteria_sorting_menu.html" %}
+    {% endif %}
     <button class="result-toolbar-button">
         {% include "core_explore_common_app/user/persistent_query/button_persistent_query.html" with url=get_shareable_link_url %}
     </button>
