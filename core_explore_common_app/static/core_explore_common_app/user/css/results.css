@@ -1,7 +1,3 @@
-.result-line-main-container {
-    border-bottom: solid 1px #d4d4d4;
-}
-
 .result-line-title-container {
     height: 45px;
 }
@@ -112,6 +108,7 @@ span.expand {
 }
 
 .permissions-link {
+    float: right;
     display: none;
 }
 
@@ -122,9 +119,13 @@ span.expand {
 }
 
 .data-info-right-container {
-    float:right;
+    float: right;
     width: auto;
     text-align: end;
+    margin: 0 10px 0 10px;
+    font-size: 0.8em;
+    font-style: italic;
+    color: #525252;
 }
 
 .data-info-left-container {

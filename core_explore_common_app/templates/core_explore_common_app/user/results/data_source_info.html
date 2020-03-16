@@ -22,8 +22,10 @@
                     <i class="fa fa-pencil permissions-icon edit" aria-hidden="true"></i>
                 </a>
             {% endif %}
+            <div title="Last modification date" class="data-info-right-container">
+                {{result.last_modification_date|json_date:"N d Y g:iA"}}
+            </div>
         </div>
-        <div title="Last modification date" class="data-info-right-container">{{result.last_modification_date|json_date:"N d Y g:iA"}}</div>
     </div>
     <div class='xmlResult' readonly='true'>
     {{ xml_representation }}

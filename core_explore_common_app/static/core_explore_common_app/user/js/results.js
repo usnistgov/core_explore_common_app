@@ -162,11 +162,9 @@ var toggleDate = function(value) {
     var dateContainers = $('.data-info-right-container');
     if(value) {
         dateContainers.show();
-        $( "div[name='result']" ).addClass( "result-line-main-container" );
         $('.switch-input').prop('checked', true);
     } else {
         dateContainers.hide();
-        $( "div[name='result']" ).removeClass( "result-line-main-container" );
         $('.switch-input').prop('checked', false);
     }
 }
