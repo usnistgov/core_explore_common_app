@@ -8,7 +8,12 @@
 getPersistentUrl = function(event){
     event.preventDefault();
 
-    var url = $(event.target).attr('href');
+    // find the target's toolbar, and then find the URL
+    var url = $(event.target)
+        .parents(".result-toolbar")
+        .find(".persistent-url-link")
+        .attr("href");
+
     var queryId = $("#query_id").html();
 
     $.ajax({

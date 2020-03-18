@@ -95,9 +95,12 @@ var getDataPermission = function() {
                         var editLinkElement = inputElement.siblings(".permissions-link");
                         editLinkElement.css('display', "inline");
                         // create the click event listener
-                        $(editLinkElement).click(function() {
-                          openEditRecord(id);
-                        });
+                            (function () {
+                                var target_id = id;
+                                $(editLinkElement).click(function() {
+                                  openEditRecord(target_id);
+                                });
+                            }());
                     }
                 }
             },
@@ -192,12 +195,14 @@ showhideResult = function(event) {
 var initToolbarComponents = function(){
     // init the sort filter when the toolbar is displayed if the script is available (sorting_multi/single_criteria.js)
     if (initFilter) initFilter();
+    // init the autosubmit for the sorting button if available
+    if (initSortingAutoSubmit) initSortingAutoSubmit();
     // when the results and the tab are displayed we can init the toggle
     initDisplayDateToggle();
     // permission api calls for the edit button
     getDataPermission();
     // listeners for the persistent query (on button_persistent_query.js)
-    $(".btn-persistent-query").on('click', getPersistentUrl);
+    $(".persistent-query-button").on('click', getPersistentUrl);
     $("#shareable-link-button").on('click', copyAndCloseModal);
 }
 

@@ -30,4 +30,4 @@ DEFAULT_DATE_TOGGLE_VALUE = getattr(settings, 'DEFAULT_DATE_TOGGLE_VALUE', False
 DISPLAY_EDIT_BUTTON = getattr(settings, 'DISPLAY_EDIT_BUTTON', False)
 
 """Result sorting graphical display type ('multi' / 'single')"""
-SORTING_DISPLAY_TYPE = getattr(settings, 'SORTING_DISPLAY_TYPE', 'multi')
+SORTING_DISPLAY_TYPE = getattr(settings, 'SORTING_DISPLAY_TYPE', 'single')
