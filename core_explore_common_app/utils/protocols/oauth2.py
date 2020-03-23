@@ -21,19 +21,23 @@ def send_get_request(url, access_token):
     return requests_utils.send_get_request_with_access_token(url, access_token)
 
 
-def send_post_request(url, data, access_token):
+def send_post_request(url, data, access_token, session_time_zone=None):
     """Sends a POST request to an Oauth2 endpoint
 
     Args:
         url:
         data:
         access_token:
+        session_time_zone:
 
     Returns:
 
     """
     # Builds header
-    headers = {'Authorization': 'Bearer ' + access_token}
+    headers = {
+        'Authorization': 'Bearer ' + access_token,
+        'TZ': str(session_time_zone)
+    }
     # post request
     return requests_utils.send_post_request(url, data=data, headers=headers)
 

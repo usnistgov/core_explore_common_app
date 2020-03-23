@@ -4,6 +4,7 @@ import json
 import urllib
 
 from django.urls import reverse
+from django.utils import timezone
 from requests import ConnectionError
 
 from core_explore_common_app.commons.exceptions import ExploreRequestError
@@ -41,7 +42,10 @@ def send(request, query, data_source_index, page):
         if data_source.authentication.type == "session":
             response = send_get_request(query_url, data=json_query, cookies={"sessionid": request.session.session_key})
         elif data_source.authentication.type == "oauth2":
-            response = oauth2_request(query_url, json_query, data_source.authentication.params['access_token'])
+            response = oauth2_request(query_url,
+                                      json_query, data_source.authentication.params['access_token'],
+                                      session_time_zone=timezone.get_current_timezone()
+                                      )
         else:
             raise ExploreRequestError("Unknown authentication type.")
 
