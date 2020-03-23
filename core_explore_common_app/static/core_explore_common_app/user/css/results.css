@@ -1,3 +1,7 @@
+ul.pagination li>span {
+    cursor: pointer;
+}
+
 .result-line-title-container {
     height: 45px;
 }
