@@ -138,16 +138,26 @@ openEditRecord = function(id) {
  * Init the display date toggle
  */
 var initDisplayDateToggle = function() {
+    var match = document.cookie.match(new RegExp('(^| )dateToggleValue=([^;]+)'));
+    var toggleValue
+    if (match) {
+        toggleValue = match[2] == 'true' ? true : false;
+    } else {
+        toggleValue = defaultDateToggleValue == 'True' ? true : false;
+        document.cookie = "dateToggleValue=" + toggleValue;
+    }
 
     var checkboxElement = $('.switch-input');
 
-    if (defaultDateToggleValue == 'True') {
+    if (toggleValue) {
         // set the checkbox to "checked"
         checkboxElement.prop('checked', true);
     } else {
         // set the checkbox to "unchecked"
         checkboxElement.prop('checked', false);
     }
+
+
     // create change listener
     $(".switch-input").change(function() {
         toggleDate($(this).is(":checked"));
@@ -170,6 +180,8 @@ var toggleDate = function(value) {
         dateContainers.hide();
         $('.switch-input').prop('checked', false);
     }
+    // update the cookie with the new toggle date value
+    document.cookie = "dateToggleValue=" + value;
 }
 
 
