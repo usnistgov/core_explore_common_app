@@ -39,7 +39,8 @@ var initLocalProvider = function(){
 var updateLocalDataSource = function(){
     var query_id = $("#query_id").html();
     var selected = $("#local_selector").is(":checked");
-
+    // before every DataSource update clear the session DataSource data
+    document.cookie = "selectedTabIndex=0";
     $.ajax({
         url: updateLocalDataSourceUrl,
         type : "GET",

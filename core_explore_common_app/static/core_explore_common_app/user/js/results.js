@@ -140,7 +140,7 @@ openEditRecord = function(id) {
 var initDisplayDateToggle = function() {
     var match = document.cookie.match(new RegExp('(^| )dateToggleValue=([^;]+)'));
     var toggleValue
-    if (match) {
+    if (match && match.length > 1) {
         toggleValue = match[2] == 'true' ? true : false;
     } else {
         toggleValue = defaultDateToggleValue == 'True' ? true : false;
@@ -216,6 +216,47 @@ var initToolbarComponents = function(){
     // listeners for the persistent query (on button_persistent_query.js)
     $(".persistent-query-button").on('click', getPersistentUrl);
     $("#shareable-link-button").on('click', copyAndCloseModal);
+    // add Tab state listener
+    initTabStateListener();
+}
+
+/**
+ * Add the click listeners on the tabs to store their state in the session
+ */
+var initTabStateListener = function() {
+    // add a listener to the tab to store their states
+    var jqPresentationElement = $("li[role=presentation]");
+    var jqDataSourceCheckboxElement = $(".tab-selector input:checkbox");
+    jqPresentationElement.unbind( "click" );
+    jqDataSourceCheckboxElement.off( "click", resetDataSourceCookie );
+
+    // when the user click on one tab set this tab as current tab on the session data
+    jqPresentationElement.on("click", function(event) {
+        document.cookie = "selectedTabIndex=" + $("li[role=presentation]").index(this);
+    });
+    // before every DataSource update clear the session DataSource data
+    jqDataSourceCheckboxElement.on("click", resetDataSourceCookie);
+
+
+    // select the correct tab
+    var tabSessionIndex = document.cookie.match(new RegExp("(^| )selectedTabIndex=([^;]+)"));
+    if (tabSessionIndex && tabSessionIndex.length > 1) {
+        // if the tab exist get the index otherwise use the default tab
+        var selectedTabValue = $("#results_" + tabSessionIndex[2]).length > 0 ? tabSessionIndex[2] : 0;
+        // activate the right tab according to the index
+        jqPresentationElement.removeClass('active');
+        $(jqPresentationElement[selectedTabValue]).addClass('active');
+        $("div[id^='results_']").removeClass('active');
+        $("#results_" + selectedTabValue).addClass('active');
+    }
+
+}
+
+/**
+  * Reset the dataSource cookie to it default value
+  */
+var resetDataSourceCookie = function(event) {
+        document.cookie = "selectedTabIndex=0";
 }
 
 /**
