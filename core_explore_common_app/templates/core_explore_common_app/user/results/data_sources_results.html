@@ -2,10 +2,10 @@
     {% if query.data_sources|length > 0 %}
         <ul class="nav nav-tabs"role="tablist">
             {% for data_source in query.data_sources %}
-            <li role="presentation" class="{% if forloop.counter0 == 0 %} active {% endif %}">
-                <a href="#results_{{forloop.counter0}}" id="tab_results_{{forloop.counter0}}" aria-controls="profile" role="tab" data-toggle="tab">
+            <li role="presentation" class="nav-item">
+                <a class="nav-link{% if forloop.counter0 == 0 %} active {% endif %}" href="#results_{{forloop.counter0}}" id="tab_results_{{forloop.counter0}}" aria-controls="profile" role="tab" data-toggle="tab">
                     From {{ data_source.name }}
-                    <span class="badge" id="results_infos_{{forloop.counter0}}">-</span>
+                    <span class="badge badge-secondary" id="results_infos_{{forloop.counter0}}">-</span>
                 </a>
             </li>
             {% endfor %}

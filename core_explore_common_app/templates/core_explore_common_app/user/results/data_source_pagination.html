@@ -1,26 +1,26 @@
 {% extends 'core_main_app/common/pagination/data_source_pagination.html'%}
 
 {% block previous_nav %}
-    <span onclick="getResultsPage(event)"
+    <span class="page-link" onclick="getResultsPage(event)"
         url="{% url 'core_explore_common_data_source_results' query_id data_source_index pagination.previous_page_number %}">&laquo;</span>
 {% endblock %}
 
 {% block fast_previous_nav %}
-    <span onclick="getResultsPage(event)"
+    <span class="page-link" onclick="getResultsPage(event)"
           url="{% url 'core_explore_common_data_source_results' query_id data_source_index pagination.number|add:'-5' %}">&hellip;</span>
 {% endblock %}
 
 {% block page_nav %}
-    <span onclick="getResultsPage(event)"
+    <span class="page-link" onclick="getResultsPage(event)"
         url="{% url 'core_explore_common_data_source_results' query_id data_source_index forloop.counter %}">{{ forloop.counter }}</span>
 {% endblock %}
 
 {% block fast_next_nav %}
-    <span onclick="getResultsPage(event)"
+    <span class="page-link" onclick="getResultsPage(event)"
           url="{% url 'core_explore_common_data_source_results' query_id data_source_index pagination.number|add:'5' %}">&hellip;</span>
 {% endblock %}
 
 {% block next_nav %}
-    <span onclick="getResultsPage(event)"
+    <span class="page-link" onclick="getResultsPage(event)"
         url="{% url 'core_explore_common_data_source_results' query_id data_source_index pagination.next_page_number %}">&raquo;</span>
 {% endblock %}

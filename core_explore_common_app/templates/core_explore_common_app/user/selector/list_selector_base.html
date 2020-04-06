@@ -1,8 +1,8 @@
 {% load staticfiles %}
 
-<div class="panel-heading">{% block title %}{% endblock %}</div>
+<div class="card-header">{% block title %}{% endblock %}</div>
 
-<div class="panel-body">{% block data_sources_list %}{% endblock %}</div>
+<div class="list-group list-group-flush">{% block data_sources_list %}{% endblock %}</div>
 
 {% block raw_js %}{% endblock %}
 

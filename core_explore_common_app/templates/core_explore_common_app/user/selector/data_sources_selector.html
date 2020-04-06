@@ -1,23 +1,19 @@
-<div id="data_sources_selector">
-    <div class="panel-group">
-        <!-- If remote data sources -->
-        {% if DATA_SOURCES_EXPLORE_APPS %}
-            <div class="panel panel-default">
-            <!-- give the option to select local or not -->
-            {% include 'core_explore_common_app/user/selector/local_selector.html' %}
-            <!-- Iterate through list of explore apps declared in the settings -->
-            {% for app in DATA_SOURCES_EXPLORE_APPS %}
-                <!-- get path to the data sources list template of the app -->
-                {% with app|add:"/user/data_sources/list.html" as list_template %}
-                    <!-- include data sources list template -->
-                    {% include list_template %}
-                {% endwith %}
-            {% endfor %}
-            </div>
-        {% else %}
-            <!-- otherwise, local always selected by default -->
-            {% include 'core_explore_common_app/user/selector/local_selector.html' with default=True %}
-        {% endif %}
-        <div class="hidden" id="query_id">{{data.query_id}}</div>
-    </div>
+<div id="data_sources_selector" class="card">
+    <!-- If remote data sources -->
+    {% if DATA_SOURCES_EXPLORE_APPS %}
+        <!-- give the option to select local or not -->
+        {% include 'core_explore_common_app/user/selector/local_selector.html' %}
+        <!-- Iterate through list of explore apps declared in the settings -->
+        {% for app in DATA_SOURCES_EXPLORE_APPS %}
+            <!-- get path to the data sources list template of the app -->
+            {% with app|add:"/user/data_sources/list.html" as list_template %}
+                <!-- include data sources list template -->
+                {% include list_template %}
+            {% endwith %}
+        {% endfor %}
+    {% else %}
+        <!-- otherwise, local always selected by default -->
+        {% include 'core_explore_common_app/user/selector/local_selector.html' with default=True %}
+    {% endif %}
+    <div class="hidden" id="query_id">{{data.query_id}}</div>
 </div>

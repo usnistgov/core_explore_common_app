@@ -206,9 +206,9 @@ showhideResult = function(event) {
 
 var initToolbarComponents = function(){
     // init the sort filter when the toolbar is displayed if the script is available (sorting_multi/single_criteria.js)
-    if (initFilter) initFilter();
+    if (typeof initFilter === "function") initFilter();
     // init the autosubmit for the sorting button if available
-    if (initSortingAutoSubmit) initSortingAutoSubmit();
+    if (typeof initSortingAutoSubmit === "function") initSortingAutoSubmit();
     // when the results and the tab are displayed we can init the toggle
     initDisplayDateToggle();
     // permission api calls for the edit button
@@ -218,6 +218,9 @@ var initToolbarComponents = function(){
     $("#shareable-link-button").on('click', copyAndCloseModal);
     // add Tab state listener
     initTabStateListener();
+    // enable the tool-bar buttons after the end of the toolbar initialization
+    $(".result-toolbar-button").attr("disabled", false);
+
 }
 
 /**
