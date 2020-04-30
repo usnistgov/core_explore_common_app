@@ -53,7 +53,7 @@ span.expand {
     cursor: pointer;
 }
 
-.filter button:hover {
+.result-toolbar-button:hover {
   background-color: #cacaca;
 }
 
