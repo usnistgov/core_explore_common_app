@@ -60,6 +60,7 @@
 .switch {
     width: var(--width);
     height: var(--height);
+    margin: 0;
 }
 
 .toggle-container label {
