@@ -247,8 +247,7 @@ var initTabStateListener = function() {
         // if the tab exist get the index otherwise use the default tab
         var selectedTabValue = $("#results_" + tabSessionIndex[2]).length > 0 ? tabSessionIndex[2] : 0;
         // activate the right tab according to the index
-        jqPresentationElement.removeClass('active');
-        $(jqPresentationElement[selectedTabValue]).addClass('active');
+        $(jqPresentationElement[selectedTabValue]).find('.nav-link').tab('show');
         $("div[id^='results_']").removeClass('active');
         $("#results_" + selectedTabValue).addClass('active');
     }
