@@ -8,13 +8,20 @@ from django.utils import timezone
 from requests import ConnectionError
 
 from core_explore_common_app.commons.exceptions import ExploreRequestError
-from core_explore_common_app.components.abstract_query.models import Authentication, DataSource
+from core_explore_common_app.components.abstract_query.models import (
+    Authentication,
+    DataSource,
+)
 from core_explore_common_app.components.query import api as query_api
 from core_explore_common_app.components.query.models import Query
 from core_explore_common_app.constants import LOCAL_QUERY_NAME, LOCAL_QUERY_URL
 from core_explore_common_app.rest.result.serializers import ResultSerializer
-from core_explore_common_app.settings import EXPLORE_ADD_DEFAULT_LOCAL_DATA_SOURCE_TO_QUERY
-from core_explore_common_app.utils.protocols.oauth2 import send_post_request as oauth2_request
+from core_explore_common_app.settings import (
+    EXPLORE_ADD_DEFAULT_LOCAL_DATA_SOURCE_TO_QUERY,
+)
+from core_explore_common_app.utils.protocols.oauth2 import (
+    send_post_request as oauth2_request,
+)
 from core_main_app.utils.requests_utils.requests_utils import send_get_request
 from core_main_app.settings import DATA_SORTING_FIELDS
 
@@ -40,12 +47,18 @@ def send(request, query, data_source_index, page):
         query_url = _get_paginated_url(data_source.url_query, page)
         # send query to data source
         if data_source.authentication.type == "session":
-            response = send_get_request(query_url, data=json_query, cookies={"sessionid": request.session.session_key})
+            response = send_get_request(
+                query_url,
+                data=json_query,
+                cookies={"sessionid": request.session.session_key},
+            )
         elif data_source.authentication.type == "oauth2":
-            response = oauth2_request(query_url,
-                                      json_query, data_source.authentication.params['access_token'],
-                                      session_time_zone=timezone.get_current_timezone()
-                                      )
+            response = oauth2_request(
+                query_url,
+                json_query,
+                data_source.authentication.params["access_token"],
+                session_time_zone=timezone.get_current_timezone(),
+            )
         else:
             raise ExploreRequestError("Unknown authentication type.")
 
@@ -54,15 +67,20 @@ def send(request, query, data_source_index, page):
             # transform response to json
             json_response = response.json()
             # Build serializer
-            results_serializer = ResultSerializer(data=json_response['results'], many=True)
+            results_serializer = ResultSerializer(
+                data=json_response["results"], many=True
+            )
 
             # Validate data
             results_serializer.is_valid(True)
 
             return json_response
         else:
-            raise ExploreRequestError("Data source {0} responded with status code {1}.".
-                                      format(data_source.name, str(response.status_code)))
+            raise ExploreRequestError(
+                "Data source {0} responded with status code {1}.".format(
+                    data_source.name, str(response.status_code)
+                )
+            )
     except ConnectionError:
         raise ExploreRequestError("Unable to contact the remote server.")
     except Exception as e:
@@ -94,11 +112,13 @@ def create_local_data_source(request):
     """
     local_name = LOCAL_QUERY_NAME
     local_query_url = get_local_query_absolute_url(request)
-    authentication = Authentication(type='session')
-    data_source = DataSource(name=local_name,
-                             url_query=local_query_url,
-                             authentication=authentication,
-                             order_by_field=','.join(DATA_SORTING_FIELDS))
+    authentication = Authentication(type="session")
+    data_source = DataSource(
+        name=local_name,
+        url_query=local_query_url,
+        authentication=authentication,
+        order_by_field=",".join(DATA_SORTING_FIELDS),
+    )
     return data_source
 
 
@@ -140,9 +160,14 @@ def create_default_query(request, template_ids):
 def _serialize_query(query, data_source):
     return {
         "query": query.content,
-        "templates": json.dumps([{'id': str(template.id), 'hash': template.hash} for template in query.templates]),
+        "templates": json.dumps(
+            [
+                {"id": str(template.id), "hash": template.hash}
+                for template in query.templates
+            ]
+        ),
         "options": json.dumps(data_source.query_options),
-        "order_by_field": data_source.order_by_field
+        "order_by_field": data_source.order_by_field,
     }
 
 

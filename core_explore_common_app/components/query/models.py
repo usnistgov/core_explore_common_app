@@ -10,6 +10,7 @@ from core_main_app.commons import exceptions
 
 # TODO: remove old queries from database
 
+
 class Query(AbstractQuery):
     """Query class
     """
@@ -44,4 +45,6 @@ class Query(AbstractQuery):
         for data_source in self.data_sources:
             if data_source.name == name and data_source.url_query == url_query:
                 return data_source
-        raise exceptions.DoesNotExist("No data source found fot the given name and url.")
+        raise exceptions.DoesNotExist(
+            "No data source found fot the given name and url."
+        )

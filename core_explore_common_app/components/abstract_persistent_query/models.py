@@ -8,5 +8,5 @@ class AbstractPersistentQuery(AbstractQuery):
     """
 
     meta = {
-        'abstract': True,
+        "abstract": True,
     }

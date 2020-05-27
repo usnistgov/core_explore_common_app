@@ -9,7 +9,7 @@ from core_explore_common_app.components.result.models import Result
 from core_explore_common_app.rest.result.serializers import ResultSerializer
 
 
-@api_view(['GET'])
+@api_view(["GET"])
 def get_result_from_data_id(request):
     """ Retrieve a Result
 
@@ -32,11 +32,11 @@ def get_result_from_data_id(request):
     """
     try:
         # get parameters
-        data_id = request.GET.get('id', None)
+        data_id = request.GET.get("id", None)
 
         # if no data id given
         if data_id is None:
-            content = {'message': "data id is missing"}
+            content = {"message": "data id is missing"}
             return Response(content, status=status.HTTP_400_BAD_REQUEST)
 
         # call api
@@ -53,5 +53,5 @@ def get_result_from_data_id(request):
 
     except Exception as e:
         # if something went wrong, return an internal server error
-        content = {'message': str(e)}
+        content = {"message": str(e)}
         return Response(content, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

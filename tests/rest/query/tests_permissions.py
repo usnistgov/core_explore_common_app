@@ -19,7 +19,7 @@ class TestExecuteLocalQueryViewGetPermissions(SimpleTestCase):
         response = RequestMock.do_request_get(
             explore_rest_views.ExecuteLocalQueryView.as_view(),
             None,
-            data={'query': '{}'}
+            data={"query": "{}"},
         )
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -31,7 +31,7 @@ class TestExecuteLocalQueryViewGetPermissions(SimpleTestCase):
         response = RequestMock.do_request_get(
             explore_rest_views.ExecuteLocalQueryView.as_view(),
             None,
-            data={'query': '{}'}
+            data={"query": "{}"},
         )
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -43,7 +43,7 @@ class TestExecuteLocalQueryViewGetPermissions(SimpleTestCase):
         response = RequestMock.do_request_get(
             explore_rest_views.ExecuteLocalQueryView.as_view(),
             None,
-            data={'query': '{}'}
+            data={"query": "{}"},
         )
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -57,7 +57,7 @@ class TestExecuteLocalQueryViewPostPermissions(SimpleTestCase):
         response = RequestMock.do_request_post(
             explore_rest_views.ExecuteLocalQueryView.as_view(),
             None,
-            data={'query': '{}'}
+            data={"query": "{}"},
         )
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -69,7 +69,7 @@ class TestExecuteLocalQueryViewPostPermissions(SimpleTestCase):
         response = RequestMock.do_request_post(
             explore_rest_views.ExecuteLocalQueryView.as_view(),
             None,
-            data={'query': '{}'}
+            data={"query": "{}"},
         )
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -81,7 +81,7 @@ class TestExecuteLocalQueryViewPostPermissions(SimpleTestCase):
         response = RequestMock.do_request_post(
             explore_rest_views.ExecuteLocalQueryView.as_view(),
             None,
-            data={'query': '{}'}
+            data={"query": "{}"},
         )
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)

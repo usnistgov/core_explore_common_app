@@ -15,15 +15,26 @@ import core_explore_common_app.components.abstract_persistent_query.api as abstr
 from core_explore_common_app.commons.exceptions import ExploreRequestError
 from core_explore_common_app.components.query import api as query_api
 from core_explore_common_app.constants import LOCAL_QUERY_NAME
-from core_explore_common_app.settings import DATA_SOURCES_EXPLORE_APPS, RESULTS_PER_PAGE, DEFAULT_DATE_TOGGLE_VALUE, \
-    SORTING_DISPLAY_TYPE
+from core_explore_common_app.settings import (
+    DATA_SOURCES_EXPLORE_APPS,
+    RESULTS_PER_PAGE,
+    DEFAULT_DATE_TOGGLE_VALUE,
+    SORTING_DISPLAY_TYPE,
+)
 from core_explore_common_app.settings import INSTALLED_APPS
-from core_explore_common_app.settings import DATA_DISPLAYED_SORTING_FIELDS, DISPLAY_EDIT_BUTTON
-from core_explore_common_app.utils.query.query import send as send_query, add_local_data_source, \
-    get_local_query_absolute_url
+from core_explore_common_app.settings import (
+    DATA_DISPLAYED_SORTING_FIELDS,
+    DISPLAY_EDIT_BUTTON,
+)
+from core_explore_common_app.utils.query.query import (
+    send as send_query,
+    add_local_data_source,
+    get_local_query_absolute_url,
+)
 from core_main_app.commons.exceptions import DoesNotExist
-from core_main_app.utils.pagination.rest_framework_paginator.rest_framework_paginator import get_page_number
-
+from core_main_app.utils.pagination.rest_framework_paginator.rest_framework_paginator import (
+    get_page_number,
+)
 
 
 def get_local_data_source(request):
@@ -36,34 +47,43 @@ def get_local_data_source(request):
 
     """
     try:
-        id_query = request.GET.get('query_id', None)
+        id_query = request.GET.get("query_id", None)
 
         if id_query is not None:
             # Get query from id
             query = query_api.get_by_id(id_query)
 
             context_params = {
-                'enabled': True,
-                'selected': False,
+                "enabled": True,
+                "selected": False,
             }
             if len(DATA_SOURCES_EXPLORE_APPS) == 0:
                 add_local_data_source(request, query)
-                context_params['enabled'] = False
+                context_params["enabled"] = False
 
             # check query to see if local data source was selected
             local_query_url = get_local_query_absolute_url(request)
             for data_source in query.data_sources:
-                if data_source.name == LOCAL_QUERY_NAME and data_source.url_query == local_query_url:
-                    context_params['selected'] = True
+                if (
+                    data_source.name == LOCAL_QUERY_NAME
+                    and data_source.url_query == local_query_url
+                ):
+                    context_params["selected"] = True
 
             context = {}
             context.update(request)
             context.update(context_params)
-            return django_render(request, 'core_explore_common_app/user/selector/local_content.html', context=context)
+            return django_render(
+                request,
+                "core_explore_common_app/user/selector/local_content.html",
+                context=context,
+            )
         else:
             return HttpResponseBadRequest("Expected query_id parameter is missing.")
     except Exception as e:
-        return HttpResponseBadRequest("An unexpected error occurred while getting local data source selector.")
+        return HttpResponseBadRequest(
+            "An unexpected error occurred while getting local data source selector."
+        )
 
 
 def update_local_data_source(request):
@@ -76,8 +96,8 @@ def update_local_data_source(request):
 
     """
     try:
-        query_id = request.GET['query_id']
-        selected = json.loads(request.GET['selected'])
+        query_id = request.GET["query_id"]
+        selected = json.loads(request.GET["selected"])
 
         # Get query from id
         query = query_api.get_by_id(query_id)
@@ -88,8 +108,9 @@ def update_local_data_source(request):
         else:
             # Local data source is not selected, remove it from the query
             local_query_url = get_local_query_absolute_url(request)
-            data_source = query_api.get_data_source_by_name_and_url_query(query, LOCAL_QUERY_NAME,
-                                                                          local_query_url)
+            data_source = query_api.get_data_source_by_name_and_url_query(
+                query, LOCAL_QUERY_NAME, local_query_url
+            )
             query_api.remove_data_source(query, data_source)
 
         return HttpResponse()
@@ -116,17 +137,21 @@ def get_data_sources_html(request):
         # set query in context
         context = {}
         context.update(request)
-        context.update({
-            'query': query
-        })
+        context.update({"query": query})
 
         # render html results
         html_template = loader.get_template(
-            join('core_explore_common_app', 'user', 'results', 'data_sources_results.html'))
+            join(
+                "core_explore_common_app",
+                "user",
+                "results",
+                "data_sources_results.html",
+            )
+        )
         html_results_holders = html_template.render(context)
 
-        response_dict = {'results': html_results_holders}
-        return HttpResponse(json.dumps(response_dict), content_type='application/json')
+        response_dict = {"results": html_results_holders}
+        return HttpResponse(json.dumps(response_dict), content_type="application/json")
     except Exception as e:
         return HttpResponseBadRequest(str(e))
 
@@ -151,9 +176,9 @@ def get_data_source_results(request, query_id, data_source_index, page=1):
         results = send_query(request, query, int(data_source_index), page)
 
         # get pagination information
-        previous_page_number = get_page_number(results['previous'])
-        next_page_number = get_page_number(results['next'])
-        results_count = results['count']
+        previous_page_number = get_page_number(results["previous"])
+        next_page_number = get_page_number(results["next"])
+        results_count = results["count"]
         page_count = int(math.ceil(float(results_count) / RESULTS_PER_PAGE))
 
         # pagination has other pages?
@@ -167,25 +192,27 @@ def get_data_source_results(request, query_id, data_source_index, page=1):
 
         # set results in context
         context_data = {
-            'results': results['results'],
-            'query_id': query_id,
-            'data_source_index': data_source_index,
-            'pagination': {
-                'number': int(page),
-                'paginator': {'num_pages': page_count},
-                'has_other_pages': has_other_pages,
-                'previous_page_number': previous_page_number,
-                'next_page_number': next_page_number,
-                'has_previous': has_previous,
-                'has_next': has_next
+            "results": results["results"],
+            "query_id": query_id,
+            "data_source_index": data_source_index,
+            "pagination": {
+                "number": int(page),
+                "paginator": {"num_pages": page_count},
+                "has_other_pages": has_other_pages,
+                "previous_page_number": previous_page_number,
+                "next_page_number": next_page_number,
+                "has_previous": has_previous,
+                "has_next": has_next,
             },
-            'exporter_app': 'core_exporters_app' in INSTALLED_APPS,
-            'blobs_preview': 'core_file_preview_app' in INSTALLED_APPS,
-            'display_edit_button': DISPLAY_EDIT_BUTTON,
-            'sorting_display_type': SORTING_DISPLAY_TYPE,
-            'data_displayed_sorting_fields': DATA_DISPLAYED_SORTING_FIELDS,
-            'get_shareable_link_url': reverse("core_explore_keyword_get_persistent_query_url"),
-            'default_date_toggle_value': DEFAULT_DATE_TOGGLE_VALUE
+            "exporter_app": "core_exporters_app" in INSTALLED_APPS,
+            "blobs_preview": "core_file_preview_app" in INSTALLED_APPS,
+            "display_edit_button": DISPLAY_EDIT_BUTTON,
+            "sorting_display_type": SORTING_DISPLAY_TYPE,
+            "data_displayed_sorting_fields": DATA_DISPLAYED_SORTING_FIELDS,
+            "get_shareable_link_url": reverse(
+                "core_explore_keyword_get_persistent_query_url"
+            ),
+            "default_date_toggle_value": DEFAULT_DATE_TOGGLE_VALUE,
         }
 
         # create context
@@ -194,15 +221,20 @@ def get_data_source_results(request, query_id, data_source_index, page=1):
         context.update(context_data)
 
         # generate html with context
-        html_template = loader.get_template(join('core_explore_common_app', 'user', 'results',
-                                                 'data_source_results.html'))
+        html_template = loader.get_template(
+            join(
+                "core_explore_common_app", "user", "results", "data_source_results.html"
+            )
+        )
         # render html
         results_html = html_template.render(context)
         # set response with html results
-        response_dict = {'results': results_html, 'nb_results': results['count']}
-        return HttpResponse(json.dumps(response_dict), content_type='application/json')
+        response_dict = {"results": results_html, "nb_results": results["count"]}
+        return HttpResponse(json.dumps(response_dict), content_type="application/json")
     except ExploreRequestError as ex:
-        return HttpResponseBadRequest("An error occurred while sending the query: " + str(ex))
+        return HttpResponseBadRequest(
+            "An error occurred while sending the query: " + str(ex)
+        )
     except Exception as e:
         return HttpResponseBadRequest("An unexpected error occurred: " + str(e))
 
@@ -210,6 +242,7 @@ def get_data_source_results(request, query_id, data_source_index, page=1):
 class CreatePersistentQueryUrlView(View, metaclass=ABCMeta):
     """ Create the persistent url from a Query
     """
+
     view_to_reverse = None
 
     def post(self, request):
@@ -222,7 +255,7 @@ class CreatePersistentQueryUrlView(View, metaclass=ABCMeta):
             """
         try:
             # get parameter
-            query_id = request.POST.get('queryId', None)
+            query_id = request.POST.get("queryId", None)
 
             # get the matching query
             try:
@@ -231,14 +264,22 @@ class CreatePersistentQueryUrlView(View, metaclass=ABCMeta):
                 return HttpResponseBadRequest("The query does not exist anymore.")
 
             # create the persistent query
-            persistent_query = abstract_persistent_query_api.upsert(self._create_persistent_query(query))
+            persistent_query = abstract_persistent_query_api.upsert(
+                self._create_persistent_query(query)
+            )
             # reverse to the url
-            url_reversed = request.build_absolute_uri(reverse(self.view_to_reverse,
-                                                              kwargs={'persistent_query_id': persistent_query.id}))
+            url_reversed = request.build_absolute_uri(
+                reverse(
+                    self.view_to_reverse,
+                    kwargs={"persistent_query_id": persistent_query.id},
+                )
+            )
             # context
-            return HttpResponse(json.dumps({'url': url_reversed}), content_type='application/javascript')
+            return HttpResponse(
+                json.dumps({"url": url_reversed}), content_type="application/javascript"
+            )
         except Exception as e:
-            return HttpResponseBadRequest(str(e), content_type='application/javascript')
+            return HttpResponseBadRequest(str(e), content_type="application/javascript")
 
     @staticmethod
     @abstractmethod

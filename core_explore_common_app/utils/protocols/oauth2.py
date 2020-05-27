@@ -4,7 +4,7 @@
 from core_explore_common_app.commons.exceptions import UsernamePasswordRequiredError
 from core_main_app.utils.requests_utils import requests_utils
 
-HEADER = {'content-type': 'application/x-www-form-urlencoded'}
+HEADER = {"content-type": "application/x-www-form-urlencoded"}
 TOKEN_SUFFIX = "/o/token/"
 
 
@@ -34,10 +34,7 @@ def send_post_request(url, data, access_token, session_time_zone=None):
 
     """
     # Builds header
-    headers = {
-        'Authorization': 'Bearer ' + access_token,
-        'TZ': str(session_time_zone)
-    }
+    headers = {"Authorization": "Bearer " + access_token, "TZ": str(session_time_zone)}
     # post request
     return requests_utils.send_post_request(url, data=data, headers=headers)
 
@@ -59,9 +56,13 @@ def post_request_token(url, client_id, client_secret, timeout, username, passwor
     # Complete Url
     token_url = "{0}{1}".format(url, TOKEN_SUFFIX)
 
-    data = _get_data_for_request(client_id, client_secret, username=username, password=password)
+    data = _get_data_for_request(
+        client_id, client_secret, username=username, password=password
+    )
 
-    return requests_utils.send_post_request(url=token_url, data=data, headers=HEADER, timeout=int(timeout))
+    return requests_utils.send_post_request(
+        url=token_url, data=data, headers=HEADER, timeout=int(timeout)
+    )
 
 
 def post_refresh_token(url, client_id, client_secret, timeout, refresh_token):
@@ -82,11 +83,14 @@ def post_refresh_token(url, client_id, client_secret, timeout, refresh_token):
 
     data = _get_data_for_request(client_id, client_secret, refresh_token=refresh_token)
 
-    return requests_utils.send_post_request(url=token_url, data=data, headers=HEADER, timeout=int(timeout))
+    return requests_utils.send_post_request(
+        url=token_url, data=data, headers=HEADER, timeout=int(timeout)
+    )
 
 
-def _get_data_for_request(client_id, client_secret,
-                          username=None, password=None, refresh_token=None):
+def _get_data_for_request(
+    client_id, client_secret, username=None, password=None, refresh_token=None
+):
     """ Returns data structure for post request
 
     Args:
@@ -101,18 +105,19 @@ def _get_data_for_request(client_id, client_secret,
     """
     # Init data
     data = {
-        'client_id': str(client_id),
-        'client_secret': str(client_secret),
+        "client_id": str(client_id),
+        "client_secret": str(client_secret),
     }
 
     if refresh_token is not None:
-        data.update({'refresh_token': str(refresh_token),
-                     'grant_type': 'refresh_token'})
+        data.update(
+            {"refresh_token": str(refresh_token), "grant_type": "refresh_token"}
+        )
     else:
         if username is not None and password is not None:
-            data.update({'grant_type': 'password',
-                         'username': username,
-                         'password': password})
+            data.update(
+                {"grant_type": "password", "username": username, "password": password}
+            )
         else:
             raise UsernamePasswordRequiredError("Username/Password must be given")
 

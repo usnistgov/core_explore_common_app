@@ -8,7 +8,9 @@ from core_explore_common_app.components.result.models import Result
 from core_explore_common_app.rest.result.serializers import ResultSerializer
 from core_explore_common_app.utils.result import result as result_utils
 from core_main_app.rest.data.abstract_views import AbstractExecuteLocalQueryView
-from core_main_app.utils.pagination.rest_framework_paginator.pagination import StandardResultsSetPagination
+from core_main_app.utils.pagination.rest_framework_paginator.pagination import (
+    StandardResultsSetPagination,
+)
 
 
 class ExecuteLocalQueryView(AbstractExecuteLocalQueryView):
@@ -45,17 +47,21 @@ class ExecuteLocalQueryView(AbstractExecuteLocalQueryView):
             if template not in template_info:
                 template_info[template] = result_utils.get_template_info(template)
 
-            results.append(Result(
-                                  title=data.title,
-                                  xml_content=data.xml_content,
-                                  template_info=template_info[template],
-                                  permission_url="{0}?ids={1}".format(url_permission_data, f'%5B"{str(data.id)}"%5D'),
-                                  detail_url="{0}?id={1}".format(detail_url_base, str(data.id)),
-                                  access_data_url="{0}?id={1}".format(url_access_data,
-                                                                      str(data.id)),
-                                  last_modification_date=pytz.utc.localize(data.last_modification_date)
-                                  )
-                           )
+            results.append(
+                Result(
+                    title=data.title,
+                    xml_content=data.xml_content,
+                    template_info=template_info[template],
+                    permission_url="{0}?ids={1}".format(
+                        url_permission_data, f'%5B"{str(data.id)}"%5D'
+                    ),
+                    detail_url="{0}?id={1}".format(detail_url_base, str(data.id)),
+                    access_data_url="{0}?id={1}".format(url_access_data, str(data.id)),
+                    last_modification_date=pytz.utc.localize(
+                        data.last_modification_date
+                    ),
+                )
+            )
 
         # serialize results
         serialized_results = ResultSerializer(results, many=True)

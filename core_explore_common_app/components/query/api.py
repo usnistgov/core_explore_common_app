@@ -43,7 +43,9 @@ def add_data_source(query, data_source):
     """
     try:
         # check if data source is already present
-        get_data_source_by_name_and_url_query(query, data_source.name, data_source.url_query)
+        get_data_source_by_name_and_url_query(
+            query, data_source.name, data_source.url_query
+        )
         # already present return query
         return query
     except DoesNotExist:
