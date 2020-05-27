@@ -1,6 +1,6 @@
-<div id="data_sources_selector" class="card">
-    <!-- If remote data sources -->
-    {% if DATA_SOURCES_EXPLORE_APPS %}
+<!-- If remote data sources -->
+{% if DATA_SOURCES_EXPLORE_APPS %}
+        <div id="data_sources_selector" class="card mb-3">
         <!-- give the option to select local or not -->
         {% include 'core_explore_common_app/user/selector/local_selector.html' %}
         <!-- Iterate through list of explore apps declared in the settings -->
@@ -11,9 +11,6 @@
                 {% include list_template %}
             {% endwith %}
         {% endfor %}
-    {% else %}
-        <!-- otherwise, local always selected by default -->
-        {% include 'core_explore_common_app/user/selector/local_selector.html' with default=True %}
-    {% endif %}
-    <div class="hidden" id="query_id">{{data.query_id}}</div>
-</div>
+        </div>
+{% endif %}
+<div class="hidden" id="query_id">{{data.query_id}}</div>
