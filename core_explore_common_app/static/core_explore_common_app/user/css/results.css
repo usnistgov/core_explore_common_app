@@ -3,7 +3,8 @@ ul.pagination li>span {
 }
 
 .result-line-title-container {
-    height: 45px;
+    overflow: hidden;
+    padding: 1px;
 }
 
 .results-page div {
