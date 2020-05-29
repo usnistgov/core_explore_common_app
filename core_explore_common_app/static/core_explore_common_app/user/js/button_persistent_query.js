@@ -1,23 +1,22 @@
-/*
-* button persistent query js file
+/**
+* Persistent query button manager
 */
 
-/**
- * AJAX call, get persistent Url with the hidden url
- */
 getPersistentUrl = function(event){
+    /**
+     * Generate persistent query URL by performing an Ajax call on a pre-defined URL.
+     */
     event.preventDefault();
 
-    // find the target's toolbar, and then find the URL
-    var url = $(event.target)
-        .parents(".result-toolbar")
-        .find(".persistent-url-link")
-        .attr("href");
+    // Check the persistent query url has been defined.
+    if (typeof persistentQueryUrl === "undefined" || persistentQueryUrl === null) {
+        showErrorModal("No persistent query URL defined");
+    }
 
-    var queryId = $("#query_id").html();
+    let queryId = $("#query_id").html();
 
     $.ajax({
-        url: url,
+        url: persistentQueryUrl,
         data: { queryId },
         type: "POST",
         dataType: "json",
@@ -25,22 +24,24 @@ getPersistentUrl = function(event){
             $("#shareable-link").val(data.url);
             $("#persistent-query-modal").modal("show");
         },
-        error:function(data){
-            alert("fail");
+        error:function(){
+            showErrorModal("Error while retrieving persistent query.");
         }
     });
 };
 
-/**
- * Copy the link and close the modal
- */
 copyAndCloseModal = function(event){
+    /**
+     * Copy the link on clipboard and close the modal
+     */
     event.preventDefault();
-    var link = $("#shareable-link");
+
+    let link = $("#shareable-link");
     link.prop('disabled', false);
     link.focus();
     link.select();
     document.execCommand('copy');
     link.prop('disabled', true);
+
     $("#persistent-query-modal").modal("hide");
-}
+};

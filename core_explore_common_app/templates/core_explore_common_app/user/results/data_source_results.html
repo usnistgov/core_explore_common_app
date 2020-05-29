@@ -7,9 +7,7 @@
     {% elif sorting_display_type == 'multi' %}
         {% include "core_explore_common_app/user/ordering_menu/multi_criteria_sorting_menu.html" %}
     {% endif %}
-    <button type="button" class="result-toolbar-button persistent-query-button">
-        {% include "core_explore_common_app/user/persistent_query/button_persistent_query.html" with url=get_shareable_link_url %}
-    </button>
+    {% include "core_explore_common_app/user/persistent_query/button_persistent_query.html" %}
     {% if exporter_app %}
         <button type="button" class="result-toolbar-button export-button">
             {% include "core_exporters_app/user/exporters/list/link_exporters_selector.html" %}

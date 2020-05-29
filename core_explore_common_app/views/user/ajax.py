@@ -209,9 +209,6 @@ def get_data_source_results(request, query_id, data_source_index, page=1):
             "display_edit_button": DISPLAY_EDIT_BUTTON,
             "sorting_display_type": SORTING_DISPLAY_TYPE,
             "data_displayed_sorting_fields": DATA_DISPLAYED_SORTING_FIELDS,
-            "get_shareable_link_url": reverse(
-                "core_explore_keyword_get_persistent_query_url"
-            ),
             "default_date_toggle_value": DEFAULT_DATE_TOGGLE_VALUE,
         }
 
