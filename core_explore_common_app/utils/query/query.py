@@ -1,7 +1,6 @@
 """Explore Common query utils
 """
 import json
-import urllib
 
 from django.urls import reverse
 from django.utils import timezone
@@ -22,8 +21,8 @@ from core_explore_common_app.settings import (
 from core_explore_common_app.utils.protocols.oauth2 import (
     send_post_request as oauth2_request,
 )
-from core_main_app.utils.requests_utils.requests_utils import send_get_request
 from core_main_app.settings import DATA_SORTING_FIELDS
+from core_main_app.utils.requests_utils.requests_utils import send_post_request
 
 
 def send(request, query, data_source_index, page):
@@ -47,10 +46,18 @@ def send(request, query, data_source_index, page):
         query_url = _get_paginated_url(data_source.url_query, page)
         # send query to data source
         if data_source.authentication.type == "session":
-            response = send_get_request(
+            # FIXME refactor in utils/protocols
+            response = send_post_request(
                 query_url,
-                data=json_query,
-                cookies={"sessionid": request.session.session_key},
+                data=json.dumps(json_query),
+                cookies={
+                    "sessionid": request.session.session_key,
+                    "csrftoken": request.COOKIES.get("csrftoken", None),
+                },
+                headers={
+                    "X-CSRFToken": request.COOKIES.get("csrftoken", None),
+                    "Content-Type": "application/json",
+                },
             )
         elif data_source.authentication.type == "oauth2":
             response = oauth2_request(
@@ -127,7 +134,6 @@ def get_local_query_absolute_url(request):
 
     Args:
         request:
-        query:
 
     Returns:
         String: Absolute URL
@@ -160,13 +166,11 @@ def create_default_query(request, template_ids):
 def _serialize_query(query, data_source):
     return {
         "query": query.content,
-        "templates": json.dumps(
-            [
-                {"id": str(template.id), "hash": template.hash}
-                for template in query.templates
-            ]
-        ),
-        "options": json.dumps(data_source.query_options),
+        "templates": [
+            {"id": str(template.id), "hash": template.hash}
+            for template in query.templates
+        ],
+        "options": data_source.query_options,
         "order_by_field": data_source.order_by_field,
     }
 
