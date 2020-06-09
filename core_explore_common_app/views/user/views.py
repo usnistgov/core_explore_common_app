@@ -45,8 +45,9 @@ class ResultsView(View):
                     "path": "core_explore_common_app/user/js/results.raw.js",
                     "is_raw": True,
                 },
+                {"path": "core_main_app/user/js/sharing_modal.js", "is_raw": False},
                 {
-                    "path": "core_explore_common_app/user/js/button_persistent_query.js",
+                    "path": "core_explore_common_app/user/js/persistent_query_config.js",
                     "is_raw": False,
                 },
                 {
@@ -92,8 +93,8 @@ class ResultsView(View):
 
     def _load_modals(self):
         modals = [
-            "core_main_app/common/modals/error_page_modal.html",
-            "core_explore_common_app/user/persistent_query/modals/persistent_query_modal.html",
+            "core_main_app/user/modals/error_page_modal.html",
+            "core_explore_common_app/user/persistent_query_modal.html",
         ]
 
         # Add the exporters modal

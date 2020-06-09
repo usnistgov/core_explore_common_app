@@ -182,7 +182,7 @@ var toggleDate = function(value) {
     }
     // update the cookie with the new toggle date value
     document.cookie = "dateToggleValue=" + value;
-}
+};
 
 
 /**
@@ -190,13 +190,13 @@ var toggleDate = function(value) {
  * @param event
  */
 showhideResult = function(event) {
-    var button = event.target;
+    let button = event.target;
     // find the xml container
-    $(event.target).parents('.result-line-main-container')
+    $(button).parents('.result-line-main-container')
         .find(".xmlResult")
         .toggle("blind", 500);
 
-    if ($(button).attr("class") == "expand") {
+    if ($(button).attr("class") === "expand") {
         $(button).attr("class", "collapse show");
     } else {
         $(button).attr("class", "expand");
@@ -213,15 +213,11 @@ var initToolbarComponents = function(){
     initDisplayDateToggle();
     // permission api calls for the edit button
     getDataPermission();
-    // listeners for the persistent query (on button_persistent_query.js)
-    $(".persistent-query-button").on('click', getPersistentUrl);
-    $("#shareable-link-button").on('click', copyAndCloseModal);
     // add Tab state listener
     initTabStateListener();
     // enable the tool-bar buttons after the end of the toolbar initialization
     $(".result-toolbar-button").attr("disabled", false);
-
-}
+};
 
 /**
  * Add the click listeners on the tabs to store their state in the session
