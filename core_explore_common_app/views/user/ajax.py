@@ -10,6 +10,7 @@ from django.http.response import HttpResponse, HttpResponseBadRequest
 from django.template import loader
 from django.views import View
 from django.shortcuts import render as django_render
+from django.utils.html import escape
 
 import core_explore_common_app.components.abstract_persistent_query.api as abstract_persistent_query_api
 from core_explore_common_app.commons.exceptions import ExploreRequestError
@@ -115,7 +116,7 @@ def update_local_data_source(request):
 
         return HttpResponse()
     except Exception as e:
-        return HttpResponseBadRequest(str(e))
+        return HttpResponseBadRequest(escape(str(e)))
 
 
 def get_data_sources_html(request):
@@ -153,7 +154,7 @@ def get_data_sources_html(request):
         response_dict = {"results": html_results_holders}
         return HttpResponse(json.dumps(response_dict), content_type="application/json")
     except Exception as e:
-        return HttpResponseBadRequest(str(e))
+        return HttpResponseBadRequest(escape(str(e)))
 
 
 def get_data_source_results(request, query_id, data_source_index, page=1):
@@ -230,10 +231,12 @@ def get_data_source_results(request, query_id, data_source_index, page=1):
         return HttpResponse(json.dumps(response_dict), content_type="application/json")
     except ExploreRequestError as ex:
         return HttpResponseBadRequest(
-            "An error occurred while sending the query: " + str(ex)
+            "An error occurred while sending the query: " + escape(str(ex)),
         )
     except Exception as e:
-        return HttpResponseBadRequest("An unexpected error occurred: " + str(e))
+        return HttpResponseBadRequest(
+            "An unexpected error occurred: " + escape(str(e)),
+        )
 
 
 class CreatePersistentQueryUrlView(View, metaclass=ABCMeta):
@@ -276,7 +279,9 @@ class CreatePersistentQueryUrlView(View, metaclass=ABCMeta):
                 json.dumps({"url": url_reversed}), content_type="application/javascript"
             )
         except Exception as e:
-            return HttpResponseBadRequest(str(e), content_type="application/javascript")
+            return HttpResponseBadRequest(
+                escape(str(e)), content_type="application/javascript"
+            )
 
     @staticmethod
     @abstractmethod
