@@ -93,7 +93,7 @@ class ResultsView(View):
 
     def _load_modals(self):
         modals = [
-            "core_main_app/user/modals/error_page_modal.html",
+            "core_main_app/common/modals/error_page_modal.html",
             "core_explore_common_app/user/persistent_query_modal.html",
         ]
 
