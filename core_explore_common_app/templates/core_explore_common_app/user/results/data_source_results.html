@@ -7,7 +7,10 @@
     {% elif sorting_display_type == 'multi' %}
         {% include "core_explore_common_app/user/ordering_menu/multi_criteria_sorting_menu.html" %}
     {% endif %}
-    {% include "core_main_app/user/sharing/button.html" with button_id="persistent-query" %}
+    {% include "core_explore_common_app/user/persistent_query/button.html" %}
+    {% if linked_records_app %}
+        {% include 'core_linked_records_app/user/sharing/explore/button.html' %}
+    {% endif %}
     {% if exporter_app %}
         <button type="button" class="result-toolbar-button export-button">
             {% include "core_exporters_app/user/exporters/list/link_exporters_selector.html" %}

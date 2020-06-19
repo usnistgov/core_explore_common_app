@@ -207,6 +207,7 @@ def get_data_source_results(request, query_id, data_source_index, page=1):
             },
             "exporter_app": "core_exporters_app" in INSTALLED_APPS,
             "blobs_preview": "core_file_preview_app" in INSTALLED_APPS,
+            "linked_records_app": "core_linked_records_app" in INSTALLED_APPS,
             "display_edit_button": DISPLAY_EDIT_BUTTON,
             "sorting_display_type": SORTING_DISPLAY_TYPE,
             "data_displayed_sorting_fields": DATA_DISPLAYED_SORTING_FIELDS,

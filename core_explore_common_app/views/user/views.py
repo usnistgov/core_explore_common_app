@@ -89,12 +89,23 @@ class ResultsView(View):
             )
             assets["css"].append("core_file_preview_app/user/css/file_preview.css")
 
+        # Add assets needed for the PID sharing
+        if "core_linked_records_app" in INSTALLED_APPS:
+            assets["js"].extend(
+                [
+                    {
+                        "path": "core_linked_records_app/user/js/sharing/explore.js",
+                        "is_raw": False,
+                    }
+                ]
+            )
+
         return assets
 
     def _load_modals(self):
         modals = [
             "core_main_app/common/modals/error_page_modal.html",
-            "core_explore_common_app/user/persistent_query_modal.html",
+            "core_explore_common_app/user/persistent_query/modal.html",
         ]
 
         # Add the exporters modal
@@ -108,6 +119,10 @@ class ResultsView(View):
         # Add the file preview modal
         if "core_file_preview_app" in INSTALLED_APPS:
             modals.append("core_file_preview_app/user/file_preview_modal.html")
+
+        # Add PID modal
+        if "core_linked_records_app" in INSTALLED_APPS:
+            modals.append("core_linked_records_app/user/sharing/explore/modal.html")
 
         return modals
 
