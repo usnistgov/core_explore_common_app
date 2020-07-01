@@ -3,10 +3,10 @@
 <div class="result-line-main-container" name="result">
     <div class="result-line-title-container">
         <div class="data-info-left-container">
-            {% if exporter_app %}
-                <input data-template-id="{{result.template_info.id}}" data-template-hash="{{result.template_info.hash}}"
-                       type="checkbox" value="{{ result.access_data_url }}" />
-            {% endif %}
+            <input data-template-id="{{result.template_info.id}}"
+                   data-template-hash="{{result.template_info.hash}}"
+                   type="checkbox" value="{{ result.access_data_url }}"
+                   class="exporter-checkbox{% if not exporter_app %} hidden{% endif %}"/>
             <span class="expand" onclick="showhideResult(event);"></span>
             <span class="result-title">
                 {% if result.detail_url %}
