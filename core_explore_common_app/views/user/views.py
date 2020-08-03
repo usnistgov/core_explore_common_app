@@ -99,6 +99,7 @@ class ResultsView(View):
                     }
                 ]
             )
+            assets["css"].append("core_linked_records_app/user/css/sharing.css")
 
         return assets
 
