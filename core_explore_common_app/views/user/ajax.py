@@ -5,17 +5,23 @@ import math
 from abc import ABCMeta, abstractmethod
 from os.path import join
 
-from django.urls import reverse
 from django.http.response import HttpResponse, HttpResponseBadRequest
-from django.template import loader
-from django.views import View
 from django.shortcuts import render as django_render
+from django.template import loader
+from django.urls import reverse
 from django.utils.html import escape
+from django.views import View
 
-import core_explore_common_app.components.abstract_persistent_query.api as abstract_persistent_query_api
 from core_explore_common_app.commons.exceptions import ExploreRequestError
+from core_explore_common_app.components.abstract_persistent_query import (
+    api as abstract_persistent_query_api,
+)
 from core_explore_common_app.components.query import api as query_api
 from core_explore_common_app.constants import LOCAL_QUERY_NAME
+from core_explore_common_app.settings import (
+    DATA_DISPLAYED_SORTING_FIELDS,
+    DISPLAY_EDIT_BUTTON,
+)
 from core_explore_common_app.settings import (
     DATA_SOURCES_EXPLORE_APPS,
     RESULTS_PER_PAGE,
@@ -23,10 +29,6 @@ from core_explore_common_app.settings import (
     SORTING_DISPLAY_TYPE,
 )
 from core_explore_common_app.settings import INSTALLED_APPS
-from core_explore_common_app.settings import (
-    DATA_DISPLAYED_SORTING_FIELDS,
-    DISPLAY_EDIT_BUTTON,
-)
 from core_explore_common_app.utils.query.query import (
     send as send_query,
     add_local_data_source,

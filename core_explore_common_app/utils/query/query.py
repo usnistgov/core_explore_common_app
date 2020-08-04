@@ -7,6 +7,7 @@ from django.urls import reverse
 from django.utils import timezone
 from requests import ConnectionError
 
+from core_explore_common_app import settings
 from core_explore_common_app.commons.exceptions import ExploreRequestError
 from core_explore_common_app.components.abstract_query.models import (
     Authentication,
@@ -119,6 +120,14 @@ def create_local_data_source(request):
         authentication=authentication,
         order_by_field=",".join(DATA_SORTING_FIELDS),
     )
+
+    if "core_linked_records_app" in settings.INSTALLED_APPS:
+        data_source.capabilities = {
+            "url_pid": request.build_absolute_uri(
+                reverse("core_linked_records_app_query")
+            )
+        }
+
     return data_source
 
 
