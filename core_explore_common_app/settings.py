@@ -37,3 +37,7 @@ DISPLAY_EDIT_BUTTON = getattr(settings, "DISPLAY_EDIT_BUTTON", False)
 
 """Result sorting graphical display type ('multi' / 'single')"""
 SORTING_DISPLAY_TYPE = getattr(settings, "SORTING_DISPLAY_TYPE", "single")
+
+SERVER_URI = getattr(settings, "SERVER_URI", "http://127.0.0.1:8000")
+""" :py:class:`str`: Server URI for import reference.
+"""
