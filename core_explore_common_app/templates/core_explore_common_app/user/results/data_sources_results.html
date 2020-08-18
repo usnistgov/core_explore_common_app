@@ -15,6 +15,29 @@
             <div role="tabpanel" class="results-container tab-pane {% if forloop.counter0 == 0 %} active {% endif %} results-page"
                  id="results_{{forloop.counter0}}"
                  url="{% url 'core_explore_common_data_source_results' query.id forloop.counter0 %}">
+                <div class="result-toolbar">
+                    {% if sorting_display_type == 'single' %}
+                        {% include "core_explore_common_app/user/ordering_menu/single_criteria_sorting_menu.html" with data_source_index=forloop.counter0  %}
+                    {% elif sorting_display_type == 'multi' %}
+                        {% include "core_explore_common_app/user/ordering_menu/multi_criteria_sorting_menu.html" %}
+                    {% endif %}
+                    {% include "core_explore_common_app/user/persistent_query/button.html" %}
+                    {% if linked_records_app %}
+                        {% include 'core_linked_records_app/user/sharing/explore/button.html' %}
+                    {% endif %}
+                    {% if exporter_app %}
+                        <button type="button" class="result-toolbar-button export-button">
+                            {% include "core_exporters_app/user/exporters/list/link_exporters_selector.html" %}
+                        </button>
+                    {% endif %}
+                    <div id="date-toggle" class="toggle-container">
+                        <label class="switch">
+                            <input type="checkbox" class="switch-input" />
+                            <span class="switch-label" data-on="Date" data-off="Date"></span>
+                            <span class="handle"></span>
+                        </label>
+                    </div>
+                </div>
                 <div class="results-page" nb_results_id="results_infos_{{forloop.counter0}}"></div>
             </div>
         {% endfor %}

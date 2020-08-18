@@ -17,6 +17,8 @@ var getDataSourcesResultsHTML = function() {
         success: function(data) {
             var $results = $("#results");
             $results.html(data.results);
+            // setup all the toolbar components (listeners, callbacks and default values)
+            initToolbarComponents();
             getDataSourcesResults();
         },
         error: function(data) { }
@@ -65,8 +67,10 @@ var get_data_source_results = function(result_page, data_source_url) {
             var nb_results_id = result_page.attr('nb_results_id');
             $("#" + nb_results_id).html(data.nb_results);
             result_page.html(data.results);
-            // setup all the toolbar components (listeners, callbacks and default values)
-            initToolbarComponents();
+            // display the date
+            initDisplayDateToggle();
+            // permission api calls for the edit button
+            getDataPermission();
             // Add leave notice on links from loaded data
             leaveNotice($("#results_" + nb_results_id.match(/(\d+)/)[0] + " a"));
         },
@@ -209,10 +213,6 @@ var initToolbarComponents = function(){
     if (typeof initFilter === "function") initFilter();
     // init the autosubmit for the sorting button if available
     if (typeof initSortingAutoSubmit === "function") initSortingAutoSubmit();
-    // when the results and the tab are displayed we can init the toggle
-    initDisplayDateToggle();
-    // permission api calls for the edit button
-    getDataPermission();
     // add Tab state listener
     initTabStateListener();
     // enable the tool-bar buttons after the end of the toolbar initialization

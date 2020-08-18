@@ -138,7 +138,13 @@ def get_data_sources_html(request):
         query = query_api.get_by_id(query_id)
 
         # set query in context
-        context = {}
+        context = {
+            "linked_records_app": "core_linked_records_app" in INSTALLED_APPS,
+            "exporter_app": "core_exporters_app" in INSTALLED_APPS,
+            "sorting_display_type": SORTING_DISPLAY_TYPE,
+            "data_displayed_sorting_fields": DATA_DISPLAYED_SORTING_FIELDS,
+            "default_date_toggle_value": DEFAULT_DATE_TOGGLE_VALUE,
+        }
         context.update(request)
         context.update({"query": query})
 
@@ -207,13 +213,9 @@ def get_data_source_results(request, query_id, data_source_index, page=1):
                 "has_previous": has_previous,
                 "has_next": has_next,
             },
-            "exporter_app": "core_exporters_app" in INSTALLED_APPS,
             "blobs_preview": "core_file_preview_app" in INSTALLED_APPS,
-            "linked_records_app": "core_linked_records_app" in INSTALLED_APPS,
             "display_edit_button": DISPLAY_EDIT_BUTTON,
-            "sorting_display_type": SORTING_DISPLAY_TYPE,
-            "data_displayed_sorting_fields": DATA_DISPLAYED_SORTING_FIELDS,
-            "default_date_toggle_value": DEFAULT_DATE_TOGGLE_VALUE,
+            "exporter_app": "core_exporters_app" in INSTALLED_APPS,
         }
 
         # create context
