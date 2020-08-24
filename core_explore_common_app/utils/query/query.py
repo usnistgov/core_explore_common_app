@@ -124,7 +124,7 @@ def create_local_data_source(request):
     if "core_linked_records_app" in settings.INSTALLED_APPS:
         data_source.capabilities = {
             "url_pid": request.build_absolute_uri(
-                reverse("core_linked_records_app_query")
+                reverse("core_linked_records_app_query_local")
             )
         }
 

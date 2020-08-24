@@ -25,7 +25,7 @@ class DataSource(EmbeddedDocument):
     query_options = fields.DictField(blank=True)
     authentication = fields.EmbeddedDocumentField(Authentication)
     order_by_field = fields.StringField(blank=True, default="")
-    capabilities = fields.DictField(blank=True)
+    capabilities = fields.DictField(blank=False)
 
 
 class AbstractQuery(Document):
