@@ -41,3 +41,7 @@ SORTING_DISPLAY_TYPE = getattr(settings, "SORTING_DISPLAY_TYPE", "single")
 SERVER_URI = getattr(settings, "SERVER_URI", "http://127.0.0.1:8000")
 """ :py:class:`str`: Server URI for import reference.
 """
+
+AUTO_SET_PID = getattr(settings, "AUTO_SET_PID", False)
+""" :py:class:`bool`: Enable PID auto-setting from core_linked_records_app.
+"""

@@ -18,17 +18,7 @@ from core_explore_common_app.components.abstract_persistent_query import (
 )
 from core_explore_common_app.components.query import api as query_api
 from core_explore_common_app.constants import LOCAL_QUERY_NAME
-from core_explore_common_app.settings import (
-    DATA_DISPLAYED_SORTING_FIELDS,
-    DISPLAY_EDIT_BUTTON,
-)
-from core_explore_common_app.settings import (
-    DATA_SOURCES_EXPLORE_APPS,
-    RESULTS_PER_PAGE,
-    DEFAULT_DATE_TOGGLE_VALUE,
-    SORTING_DISPLAY_TYPE,
-)
-from core_explore_common_app.settings import INSTALLED_APPS
+from core_explore_common_app import settings
 from core_explore_common_app.utils.query.query import (
     send as send_query,
     add_local_data_source,
@@ -60,7 +50,7 @@ def get_local_data_source(request):
                 "enabled": True,
                 "selected": False,
             }
-            if len(DATA_SOURCES_EXPLORE_APPS) == 0:
+            if len(settings.DATA_SOURCES_EXPLORE_APPS) == 0:
                 add_local_data_source(request, query)
                 context_params["enabled"] = False
 
@@ -139,11 +129,12 @@ def get_data_sources_html(request):
 
         # set query in context
         context = {
-            "linked_records_app": "core_linked_records_app" in INSTALLED_APPS,
-            "exporter_app": "core_exporters_app" in INSTALLED_APPS,
-            "sorting_display_type": SORTING_DISPLAY_TYPE,
-            "data_displayed_sorting_fields": DATA_DISPLAYED_SORTING_FIELDS,
-            "default_date_toggle_value": DEFAULT_DATE_TOGGLE_VALUE,
+            "linked_records_app": "core_linked_records_app" in settings.INSTALLED_APPS
+            and settings.AUTO_SET_PID,
+            "exporter_app": "core_exporters_app" in settings.INSTALLED_APPS,
+            "sorting_display_type": settings.SORTING_DISPLAY_TYPE,
+            "data_displayed_sorting_fields": settings.DATA_DISPLAYED_SORTING_FIELDS,
+            "default_date_toggle_value": settings.DEFAULT_DATE_TOGGLE_VALUE,
         }
         context.update(request)
         context.update({"query": query})
@@ -188,10 +179,10 @@ def get_data_source_results(request, query_id, data_source_index, page=1):
         previous_page_number = get_page_number(results["previous"])
         next_page_number = get_page_number(results["next"])
         results_count = results["count"]
-        page_count = int(math.ceil(float(results_count) / RESULTS_PER_PAGE))
+        page_count = int(math.ceil(float(results_count) / settings.RESULTS_PER_PAGE))
 
         # pagination has other pages?
-        has_other_pages = results_count > RESULTS_PER_PAGE
+        has_other_pages = results_count > settings.RESULTS_PER_PAGE
 
         # pagination has previous?
         has_previous = previous_page_number is not None
@@ -213,9 +204,9 @@ def get_data_source_results(request, query_id, data_source_index, page=1):
                 "has_previous": has_previous,
                 "has_next": has_next,
             },
-            "blobs_preview": "core_file_preview_app" in INSTALLED_APPS,
-            "display_edit_button": DISPLAY_EDIT_BUTTON,
-            "exporter_app": "core_exporters_app" in INSTALLED_APPS,
+            "blobs_preview": "core_file_preview_app" in settings.INSTALLED_APPS,
+            "display_edit_button": settings.DISPLAY_EDIT_BUTTON,
+            "exporter_app": "core_exporters_app" in settings.INSTALLED_APPS,
         }
 
         # create context

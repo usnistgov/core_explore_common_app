@@ -8,7 +8,7 @@ from django.views.generic import View
 
 from core_explore_common_app.components.query import api as query_api
 from core_explore_common_app.components.query.models import Query
-from core_explore_common_app.settings import SORTING_DISPLAY_TYPE, INSTALLED_APPS
+from core_explore_common_app import settings
 
 
 class ResultsView(View):
@@ -52,7 +52,7 @@ class ResultsView(View):
                 },
                 {
                     "path": "core_explore_common_app/user/js/sorting_{0}_criteria.js".format(
-                        SORTING_DISPLAY_TYPE
+                        settings.SORTING_DISPLAY_TYPE
                     ),
                     "is_raw": False,
                 },
@@ -66,7 +66,7 @@ class ResultsView(View):
         }
 
         # Add assets needed for the exporters
-        if "core_exporters_app" in INSTALLED_APPS:
+        if "core_exporters_app" in settings.INSTALLED_APPS:
             # add all assets needed
             assets["js"].extend(
                 [
@@ -78,7 +78,7 @@ class ResultsView(View):
             )
 
         # Add assets needed for the file preview
-        if "core_file_preview_app" in INSTALLED_APPS:
+        if "core_file_preview_app" in settings.INSTALLED_APPS:
             assets["js"].extend(
                 [
                     {
@@ -90,7 +90,10 @@ class ResultsView(View):
             assets["css"].append("core_file_preview_app/user/css/file_preview.css")
 
         # Add assets needed for the PID sharing
-        if "core_linked_records_app" in INSTALLED_APPS:
+        if (
+            "core_linked_records_app" in settings.INSTALLED_APPS
+            and settings.AUTO_SET_PID
+        ):
             assets["js"].extend(
                 [
                     {
@@ -110,7 +113,7 @@ class ResultsView(View):
         ]
 
         # Add the exporters modal
-        if "core_exporters_app" in INSTALLED_APPS:
+        if "core_exporters_app" in settings.INSTALLED_APPS:
             modals.extend(
                 [
                     "core_exporters_app/user/exporters/list/modals/list_exporters_selector.html"
@@ -118,11 +121,14 @@ class ResultsView(View):
             )
 
         # Add the file preview modal
-        if "core_file_preview_app" in INSTALLED_APPS:
+        if "core_file_preview_app" in settings.INSTALLED_APPS:
             modals.append("core_file_preview_app/user/file_preview_modal.html")
 
         # Add PID modal
-        if "core_linked_records_app" in INSTALLED_APPS:
+        if (
+            "core_linked_records_app" in settings.INSTALLED_APPS
+            and settings.AUTO_SET_PID
+        ):
             modals.append("core_linked_records_app/user/sharing/explore/modal.html")
 
         return modals
