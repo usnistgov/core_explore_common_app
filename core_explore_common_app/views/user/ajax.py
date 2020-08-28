@@ -31,7 +31,7 @@ from core_main_app.utils.pagination.rest_framework_paginator.rest_framework_pagi
 
 
 def get_local_data_source(request):
-    """ Ajax method to get the local data source
+    """Ajax method to get the local data source
 
     Args:
         request:
@@ -80,7 +80,7 @@ def get_local_data_source(request):
 
 
 def update_local_data_source(request):
-    """ Ajax method to update query with local data source
+    """Ajax method to update query with local data source
 
     Args:
         request:
@@ -236,19 +236,18 @@ def get_data_source_results(request, query_id, data_source_index, page=1):
 
 
 class CreatePersistentQueryUrlView(View, metaclass=ABCMeta):
-    """ Create the persistent url from a Query
-    """
+    """Create the persistent url from a Query"""
 
     view_to_reverse = None
 
     def post(self, request):
-        """ Create a persistent query
-            Args:
-                request:
+        """Create a persistent query
+        Args:
+            request:
 
-            Returns:
+        Returns:
 
-            """
+        """
         try:
             # get parameter
             query_id = request.POST.get("queryId", None)
@@ -282,7 +281,7 @@ class CreatePersistentQueryUrlView(View, metaclass=ABCMeta):
     @staticmethod
     @abstractmethod
     def _create_persistent_query(query):
-        """ Create the persistent query
+        """Create the persistent query
 
         Args:
             query:

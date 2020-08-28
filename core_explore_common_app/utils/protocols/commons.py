@@ -3,7 +3,7 @@
 
 
 def get_url(protocol, address, port):
-    """ Returns the Url with the given parameters
+    """Returns the Url with the given parameters
 
     Args:
         protocol:

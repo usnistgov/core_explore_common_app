@@ -20,7 +20,7 @@ class ResultsView(View):
 
     @staticmethod
     def build_sorting_context_array(query):
-        """ Get the query data-sources dans build the context sorting array for the JS
+        """Get the query data-sources dans build the context sorting array for the JS
 
         Returns:
 

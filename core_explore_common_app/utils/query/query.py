@@ -104,7 +104,7 @@ def add_local_data_source(request, query):
 
 
 def create_local_data_source(request):
-    """  Create local datasource
+    """Create local datasource
 
     Args:
         request:
@@ -132,7 +132,7 @@ def create_local_data_source(request):
 
 
 def get_local_query_absolute_url(request):
-    """ Return local query absolute URL.
+    """Return local query absolute URL.
 
     Args:
         request:
@@ -146,7 +146,7 @@ def get_local_query_absolute_url(request):
 
 
 def create_default_query(request, template_ids):
-    """ create a new Query object
+    """create a new Query object
 
     Args:
         request:

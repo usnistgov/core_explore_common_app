@@ -4,8 +4,7 @@ from core_explore_common_app.components.abstract_query.models import AbstractQue
 
 
 class AbstractPersistentQuery(AbstractQuery):
-    """ Abstract Persistent Query
-    """
+    """Abstract Persistent Query"""
 
     meta = {
         "abstract": True,

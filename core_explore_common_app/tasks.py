@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 
 @periodic_task(run_every=crontab(minute=0, hour=0))
 def delete_old_queries():
-    """ Every day at midnight, delete older queries.
+    """Every day at midnight, delete older queries.
 
     Returns:
 

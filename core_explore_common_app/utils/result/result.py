@@ -30,7 +30,7 @@ def get_template_info(template, include_template_id=True):
 
 
 def get_result_from_rest_data_response(response):
-    """ Returns result object from data rest response
+    """Returns result object from data rest response
 
     Args:
         response:

@@ -40,7 +40,7 @@ def send_post_request(url, data, access_token, session_time_zone=None):
 
 
 def post_request_token(url, client_id, client_secret, timeout, username, password):
-    """ Request token
+    """Request token
 
     Args:
         url:
@@ -66,7 +66,7 @@ def post_request_token(url, client_id, client_secret, timeout, username, passwor
 
 
 def post_refresh_token(url, client_id, client_secret, timeout, refresh_token):
-    """ Refresh token
+    """Refresh token
 
     Args:
         url:
@@ -91,7 +91,7 @@ def post_refresh_token(url, client_id, client_secret, timeout, refresh_token):
 def _get_data_for_request(
     client_id, client_secret, username=None, password=None, refresh_token=None
 ):
-    """ Returns data structure for post request
+    """Returns data structure for post request
 
     Args:
         client_id:

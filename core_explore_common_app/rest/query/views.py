@@ -16,7 +16,7 @@ from core_main_app.utils.pagination.rest_framework_paginator.pagination import (
 
 class ExecuteLocalQueryView(AbstractExecuteLocalQueryView):
     def build_response(self, data_list):
-        """ Build the paginated list of data
+        """Build the paginated list of data
 
         Args:
 

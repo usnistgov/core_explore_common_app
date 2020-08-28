@@ -84,7 +84,7 @@ def get_data_source_by_name_and_url_query(query, name, url_query):
 
 
 def set_visibility_to_query(query):
-    """ Set visibility with the visibility defined in settings
+    """Set visibility with the visibility defined in settings
 
     Args:
         query:

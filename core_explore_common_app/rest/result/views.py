@@ -11,7 +11,7 @@ from core_explore_common_app.rest.result.serializers import ResultSerializer
 
 @api_view(["GET"])
 def get_result_from_data_id(request):
-    """ Retrieve a Result
+    """Retrieve a Result
 
     Parameters:
 

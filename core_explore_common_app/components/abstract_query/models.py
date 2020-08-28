@@ -9,16 +9,14 @@ AUTH_TYPES = ("session", "oauth2")
 
 
 class Authentication(EmbeddedDocument):
-    """Authentication class
-    """
+    """Authentication class"""
 
     type = fields.StringField(choices=AUTH_TYPES)
     params = fields.DictField(blank=True)
 
 
 class DataSource(EmbeddedDocument):
-    """Data Source class
-    """
+    """Data Source class"""
 
     name = fields.StringField(blank=False)
     url_query = fields.StringField(blank=False)
@@ -29,8 +27,7 @@ class DataSource(EmbeddedDocument):
 
 
 class AbstractQuery(Document):
-    """ Abstract Query
-    """
+    """Abstract Query"""
 
     user_id = fields.StringField(blank=False)
     content = fields.StringField(blank=True)

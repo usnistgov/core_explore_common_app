@@ -12,8 +12,7 @@ from core_main_app.commons import exceptions
 
 
 class Query(AbstractQuery):
-    """Query class
-    """
+    """Query class"""
 
     @staticmethod
     def get_by_id(query_id):
