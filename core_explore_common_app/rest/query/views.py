@@ -52,7 +52,10 @@ class ExecuteLocalQueryView(AbstractExecuteLocalQueryView):
 
             # Use the PID link if the app is installed and a PID is defined for the
             # document
-            if "core_linked_records_app" in settings.INSTALLED_APPS:
+            if (
+                "core_linked_records_app" in settings.INSTALLED_APPS
+                and settings.AUTO_SET_PID
+            ):
                 from core_linked_records_app.components.data import api as data_api
 
                 pid_url = data_api.get_pids_for_data_list([data.id], self.request.user)
