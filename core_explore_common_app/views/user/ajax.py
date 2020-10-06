@@ -44,7 +44,7 @@ def get_local_data_source(request):
 
         if id_query is not None:
             # Get query from id
-            query = query_api.get_by_id(id_query)
+            query = query_api.get_by_id(id_query, request.user)
 
             context_params = {
                 "enabled": True,
@@ -93,7 +93,7 @@ def update_local_data_source(request):
         selected = json.loads(request.GET["selected"])
 
         # Get query from id
-        query = query_api.get_by_id(query_id)
+        query = query_api.get_by_id(query_id, request.user)
 
         if selected:
             # Local data source is selected, add it to the query as a data source
@@ -102,9 +102,9 @@ def update_local_data_source(request):
             # Local data source is not selected, remove it from the query
             local_query_url = get_local_query_absolute_url(request)
             data_source = query_api.get_data_source_by_name_and_url_query(
-                query, LOCAL_QUERY_NAME, local_query_url
+                query, LOCAL_QUERY_NAME, local_query_url, request.user
             )
-            query_api.remove_data_source(query, data_source)
+            query_api.remove_data_source(query, data_source, request.user)
 
         return HttpResponse()
     except Exception as e:
@@ -125,7 +125,7 @@ def get_data_sources_html(request):
         query_id = request.GET["query_id"]
 
         # get query results
-        query = query_api.get_by_id(query_id)
+        query = query_api.get_by_id(query_id, request.user)
 
         # set query in context
         context = {
@@ -170,7 +170,7 @@ def get_data_source_results(request, query_id, data_source_index, page=1):
     """
     try:
         # get query
-        query = query_api.get_by_id(query_id)
+        query = query_api.get_by_id(query_id, request.user)
 
         # send query, and get results from data source
         results = send_query(request, query, int(data_source_index), page)
@@ -254,7 +254,7 @@ class CreatePersistentQueryUrlView(View, metaclass=ABCMeta):
 
             # get the matching query
             try:
-                query = query_api.get_by_id(query_id)
+                query = query_api.get_by_id(query_id, request.user)
             except DoesNotExist:
                 return HttpResponseBadRequest("The query does not exist anymore.")
 

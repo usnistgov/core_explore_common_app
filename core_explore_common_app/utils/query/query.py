@@ -100,7 +100,7 @@ def add_local_data_source(request, query):
     """
     # Add Local to the query as a data source
     data_source = create_local_data_source(request)
-    query_api.add_data_source(query, data_source)
+    query_api.add_data_source(query, data_source, request.user)
 
 
 def create_local_data_source(request):

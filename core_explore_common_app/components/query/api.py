@@ -1,13 +1,16 @@
 """ Query api
 """
 from core_explore_common_app import settings
+from core_explore_common_app.access_control.api import can_read, can_access
 from core_explore_common_app.components.query.models import Query
 from core_explore_common_app.constants import LOCAL_QUERY_NAME
+from core_main_app.access_control.decorators import access_control
 from core_main_app.commons.exceptions import DoesNotExist
 from core_main_app.utils.query.constants import VISIBILITY_OPTION
 
 
-def upsert(query):
+@access_control(can_access)
+def upsert(query, user):
     """Saves or uploads query
 
     Args:
@@ -19,7 +22,8 @@ def upsert(query):
     return query.save()
 
 
-def get_by_id(id_query):
+@access_control(can_read)
+def get_by_id(id_query, user):
     """Returns a query with the given id
 
     Args:
@@ -31,12 +35,14 @@ def get_by_id(id_query):
     return Query.get_by_id(id_query)
 
 
-def add_data_source(query, data_source):
+@access_control(can_access)
+def add_data_source(query, data_source, user):
     """Adds a data source to the query
 
     Args:
         query:
         data_source:
+        user:
 
     Returns:
 
@@ -44,7 +50,7 @@ def add_data_source(query, data_source):
     try:
         # check if data source is already present
         get_data_source_by_name_and_url_query(
-            query, data_source.name, data_source.url_query
+            query, data_source.name, data_source.url_query, user
         )
         # already present return query
         return query
@@ -52,30 +58,34 @@ def add_data_source(query, data_source):
         # add data source to query if not present
         query.data_sources.append(data_source)
         # update query
-        return upsert(query)
+        return upsert(query, user)
 
 
-def remove_data_source(query, data_source):
+@access_control(can_access)
+def remove_data_source(query, data_source, user):
     """Removes a data source from the query
 
     Args:
         query:
         data_source:
+        user:
 
     Returns:
 
     """
     query.data_sources.remove(data_source)
-    return upsert(query)
+    return upsert(query, user)
 
 
-def get_data_source_by_name_and_url_query(query, name, url_query):
+@access_control(can_access)
+def get_data_source_by_name_and_url_query(query, name, url_query, user):
     """Returns a data source from given name and url of query
 
     Args:
         query:
         name:
         url_query:
+        user:
 
     Returns:
 
@@ -83,11 +93,13 @@ def get_data_source_by_name_and_url_query(query, name, url_query):
     return query.get_data_source_by_name_and_url_query(name, url_query)
 
 
-def set_visibility_to_query(query):
+@access_control(can_access)
+def set_visibility_to_query(query, user):
     """Set visibility with the visibility defined in settings
 
     Args:
         query:
+        user:
 
     Returns:
 

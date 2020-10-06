@@ -11,6 +11,7 @@ from core_explore_common_app.components.abstract_query.models import (
 from core_explore_common_app.components.query import api as query_api
 from core_explore_common_app.components.query.models import Query
 from core_main_app.commons import exceptions
+from core_main_app.utils.tests_tools.MockUser import create_mock_user
 
 
 class TestQueryUpsert(TestCase):
@@ -18,7 +19,8 @@ class TestQueryUpsert(TestCase):
     def test_upsert_query_returns_query(self, mock_save):
         query = _create_query()
         mock_save.return_value = query
-        self.assertTrue(isinstance(query_api.upsert(query), Query))
+        mock_user = create_mock_user("1")
+        self.assertTrue(isinstance(query_api.upsert(query, mock_user), Query))
 
 
 class TestQueryGetById(TestCase):
@@ -26,17 +28,19 @@ class TestQueryGetById(TestCase):
     def test_saved_query_get_by_id_raises_api_error_if_not_found(self, mock_get):
         # Arrange
         mock_get.side_effect = exceptions.DoesNotExist("")
+        mock_user = create_mock_user("1")
         # Act # Assert
         with self.assertRaises(exceptions.DoesNotExist):
-            query_api.get_by_id("1")
+            query_api.get_by_id("1", mock_user)
 
     @patch.object(Query, "get_by_id")
     def test_query_get_by_id_return_data_if_found(self, mock_get):
         # Arrange
         query = _create_query()
         mock_get.return_value = query
+        mock_user = create_mock_user("1")
         # Act
-        result = query_api.get_by_id(query.id)
+        result = query_api.get_by_id(query.id, mock_user)
         # Assert
         self.assertIsInstance(result, Query)
 
@@ -50,9 +54,12 @@ class TestGetDataSourceByNameAndUrlQuery(TestCase):
         query = _create_query()
         # Arrange
         mock_get.side_effect = exceptions.DoesNotExist("")
+        mock_user = create_mock_user("1")
         # Act # Assert
         with self.assertRaises(exceptions.DoesNotExist):
-            query_api.get_data_source_by_name_and_url_query(query, "name", "url")
+            query_api.get_data_source_by_name_and_url_query(
+                query, "name", "url", mock_user
+            )
 
     @patch.object(Query, "get_data_source_by_name_and_url_query")
     def test_query_get_by_id_return_data_if_found(self, mock_get):
@@ -60,9 +67,10 @@ class TestGetDataSourceByNameAndUrlQuery(TestCase):
         query = _create_query()
         # Arrange
         mock_get.return_value = query
+        mock_user = create_mock_user("1")
         # Act
         result = query_api.get_data_source_by_name_and_url_query(
-            query, "Data Source", "/url"
+            query, "Data Source", "/url", mock_user
         )
         # Assert
         self.assertIsInstance(result, Query)
@@ -77,10 +85,11 @@ class TestQueryAddDataSource(TestCase):
         # Arrange
         mock_get.side_effect = exceptions.DoesNotExist("")
         mock_save.return_value = query
+        mock_user = create_mock_user("1")
 
         origin_data_sources = len(query.data_sources)
         data_source = _create_data_source("Remote", "/remote/url")
-        query_api.add_data_source(query, data_source)
+        query_api.add_data_source(query, data_source, mock_user)
         self.assertTrue(len(query.data_sources) == origin_data_sources + 1)
 
     @patch.object(Query, "save")
@@ -93,10 +102,11 @@ class TestQueryAddDataSource(TestCase):
         # Arrange
         mock_get.return_value = query.data_sources[0]
         mock_save.return_value = query
+        mock_user = create_mock_user("1")
 
         origin_data_sources = len(query.data_sources)
         data_source = _create_data_source("Remote", "/remote/url")
-        query_api.add_data_source(query, data_source)
+        query_api.add_data_source(query, data_source, mock_user)
         self.assertTrue(len(query.data_sources) == origin_data_sources)
 
 
@@ -106,9 +116,10 @@ class TestQueryRemoveDataSource(TestCase):
         # create query
         query = _create_query()
         mock_save.return_value = query
+        mock_user = create_mock_user("1")
         origin_data_sources = len(query.data_sources)
         data_source = query.data_sources[0]
-        query_api.remove_data_source(query, data_source)
+        query_api.remove_data_source(query, data_source, mock_user)
         self.assertTrue(len(query.data_sources) == origin_data_sources - 1)
 
 
