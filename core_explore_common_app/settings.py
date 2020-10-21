@@ -50,3 +50,9 @@ SERVER_URI = getattr(settings, "SERVER_URI", "http://127.0.0.1:8000")
 AUTO_SET_PID = getattr(settings, "AUTO_SET_PID", False)
 """ :py:class:`bool`: Enable PID auto-setting from core_linked_records_app.
 """
+
+CAN_ANONYMOUS_ACCESS_PUBLIC_DOCUMENT = getattr(
+    settings, "CAN_ANONYMOUS_ACCESS_PUBLIC_DOCUMENT", False
+)
+""" :py:class:`bool`: Can anonymous user access public document.
+"""

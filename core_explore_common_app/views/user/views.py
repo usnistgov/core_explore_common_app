@@ -9,6 +9,7 @@ from django.views.generic import View
 from core_explore_common_app.components.query import api as query_api
 from core_explore_common_app.components.query.models import Query
 from core_explore_common_app import settings
+from core_main_app.access_control.exceptions import AccessControlError
 
 
 class ResultsView(View):
@@ -155,8 +156,12 @@ class ResultQueryRedirectView(RedirectView, metaclass=ABCMeta):
 
             # then redirect to the result page core_explore_example_results with /<template_id>/<query_id>
             return self._get_reversed_url(query)
+        except AccessControlError:
+            # add error message
+            messages.add_message(self.request, messages.ERROR, "Access Forbidden.")
+            return self._get_reversed_url_if_failed()
         except Exception as e:
-            # add success message
+            # add error message
             messages.add_message(
                 self.request, messages.ERROR, "The given URL is not valid."
             )
