@@ -143,10 +143,3 @@ var cleanSortingList = function(inputList) {
     });
     return cleanedInputList;
 }
-
-/**
- * Load controllers for the results page
- */
-$(document).ready(function() {
-    initFilter();
-});
