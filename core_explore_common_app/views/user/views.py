@@ -140,7 +140,7 @@ class ResultQueryRedirectView(RedirectView, metaclass=ABCMeta):
         try:
             # here we receive a PersistentQuery id
             persistent_query_example = self._get_persistent_query(
-                kwargs["persistent_query_id"]
+                kwargs["persistent_query_id"], self.request.user
             )
 
             # from it we have to duplicate it to a Query with the new user_id
@@ -169,7 +169,7 @@ class ResultQueryRedirectView(RedirectView, metaclass=ABCMeta):
 
     @staticmethod
     @abstractmethod
-    def _get_persistent_query(persistent_query_id):
+    def _get_persistent_query(persistent_query_id, user):
         raise NotImplementedError("_get_persistent_query method is not implemented.")
 
     @staticmethod

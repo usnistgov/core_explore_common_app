@@ -8,6 +8,10 @@ from core_explore_common_app.components.query.models import Query
 from core_explore_common_app.settings import CAN_ANONYMOUS_ACCESS_PUBLIC_DOCUMENT
 from core_main_app.access_control.exceptions import AccessControlError
 
+from core_explore_common_app.components.abstract_persistent_query.models import (
+    AbstractPersistentQuery,
+)
+
 logger = logging.getLogger(__name__)
 
 
@@ -81,3 +85,65 @@ def can_access(func, *args, **kwargs):
         )
 
     return func(*args, **kwargs)
+
+
+def can_read_persistent_query(func, *args, **kwargs):
+    """Can user read
+
+    Args:
+        func:
+        *args:
+        **kwargs:
+
+    Returns:
+
+    """
+    user = next(
+        (
+            arg
+            for arg in args
+            if isinstance(arg, User) or isinstance(arg, AnonymousUser)
+        ),
+        None,
+    )
+    if not CAN_ANONYMOUS_ACCESS_PUBLIC_DOCUMENT and (user is None or user.is_anonymous):
+        raise AccessControlError(
+            "The user doesn't have enough rights to read this query."
+        )
+    return func(*args, **kwargs)
+
+
+def can_write_persistent_query(func, *args, **kwargs):
+    """Can user read
+
+    Args:
+        func:
+        *args:
+        **kwargs:
+
+    Returns:
+
+    """
+    user = next(
+        (
+            arg
+            for arg in args
+            if isinstance(arg, User) or isinstance(arg, AnonymousUser)
+        ),
+        None,
+    )
+    if user is not None or not user.is_anonymous:
+        if user.is_superuser:
+            return func(*args, **kwargs)
+
+        query = next(
+            (arg for arg in args if isinstance(arg, AbstractPersistentQuery)),
+            None,
+        )
+
+        if query.user_id == str(user.id):
+            return func(*args, **kwargs)
+        # user is not owner or query
+    raise AccessControlError(
+        "The user doesn't have enough rights to access this query."
+    )

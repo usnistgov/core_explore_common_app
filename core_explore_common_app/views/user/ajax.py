@@ -260,7 +260,7 @@ class CreatePersistentQueryUrlView(View, metaclass=ABCMeta):
 
             # create the persistent query
             persistent_query = abstract_persistent_query_api.upsert(
-                self._create_persistent_query(query)
+                self._create_persistent_query(query), request.user
             )
             # reverse to the url
             url_reversed = request.build_absolute_uri(
