@@ -138,19 +138,32 @@ class ResultsView(View):
 class ResultQueryRedirectView(RedirectView, metaclass=ABCMeta):
     def get_redirect_url(self, *args, **kwargs):
         try:
-            # here we receive a PersistentQuery id
-            persistent_query_example = self._get_persistent_query(
-                kwargs["persistent_query_id"], self.request.user
-            )
+            # here we receive a PersistentQuery  name or id
+            persistent_query_id = self.request.GET.get("id", None)
+            persistent_query_name = self.request.GET.get("name", None)
+
+            if persistent_query_id is not None:
+                persistent_query = self._get_persistent_query_by_id(
+                    persistent_query_id, self.request.user
+                )
+            elif persistent_query_name is not None:
+                persistent_query = self._get_persistent_query_by_name(
+                    persistent_query_name, self.request.user
+                )
+            else:
+                messages.add_message(
+                    self.request, messages.ERROR, "Expecting id or name."
+                )
+                return self._get_reversed_url_if_failed()
 
             # from it we have to duplicate it to a Query with the new user_id
             # we should probably add the query_id into the persistent query?
             # to avoid to recreate this query each time we visit the persistent URL
             query = Query(
                 user_id=str(self.request.user.id),
-                content=persistent_query_example.content,
-                templates=persistent_query_example.templates,
-                data_sources=persistent_query_example.data_sources,
+                content=persistent_query.content,
+                templates=persistent_query.templates,
+                data_sources=persistent_query.data_sources,
             )
             query = query_api.upsert(query, self.request.user)
 
@@ -169,7 +182,12 @@ class ResultQueryRedirectView(RedirectView, metaclass=ABCMeta):
 
     @staticmethod
     @abstractmethod
-    def _get_persistent_query(persistent_query_id, user):
+    def _get_persistent_query_by_id(persistent_query_id, user):
+        raise NotImplementedError("_get_persistent_query method is not implemented.")
+
+    @staticmethod
+    @abstractmethod
+    def _get_persistent_query_by_name(persistent_query_name, user):
         raise NotImplementedError("_get_persistent_query method is not implemented.")
 
     @staticmethod

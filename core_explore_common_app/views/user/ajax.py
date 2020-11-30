@@ -263,15 +263,11 @@ class CreatePersistentQueryUrlView(View, metaclass=ABCMeta):
                 self._create_persistent_query(query), request.user
             )
             # reverse to the url
-            url_reversed = request.build_absolute_uri(
-                reverse(
-                    self.view_to_reverse,
-                    kwargs={"persistent_query_id": persistent_query.id},
-                )
-            )
+            url_reversed = request.build_absolute_uri(reverse(self.view_to_reverse))
             # context
             return HttpResponse(
-                json.dumps({"url": url_reversed}), content_type="application/javascript"
+                json.dumps({"url": url_reversed + "?id=" + str(persistent_query.id)}),
+                content_type="application/javascript",
             )
         except Exception as e:
             return HttpResponseBadRequest(
