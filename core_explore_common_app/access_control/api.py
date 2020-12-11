@@ -106,10 +106,21 @@ def can_read_persistent_query(func, *args, **kwargs):
         ),
         None,
     )
-    if not CAN_ANONYMOUS_ACCESS_PUBLIC_DOCUMENT and (user is None or user.is_anonymous):
+    if user is None:
         raise AccessControlError(
             "The user doesn't have enough rights to read this query."
         )
+
+    # Anonymous can read when CAN_ANONYMOUS_ACCESS_PUBLIC_DOCUMENT
+    if user.is_anonymous:
+        if CAN_ANONYMOUS_ACCESS_PUBLIC_DOCUMENT:
+            return func(*args, **kwargs)
+        else:
+            raise AccessControlError(
+                "The user doesn't have enough rights to read this query."
+            )
+
+    # Superuser and user can always read queries
     return func(*args, **kwargs)
 
 
@@ -132,18 +143,33 @@ def can_write_persistent_query(func, *args, **kwargs):
         ),
         None,
     )
-    if user is not None or not user.is_anonymous:
-        if user.is_superuser:
-            return func(*args, **kwargs)
-
-        query = next(
-            (arg for arg in args if isinstance(arg, AbstractPersistentQuery)),
-            None,
+    if user is None:
+        raise AccessControlError(
+            "The user doesn't have enough rights to access this query."
         )
+    # Superuser can create and update any query
+    if user.is_superuser:
+        return func(*args, **kwargs)
 
-        if query.user_id == str(user.id):
+    query = next(
+        (arg for arg in args if isinstance(arg, AbstractPersistentQuery)),
+        None,
+    )
+
+    # Anonymous can only create new query
+    if user.is_anonymous:
+        if query.id is None and CAN_ANONYMOUS_ACCESS_PUBLIC_DOCUMENT:
             return func(*args, **kwargs)
-        # user is not owner or query
+        else:
+            raise AccessControlError(
+                "The user doesn't have enough rights to access this query."
+            )
+
+    # Owner can create and update own queries
+    if query.user_id == str(user.id):
+        return func(*args, **kwargs)
+
+    # Non-Owner
     raise AccessControlError(
         "The user doesn't have enough rights to access this query."
     )
