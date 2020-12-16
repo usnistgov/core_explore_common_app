@@ -111,17 +111,22 @@ def can_read_persistent_query(func, *args, **kwargs):
             "The user doesn't have enough rights to read this query."
         )
 
+    query = func(*args, **kwargs)
+
     # Anonymous can read when CAN_ANONYMOUS_ACCESS_PUBLIC_DOCUMENT
     if user.is_anonymous:
-        if CAN_ANONYMOUS_ACCESS_PUBLIC_DOCUMENT:
-            return func(*args, **kwargs)
+        # Allow read only for one query
+        if CAN_ANONYMOUS_ACCESS_PUBLIC_DOCUMENT and isinstance(
+            query, AbstractPersistentQuery
+        ):
+            return query
         else:
             raise AccessControlError(
                 "The user doesn't have enough rights to read this query."
             )
 
     # Superuser and user can always read queries
-    return func(*args, **kwargs)
+    return query
 
 
 def can_write_persistent_query(func, *args, **kwargs):
