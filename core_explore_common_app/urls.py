@@ -32,4 +32,9 @@ urlpatterns = [
         user_ajax.get_data_source_results,
         name="core_explore_common_data_source_results",
     ),
+    re_path(
+        r"^(?P<persistent_query_type>\w+)/(?P<persistent_query_id>\w+)",
+        user_ajax.ContentPersistentQueryView.as_view(),
+        name="core_explore_common_persistent_query_content",
+    ),
 ]

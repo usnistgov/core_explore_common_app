@@ -1,6 +1,7 @@
 {% extends 'core_main_app/user/sharing/button.html' %}
 
 {% block btn_id %}persistent-query{% endblock %}
-{% block btn_class %}result-toolbar-button{% endblock %}
+{% block btn_object_id %}{{objectid}}{% endblock %}
+{% block btn_class %}{% if come_from_my_queries %} btn btn-secondary {% else %} result-toolbar-button {% endif %}{% endblock %}
 {% block btn_icon %}link{% endblock %}
-{% block btn_name %}Share Query{% endblock %}
+{% block btn_name %}{% if come_from_my_queries %} Get link {% else %}Share Query{% endif %}{% endblock %}

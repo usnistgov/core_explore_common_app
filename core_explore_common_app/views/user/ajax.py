@@ -13,12 +13,21 @@ from django.utils.html import escape
 from django.views import View
 
 from core_explore_common_app.commons.exceptions import ExploreRequestError
+
 from core_explore_common_app.components.abstract_persistent_query import (
     api as abstract_persistent_query_api,
 )
+from core_explore_common_app.components.abstract_persistent_query.models import (
+    AbstractPersistentQuery,
+)
+from django.utils.decorators import method_decorator
+from django.contrib.auth.decorators import login_required
+
+from core_main_app.views.common.views import CommonView
 from core_explore_common_app.components.query import api as query_api
 from core_explore_common_app.constants import LOCAL_QUERY_NAME
 from core_explore_common_app import settings
+
 from core_explore_common_app.utils.query.query import (
     send as send_query,
     add_local_data_source,
@@ -286,3 +295,48 @@ class CreatePersistentQueryUrlView(View, metaclass=ABCMeta):
 
         """
         raise NotImplementedError("_create_persistent_query method is not implemented.")
+
+
+@method_decorator(login_required, name="dispatch")
+class ContentPersistentQueryView(CommonView):
+    """
+    View persistent query content
+    """
+
+    template = "core_explore_common_app/user/results/persistent_query_content.html"
+
+    def get(self, request, *args, **kwargs):
+
+        try:
+            # get persistent query id
+            persistent_query_id = kwargs["persistent_query_id"]
+
+            # get persistent query class name
+            persistent_query_type = kwargs["persistent_query_type"]
+
+            persistent_query_class = next(
+                (
+                    subclass
+                    for subclass in AbstractPersistentQuery.get_subclasses()
+                    if subclass.__name__ == persistent_query_type
+                ),
+                None,
+            )
+
+            # get persistent query
+            persistent_query = abstract_persistent_query_api.get_by_id(
+                persistent_query_class, persistent_query_id, request.user
+            )
+        except:
+            return HttpResponseBadRequest("Something wrong happened.")
+
+        # create context
+        context = {
+            "query": persistent_query,
+        }
+
+        return self.common_render(
+            request,
+            self.template,
+            context=context,
+        )

@@ -11,3 +11,13 @@ class AbstractPersistentQuery(AbstractQuery):
     meta = {
         "abstract": True,
     }
+
+    @staticmethod
+    def get_subclasses():
+        """
+        Returns: list of subclasses
+
+
+        """
+
+        return AbstractPersistentQuery.__subclasses__()
