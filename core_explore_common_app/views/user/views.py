@@ -136,6 +136,10 @@ class ResultsView(View):
 
 
 class ResultQueryRedirectView(RedirectView, metaclass=ABCMeta):
+    model_name = None
+    object_name = None
+    redirect_url = None
+
     def get_redirect_url(self, *args, **kwargs):
         try:
             # here we receive a PersistentQuery  name or id
@@ -189,6 +193,11 @@ class ResultQueryRedirectView(RedirectView, metaclass=ABCMeta):
     @abstractmethod
     def _get_persistent_query_by_name(persistent_query_name, user):
         raise NotImplementedError("_get_persistent_query method is not implemented.")
+
+    @staticmethod
+    @abstractmethod
+    def get_url_path():
+        raise NotImplementedError("get_url_path method is not implemented.")
 
     @staticmethod
     @abstractmethod

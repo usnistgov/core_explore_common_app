@@ -64,16 +64,8 @@ let renamePersistentQuery = function(e){
     // get persistent query id if not set
     if (persistent_query_id == "") persistent_query_id = persistent_query_url.split("=")[1]
 
-    // get persistent query type form the url
-    var query_type = persistent_query_url.split("/")[4]
-
-    // make REST API link
-    // FIXME : make the redirect url correctly
-
-    renameUrl =  window.origin+"/explore/"+query_type+"/rest/persistent_query_"+query_type+"/"+persistent_query_id+"/"
-
     $.ajax({
-        url: renameUrl,
+        url: persistentQueryRestUrl.replace("queryId", persistent_query_id),
         data: { "name": persistent_query_name },
         dataType:"json",
         type: "patch",
