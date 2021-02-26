@@ -8,7 +8,7 @@ $(document).ready(function() {
         "#persistent-query-link", "#persistent-query-submit"
 
     );
-    $('#persistent-query-name').change(changeRenameButtonVisibility);
+    $('#persistent-query-name').on('input',changeRenameButtonVisibility);
     $('#persistent-query-rename').click(renamePersistentQuery);
 
 });
@@ -42,16 +42,6 @@ let configurePersistentQueryModal = function() {
         }
     });
     return !hasFailed;
-}
-
-let changeRenameButtonVisibility = function(){
-   // enable the rename button
-   if( $("#persistent-query-name").val() != '') {
-       $('#persistent-query-rename').prop('disabled', false);
-   }
-   else{
-      $('#persistent-query-rename').prop('disabled', true);
-   }
 }
 
 
@@ -88,3 +78,12 @@ let renamePersistentQuery = function(e){
         }
     });
  }
+
+let changeRenameButtonVisibility = function(e){
+   if( $("#persistent-query-name").val() != '') {
+       $('#persistent-query-rename').prop('disabled', false);
+   }
+   else{
+      $('#persistent-query-rename').prop('disabled', true);
+   }
+}
