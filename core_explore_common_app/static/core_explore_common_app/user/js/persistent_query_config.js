@@ -10,7 +10,6 @@ $(document).ready(function() {
     );
     $('#persistent-query-name').on('input',changeRenameButtonVisibility);
     $('#persistent-query-rename').click(renamePersistentQuery);
-
 });
 
 
