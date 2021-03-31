@@ -1,11 +1,10 @@
-celery==4.1.1
-# FIXME: upgrade celery and remove kombu
-kombu==4.3.0
-Django==2.2.13
-django-mongoengine==0.3.3
-djangorestframework==3.9.1
-django-rest-framework-mongoengine==3.4.0
+celery==4.4.7
+kombu==4.6.11
+Django==2.2.19
+django-mongoengine==0.4.1
+djangorestframework==3.12.2
+django-rest-framework-mongoengine==3.4.1
 mock==2.0.0
-mongoengine==0.18.2
-requests==2.20.0
-future==0.17.1
+mongoengine==0.23.0
+requests==2.25.1
+future==0.18.2
