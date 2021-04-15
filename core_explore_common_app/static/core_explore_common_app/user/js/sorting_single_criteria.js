@@ -104,7 +104,7 @@ var createSortingListeners = function() {
 var toggleFilter = function(event) {
     // Stop the event propagation to avoid default behavior: close dropdown on click
     event.stopPropagation();
-    $('[id^="result-button-filter"]').children().attr('class','fa fa-spinner fa-spin');
+    $('[id^="result-button-filter"]').children().attr('class','fas fa-spinner fa-spin');
     var clickedButtonElementId = $(event.target).closest('li')[0];
     var clickedButtonValue = $(clickedButtonElementId).attr('data-filter-order');
     var tabIndex = parseFloat($(event.target) // search in the parents node the tab index

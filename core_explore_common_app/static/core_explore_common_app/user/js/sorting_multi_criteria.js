@@ -106,13 +106,13 @@ var refreshFilterPanel = function(tabIndex) {
         current_filter_elements.each( (index, iconElement )=>{
                 switch (ordering_prefix) {
                     case '':
-                        iconElement.className = "fa fa-random"
+                        iconElement.className = "fas fa-random"
                 break;
                     case '+':
-                        iconElement.className = "fa fa-sort-alpha-asc"
+                        iconElement.className = "fas fa-sort-alpha-asc"
                 break;
                     case '-':
-                        iconElement.className = "fa fa-sort-alpha-desc"
+                        iconElement.className = "fas fa-sort-alpha-desc"
                 break;
                 default:
                 console.error('Error: Wrong filter format.')
@@ -144,7 +144,7 @@ var toggleFilter = function(event) {
     event.stopPropagation();
 
     var clickedButtonElementId = $(event.target).closest('li')[0];
-    $('[id^="result-button-filter"]').children().attr('class','fa fa-spinner fa-spin');
+    $('[id^="result-button-filter"]').children().attr('class','fas fa-spinner fa-spin');
     var clickedButtonValue = $(clickedButtonElementId).attr('data-filter-value');
     var tabIndex = parseFloat($(event.target) // search in the parents node the tab index
         .parent()[0]
