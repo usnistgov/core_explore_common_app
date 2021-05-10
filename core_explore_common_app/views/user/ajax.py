@@ -334,9 +334,12 @@ class ContentPersistentQueryView(CommonView):
         context = {
             "query": persistent_query,
         }
+        assets = {
+            "js": [
+                {"path": "core_main_app/common/js/backtoprevious.js", "is_raw": True}
+            ]
+        }
 
         return self.common_render(
-            request,
-            self.template,
-            context=context,
+            request, self.template, assets=assets, context=context
         )

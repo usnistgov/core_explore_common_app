@@ -4,13 +4,20 @@
     <h1>Query {% if data.query.name %}: {{ data.query.name }} {% endif %}</h1>
 </div>
 {% endblock %}
+
 {% block box_body %}
 <div >
-    {% if data.query.content != "{}"%}
+    <button  type="button" class="btn btn-secondary  float-right back-to-previous">
+        <i class="fas fa-arrow-left"></i> Back to previous
+    </button>
+    <div>
+        {% if data.query.content != "{}"%}
         {{data.query.content}}
-    {% else %}
-        No content
-    {% endif %}
+        {% else %}
+            No content
+        {% endif %}
+    </div>
+
 </div>
 {% endblock %}
 
