@@ -303,7 +303,9 @@ class ContentPersistentQueryView(CommonView):
     View persistent query content
     """
 
-    template = "core_explore_common_app/user/results/persistent_query_content.html"
+    template = (
+        "core_explore_common_app/user/persistent_query/persistent_query_content.html"
+    )
 
     def get(self, request, *args, **kwargs):
 

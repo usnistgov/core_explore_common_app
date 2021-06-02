@@ -1,0 +1,13 @@
+{% extends 'core_main_app/_render/admin/theme/tools/box.html' %}
+{% block box_title %}
+<div>
+    <h1>Query {% if data.query.name %}: {{ data.query.name }} {% endif %}</h1>
+</div>
+{% endblock %}
+
+{% block box_body %}
+<div >
+    {% include 'core_explore_common_app/commons/query_content.html' %}
+</div>
+{% endblock %}
+
