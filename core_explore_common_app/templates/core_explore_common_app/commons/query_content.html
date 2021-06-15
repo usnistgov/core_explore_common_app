@@ -5,7 +5,7 @@
     </button>
     <div>
         {% if data.query.content != "{}"%}
-        {{data.query.content}}
+        <pre><code class="json">{{data.content}}</code></pre>
         {% else %}
             No content
         {% endif %}

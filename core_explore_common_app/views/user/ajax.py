@@ -333,13 +333,21 @@ class ContentPersistentQueryView(CommonView):
             return HttpResponseBadRequest("Something wrong happened.")
 
         # create context
-        context = {
-            "query": persistent_query,
-        }
+        content = json.loads(persistent_query.content)
+        context = {"query": persistent_query, "content": json.dumps(content, indent=4)}
         assets = {
             "js": [
-                {"path": "core_main_app/common/js/backtoprevious.js", "is_raw": True}
-            ]
+                {"path": "core_main_app/common/js/backtoprevious.js", "is_raw": True},
+                {
+                    "path": "core_main_app/libs/highlight/11.0.0/js/highlight.min.js",
+                    "is_raw": False,
+                },
+                {
+                    "path": "core_main_app/libs/highlight/11.0.0/js/init_highlight.js",
+                    "is_raw": False,
+                },
+            ],
+            "css": ["core_main_app/libs/highlight/11.0.0/css/atom-one-light.css"],
         }
 
         return self.common_render(
