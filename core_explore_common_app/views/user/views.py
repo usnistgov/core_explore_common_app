@@ -91,19 +91,21 @@ class ResultsView(View):
             assets["css"].append("core_file_preview_app/user/css/file_preview.css")
 
         # Add assets needed for the PID sharing
-        if (
-            "core_linked_records_app" in settings.INSTALLED_APPS
-            and settings.AUTO_SET_PID
-        ):
-            assets["js"].extend(
-                [
-                    {
-                        "path": "core_linked_records_app/user/js/sharing/explore.js",
-                        "is_raw": False,
-                    }
-                ]
+        if "core_linked_records_app" in settings.INSTALLED_APPS:
+            from core_linked_records_app.components.pid_settings import (
+                api as pid_settings_api,
             )
-            assets["css"].append("core_linked_records_app/user/css/sharing.css")
+
+            if pid_settings_api.get().auto_set_pid:
+                assets["js"].extend(
+                    [
+                        {
+                            "path": "core_linked_records_app/user/js/sharing/explore.js",
+                            "is_raw": False,
+                        }
+                    ]
+                )
+                assets["css"].append("core_linked_records_app/user/css/sharing.css")
 
         return assets
 
@@ -126,11 +128,13 @@ class ResultsView(View):
             modals.append("core_file_preview_app/user/file_preview_modal.html")
 
         # Add PID modal
-        if (
-            "core_linked_records_app" in settings.INSTALLED_APPS
-            and settings.AUTO_SET_PID
-        ):
-            modals.append("core_linked_records_app/user/sharing/explore/modal.html")
+        if "core_linked_records_app" in settings.INSTALLED_APPS:
+            from core_linked_records_app.components.pid_settings import (
+                api as pid_settings_api,
+            )
+
+            if pid_settings_api.get().auto_set_pid:
+                modals.append("core_linked_records_app/user/sharing/explore/modal.html")
 
         return modals
 

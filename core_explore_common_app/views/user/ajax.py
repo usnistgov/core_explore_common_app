@@ -136,10 +136,18 @@ def get_data_sources_html(request):
         # get query results
         query = query_api.get_by_id(query_id, request.user)
 
+        # Check if 'core_linked_records_app' is installed and activated
+        is_linked_records_installed = False
+        if "core_linked_records_app" in settings.INSTALLED_APPS:
+            from core_linked_records_app.components.pid_settings import (
+                api as pid_settings_api,
+            )
+
+            is_linked_records_installed = pid_settings_api.get().auto_set_pid
+
         # set query in context
         context = {
-            "linked_records_app": "core_linked_records_app" in settings.INSTALLED_APPS
-            and settings.AUTO_SET_PID,
+            "linked_records_app": is_linked_records_installed,
             "exporter_app": "core_exporters_app" in settings.INSTALLED_APPS,
             "sorting_display_type": settings.SORTING_DISPLAY_TYPE,
             "data_displayed_sorting_fields": settings.DATA_DISPLAYED_SORTING_FIELDS,
