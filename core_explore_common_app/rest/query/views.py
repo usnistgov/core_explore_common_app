@@ -59,9 +59,7 @@ class ExecuteLocalQueryView(AbstractExecuteLocalQueryView):
                 from core_linked_records_app.components.data import api as data_api
 
                 if pid_settings_api.get().auto_set_pid:
-                    pid_url = data_api.get_pids_for_data_list(
-                        [data.id], self.request.user
-                    )
+                    pid_url = data_api.get_pids_for_data_list([data.id], self.request)
 
                     if len(pid_url) == 1:  # If a PID is defined for the document
                         detail_url = pid_url[0].replace(settings.SERVER_URI, "")
