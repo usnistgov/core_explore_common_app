@@ -2,7 +2,7 @@
 {% load blob_tags %}
 {% load get_attribute %}
 {% for result in results %}
-    {% xsl_transform_list xml_content=result.xml_content template_id=result.template_info.id template_hash=result.template_info.hash request=request as xml_representation%}
+    {% xsl_transform_list xml_content=result.xml_content template_id=result.template_info.id template_hash=result.template_info.hash as xml_representation%}
     {% if blobs_preview %}
         {% render_blob_links_in_span xml_string=xml_representation as xml_representation %}
     {% endif %}
