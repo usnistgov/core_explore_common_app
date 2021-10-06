@@ -4,13 +4,12 @@ import logging
 
 from django.contrib.auth.models import User, AnonymousUser
 
-from core_explore_common_app.components.query.models import Query
-from core_explore_common_app.settings import CAN_ANONYMOUS_ACCESS_PUBLIC_DOCUMENT
-from core_main_app.access_control.exceptions import AccessControlError
-
 from core_explore_common_app.components.abstract_persistent_query.models import (
     AbstractPersistentQuery,
 )
+from core_explore_common_app.components.query.models import Query
+from core_explore_common_app.settings import CAN_ANONYMOUS_ACCESS_PUBLIC_DOCUMENT
+from core_main_app.access_control.exceptions import AccessControlError
 
 logger = logging.getLogger(__name__)
 

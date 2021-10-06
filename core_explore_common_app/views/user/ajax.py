@@ -5,29 +5,25 @@ import math
 from abc import ABCMeta, abstractmethod
 from os.path import join
 
+from django.contrib.auth.decorators import login_required
 from django.http.response import HttpResponse, HttpResponseBadRequest
 from django.shortcuts import render as django_render
 from django.template import loader
 from django.urls import reverse
+from django.utils.decorators import method_decorator
 from django.utils.html import escape
 from django.views import View
 
+from core_explore_common_app import settings
 from core_explore_common_app.commons.exceptions import ExploreRequestError
-
 from core_explore_common_app.components.abstract_persistent_query import (
     api as abstract_persistent_query_api,
 )
 from core_explore_common_app.components.abstract_persistent_query.models import (
     AbstractPersistentQuery,
 )
-from django.utils.decorators import method_decorator
-from django.contrib.auth.decorators import login_required
-
-from core_main_app.views.common.views import CommonView
 from core_explore_common_app.components.query import api as query_api
 from core_explore_common_app.constants import LOCAL_QUERY_NAME
-from core_explore_common_app import settings
-
 from core_explore_common_app.utils.query.query import (
     send as send_query,
     add_local_data_source,
@@ -37,6 +33,7 @@ from core_main_app.commons.exceptions import DoesNotExist
 from core_main_app.utils.pagination.rest_framework_paginator.rest_framework_paginator import (
     get_page_number,
 )
+from core_main_app.views.common.views import CommonView
 
 
 def get_local_data_source(request):
@@ -67,8 +64,8 @@ def get_local_data_source(request):
             local_query_url = get_local_query_absolute_url(request)
             for data_source in query.data_sources:
                 if (
-                    data_source.name == LOCAL_QUERY_NAME
-                    and data_source.url_query == local_query_url
+                    data_source["name"] == LOCAL_QUERY_NAME
+                    and data_source["url_query"] == local_query_url
                 ):
                     context_params["selected"] = True
 
@@ -277,7 +274,9 @@ class CreatePersistentQueryUrlView(View, metaclass=ABCMeta):
 
             # create the persistent query
             persistent_query = abstract_persistent_query_api.upsert(
-                self._create_persistent_query(query), request.user
+                self._create_persistent_query(query),
+                query.templates.all(),
+                request.user,
             )
             # reverse to the url
             url_reversed = request.build_absolute_uri(reverse(self.view_to_reverse))

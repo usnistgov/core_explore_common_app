@@ -1,25 +1,28 @@
 """Persistent Query api
 """
 
-from core_main_app.access_control.decorators import access_control
 from core_explore_common_app.access_control.api import (
     can_write_persistent_query,
     can_read_persistent_query,
 )
+from core_main_app.access_control.decorators import access_control
 
 
 @access_control(can_write_persistent_query)
-def upsert(persistent_query, user):
+def upsert(persistent_query, templates, user):
     """Saves or update persistent query
 
     Args:
         persistent_query:
+        templates:
         user:
 
     Returns:
 
     """
-    return persistent_query.save()
+    persistent_query.save()
+    persistent_query.templates.set(templates)
+    return persistent_query
 
 
 @access_control(can_read_persistent_query)

@@ -9,4 +9,4 @@ def get_all_queries():
     Returns:
 
     """
-    return Query.objects().all()
+    return Query.objects.all()

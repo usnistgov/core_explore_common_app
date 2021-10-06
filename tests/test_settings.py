@@ -10,7 +10,21 @@ INSTALLED_APPS = [
     "django.contrib.sites",
     # Local apps
     "tests",
+    "core_main_app",
+    "core_explore_common_app",
 ]
+
+# IN-MEMORY TEST DATABASE
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": ":memory:",
+        "USER": "",
+        "PASSWORD": "",
+        "HOST": "",
+        "PORT": "",
+    },
+}
 
 CUSTOM_NAME = "Local"
 """ :py:class:`str`: Name of the local instance
@@ -38,3 +52,5 @@ TEMPLATES = [
         },
     },
 ]
+
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"

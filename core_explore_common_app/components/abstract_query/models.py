@@ -1,43 +1,54 @@
 """ Abstract Query model
 """
-from django_mongoengine import fields, Document
-from mongoengine import EmbeddedDocument
 
+from django.db import models
+
+from core_main_app.commons.exceptions import CoreError
 from core_main_app.components.template.models import Template
 
 AUTH_TYPES = ("session", "oauth2")
 
 
-class Authentication(EmbeddedDocument):
+class Authentication(dict):
     """Authentication class"""
 
-    type = fields.StringField(choices=AUTH_TYPES)
-    params = fields.DictField(blank=True)
+    def __init__(self, auth_type="", params=None):
+        if auth_type not in AUTH_TYPES:
+            raise CoreError("Invalid AUTH_TYPE.")
+        dict.__init__(self, auth_type=auth_type, params=params if params else dict())
 
 
-class DataSource(EmbeddedDocument):
+class DataSource(dict):
     """Data Source class"""
 
-    name = fields.StringField(blank=False)
-    url_query = fields.StringField(blank=False)
-    query_options = fields.DictField(blank=True)
-    authentication = fields.EmbeddedDocumentField(Authentication)
-    order_by_field = fields.StringField(blank=True, default="")
-    capabilities = fields.DictField(blank=True)
+    def __init__(
+        self,
+        name,
+        url_query,
+        query_options=None,
+        authentication=None,
+        order_by_field=None,
+        capabilities=None,
+    ):
+        dict.__init__(
+            self,
+            name=name,
+            url_query=url_query,
+            query_options=query_options if query_options else dict(),
+            authentication=authentication if authentication else dict(),
+            order_by_field=order_by_field if order_by_field else "",
+            capabilities=capabilities if capabilities else dict(),
+        )
 
 
-class AbstractQuery(Document):
+class AbstractQuery(models.Model):
     """Abstract Query"""
 
-    user_id = fields.StringField(blank=False)
-    content = fields.StringField(blank=True)
-    templates = fields.ListField(
-        fields.ReferenceField(Template, blank=True), blank=True, default=[]
-    )
-    data_sources = fields.ListField(
-        fields.EmbeddedDocumentField(DataSource, blank=True), blank=True, default=[]
-    )
+    user_id = models.CharField(blank=False, max_length=200)
+    content = models.TextField(blank=True, null=True)
+    templates = models.ManyToManyField(Template, blank=True, default=[])
+    data_sources = models.JSONField(blank=True, default=list)
+    creation_date = models.DateTimeField(auto_now_add=True)
 
-    meta = {
-        "abstract": True,
-    }
+    class Meta:
+        abstract = True

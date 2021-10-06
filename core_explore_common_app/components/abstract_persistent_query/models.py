@@ -1,16 +1,17 @@
 """ Abstract Persistent Query model
 """
+from django.db import models
+
 from core_explore_common_app.components.abstract_query.models import AbstractQuery
-from django_mongoengine import fields
 
 
 class AbstractPersistentQuery(AbstractQuery):
     """Abstract Persistent Query"""
 
-    name = fields.StringField(sparse=True, unique=True, blank=True)
-    meta = {
-        "abstract": True,
-    }
+    name = models.CharField(unique=True, blank=True, max_length=200, null=True)
+
+    class Meta:
+        abstract = True
 
     @staticmethod
     def get_subclasses():

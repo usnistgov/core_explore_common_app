@@ -1,9 +1,5 @@
 celery
 Django
-django-mongoengine
 djangorestframework
-django-rest-framework-mongoengine
-mock
-mongoengine
 requests
 future

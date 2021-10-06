@@ -6,9 +6,9 @@ from django.contrib import messages
 from django.views.generic import RedirectView
 from django.views.generic import View
 
+from core_explore_common_app import settings
 from core_explore_common_app.components.query import api as query_api
 from core_explore_common_app.components.query.models import Query
-from core_explore_common_app import settings
 from core_main_app.access_control.exceptions import AccessControlError
 
 
@@ -28,7 +28,7 @@ class ResultsView(View):
         """
         context_array = []
         for data_source in query.data_sources:
-            context_array.append(data_source.order_by_field)
+            context_array.append(data_source["order_by_field"])
 
         return ";".join(context_array)
 
@@ -170,7 +170,7 @@ class ResultQueryRedirectView(RedirectView, metaclass=ABCMeta):
             query = Query(
                 user_id=str(self.request.user.id),
                 content=persistent_query.content,
-                templates=persistent_query.templates,
+                templates=persistent_query.templates.all(),
                 data_sources=persistent_query.data_sources,
             )
             query = query_api.upsert(query, self.request.user)

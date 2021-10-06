@@ -1,9 +1,14 @@
 """ Query api
 """
+
 from core_explore_common_app import settings
 from core_explore_common_app.access_control.api import can_read, can_access
 from core_explore_common_app.components.query.models import Query
 from core_explore_common_app.constants import LOCAL_QUERY_NAME
+from core_explore_common_app.settings import (
+    EXPLORE_ADD_DEFAULT_LOCAL_DATA_SOURCE_TO_QUERY,
+)
+from core_explore_common_app.utils.query.query import add_local_data_source
 from core_main_app.access_control.decorators import access_control
 from core_main_app.commons.exceptions import DoesNotExist
 from core_main_app.utils.query.constants import VISIBILITY_OPTION
@@ -19,7 +24,32 @@ def upsert(query, user):
     Returns:
 
     """
-    return query.save()
+    query.save()
+    return query
+
+
+def create_default_query(request, template_ids):
+    """create a new Query object
+
+    Args:
+        request:
+        template_ids:
+
+    Returns:
+
+    """
+    # create new query object
+    query = Query(user_id=str(request.user.id))
+    if EXPLORE_ADD_DEFAULT_LOCAL_DATA_SOURCE_TO_QUERY:
+        # add the local data source by default
+        add_local_data_source(request, query)
+    # add a default empty query content
+    query.content = "{}"
+    # Save query in database
+    upsert(query, request.user)
+    # Set list of templates
+    query.templates.set(template_ids)
+    return query
 
 
 @access_control(can_read)
@@ -50,7 +80,7 @@ def add_data_source(query, data_source, user):
     try:
         # check if data source is already present
         get_data_source_by_name_and_url_query(
-            query, data_source.name, data_source.url_query, user
+            query, data_source["name"], data_source["url_query"], user
         )
         # already present return query
         return query
@@ -58,7 +88,8 @@ def add_data_source(query, data_source, user):
         # add data source to query if not present
         query.data_sources.append(data_source)
         # update query
-        return upsert(query, user)
+        upsert(query, user)
+        return query
 
 
 @access_control(can_access)
@@ -74,7 +105,8 @@ def remove_data_source(query, data_source, user):
 
     """
     query.data_sources.remove(data_source)
-    return upsert(query, user)
+    upsert(query, user)
+    return query
 
 
 @access_control(can_access)
@@ -107,7 +139,9 @@ def set_visibility_to_query(query, user):
     # Set visibility option for local data source
     for data_source in query.data_sources:
         # find local data source
-        if data_source.name == LOCAL_QUERY_NAME:
+        if data_source["name"] == LOCAL_QUERY_NAME:
             # set visibility to public
-            data_source.query_options = {VISIBILITY_OPTION: settings.QUERY_VISIBILITY}
+            data_source["query_options"] = {
+                VISIBILITY_OPTION: settings.QUERY_VISIBILITY
+            }
             break

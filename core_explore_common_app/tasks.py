@@ -25,7 +25,7 @@ def delete_old_queries():
         old_queries = [
             query
             for query in get_all_queries()
-            if query.id.generation_time
+            if query.creation_date
             < timezone.now() - timedelta(days=QUERIES_MAX_DAYS_IN_DATABASE)
         ]
         # remove old queries from database
