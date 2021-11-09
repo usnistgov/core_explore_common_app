@@ -10,7 +10,7 @@ var getDataSourcesResultsHTML = function() {
 
     $.ajax({
         url: getDataSourcesHTMLUrl,
-        type: "GET",
+        type: "POST",
         data: {
             'query_id': query_id
         },
@@ -62,7 +62,7 @@ var get_data_source_results = function(result_page, data_source_url) {
 
     $.ajax({
         url: data_source_url,
-        type: "GET",
+        type: "POST",
         success: function(data) {
             var nb_results_id = result_page.attr('nb_results_id');
             $("#" + nb_results_id).html(data.nb_results);
