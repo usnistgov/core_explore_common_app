@@ -128,7 +128,7 @@ def get_data_sources_html(request):
     """
     try:
         # get query id
-        query_id = request.GET["query_id"]
+        query_id = request.POST["query_id"]
 
         # get query results
         query = query_api.get_by_id(query_id, request.user)
@@ -150,7 +150,6 @@ def get_data_sources_html(request):
             "data_displayed_sorting_fields": settings.DATA_DISPLAYED_SORTING_FIELDS,
             "default_date_toggle_value": settings.DEFAULT_DATE_TOGGLE_VALUE,
         }
-        context.update(request)
         context.update({"query": query})
 
         # render html results
