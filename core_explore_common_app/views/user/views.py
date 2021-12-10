@@ -170,10 +170,10 @@ class ResultQueryRedirectView(RedirectView, metaclass=ABCMeta):
             query = Query(
                 user_id=str(self.request.user.id),
                 content=persistent_query.content,
-                templates=persistent_query.templates.all(),
                 data_sources=persistent_query.data_sources,
             )
             query = query_api.upsert(query, self.request.user)
+            query.templates.set(persistent_query.templates.all())
 
             # then redirect to the result page core_explore_example_results with /<template_id>/<query_id>
             return self._get_reversed_url(query)
