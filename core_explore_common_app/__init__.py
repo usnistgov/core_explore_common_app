@@ -1,0 +1,1 @@
+default_app_config = "core_explore_common_app.apps.CoreExploreCommonAppConfig"
