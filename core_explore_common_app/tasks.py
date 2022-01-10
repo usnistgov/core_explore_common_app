@@ -3,9 +3,10 @@
 import logging
 from datetime import timedelta
 
-from celery.schedules import crontab
-from celery.task import periodic_task
+from celery import shared_task
+from django.core.exceptions import ObjectDoesNotExist
 from django.utils import timezone
+from django_celery_beat.models import CrontabSchedule, PeriodicTask
 
 from core_explore_common_app.settings import QUERIES_MAX_DAYS_IN_DATABASE
 from core_explore_common_app.system.api import get_all_queries
@@ -13,7 +14,7 @@ from core_explore_common_app.system.api import get_all_queries
 logger = logging.getLogger(__name__)
 
 
-@periodic_task(run_every=crontab(minute=0, hour=0))
+@shared_task
 def delete_old_queries():
     """Every day at midnight, delete older queries.
 
