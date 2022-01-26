@@ -30,7 +30,6 @@ class ExecuteLocalQueryView(AbstractExecuteLocalQueryView):
         # get requested page from list of results
         page = paginator.paginate_queryset(data_list, self.request)
 
-        # FIXME: See if can use reverse to include data id, and avoid format
         # Get detail view base url (to be completed with data id)
         detail_url_base = reverse("core_main_app_data_detail")
         url_access_data = reverse("core_explore_common_app_get_result_from_data_id")

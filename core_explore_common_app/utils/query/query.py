@@ -146,7 +146,7 @@ def _serialize_query(query, data_source):
         "query": query.content,
         "templates": json.dumps(
             [
-                {"id": str(template.id), "hash": template.hash}
+                {"id": template.id, "hash": template.hash}
                 for template in query.templates.all()
             ]
         ),
