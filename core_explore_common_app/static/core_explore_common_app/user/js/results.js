@@ -90,7 +90,7 @@ var getDataPermission = function() {
         var dataPermissionUrl = inputElement.attr("value");
         $.ajax({
             url: dataPermissionUrl,
-            type: "GET",
+            type: "POST",
             contentType:"application/json; charset=utf-8",
             success: function(data) {
                 for(id in data) {
