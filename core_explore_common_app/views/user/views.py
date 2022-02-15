@@ -10,6 +10,10 @@ from core_explore_common_app.components.query import api as query_api
 from core_explore_common_app.components.query.models import Query
 from core_explore_common_app import settings
 from core_main_app.access_control.exceptions import AccessControlError
+from core_explore_common_app.settings import (
+    EXPLORE_ADD_DEFAULT_LOCAL_DATA_SOURCE_TO_QUERY,
+)
+from core_explore_common_app.utils.query.query import add_local_data_source
 
 
 class ResultsView(View):
@@ -173,6 +177,13 @@ class ResultQueryRedirectView(RedirectView, metaclass=ABCMeta):
                 templates=persistent_query.templates,
                 data_sources=persistent_query.data_sources,
             )
+            # add the local data source by default
+            if (
+                query.data_sources == []
+                and EXPLORE_ADD_DEFAULT_LOCAL_DATA_SOURCE_TO_QUERY
+            ):
+                add_local_data_source(self.request, query)
+
             query = query_api.upsert(query, self.request.user)
 
             # then redirect to the result page core_explore_example_results with /<template_id>/<query_id>
