@@ -39,24 +39,31 @@ class ExecuteLocalQueryView(AbstractExecuteLocalQueryView):
         results = []
         # Template info
         template_info = dict()
+        # Init pid settings
+        auto_set_pid = False
+        if "core_linked_records_app" in settings.INSTALLED_APPS:
+            from core_linked_records_app.components.pid_settings import (
+                api as pid_settings_api,
+            )
+
+            auto_set_pid = pid_settings_api.get().auto_set_pid
         for data in page:
             # get data's template
-            template = data.template
+            template_id = data.template_id
             # get and store data's template information
-            if template not in template_info:
-                template_info[template] = result_utils.get_template_info(template)
+            if template_id not in template_info:
+                template_info[template_id] = result_utils.get_template_info(
+                    data.template
+                )
 
             detail_url = "{0}?id={1}".format(detail_url_base, str(data.id))
 
             # Use the PID link if the app is installed and a PID is defined for the
             # document
             if "core_linked_records_app" in settings.INSTALLED_APPS:
-                from core_linked_records_app.components.pid_settings import (
-                    api as pid_settings_api,
-                )
                 from core_linked_records_app.components.data import api as data_api
 
-                if pid_settings_api.get().auto_set_pid:
+                if auto_set_pid:
                     pid_url = data_api.get_pids_for_data_list([data.id], self.request)
 
                     if len(pid_url) == 1:  # If a PID is defined for the document
@@ -66,7 +73,7 @@ class ExecuteLocalQueryView(AbstractExecuteLocalQueryView):
                 Result(
                     title=data.title,
                     xml_content=data.xml_content,
-                    template_info=template_info[template],
+                    template_info=template_info[template_id],
                     permission_url="{0}?ids={1}".format(
                         url_permission_data, f'%5B"{str(data.id)}"%5D'
                     ),
