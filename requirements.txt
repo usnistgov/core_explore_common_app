@@ -1,5 +1,6 @@
 celery
 Django
 djangorestframework
-requests
 future
+pytz
+requests
