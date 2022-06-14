@@ -31,7 +31,6 @@ var getDataSourcesResultsHTML = function() {
  */
 var getDataSourcesResults = function(order_by_field) {
     var $results = $("#results");
-
     $results.find(".results-container").each(function() {
         // TODO: check if problem setting variable with async call
         var $result_container = $(this);
@@ -39,6 +38,7 @@ var getDataSourcesResults = function(order_by_field) {
         var result_page = $result_container.find(".results-page");
         get_data_source_results(result_page, data_source_url);
     });
+
 };
 
 /**
@@ -59,6 +59,8 @@ var getResultsPage = function(event) {
  * @param data_source_url
  */
 var get_data_source_results = function(result_page, data_source_url) {
+    // display spinner
+    displaySpinner(result_page)
 
     $.ajax({
         url: data_source_url,
@@ -77,14 +79,13 @@ var get_data_source_results = function(result_page, data_source_url) {
         error: function(data) {
             result_page.html(data.responseText);
         }
-    });
+    })
 };
 
 /*
  * Display the edit icon according to the user permissions
  */
 var getDataPermission = function() {
-
     $("input.input-permission-url").map(function(){
         var inputElement = $(this);
         var dataPermissionUrl = inputElement.attr("value");
@@ -111,7 +112,7 @@ var getDataPermission = function() {
             error: function(data) {
                 console.log(data)
             }
-        });
+        })
     });
 }
 
@@ -120,7 +121,7 @@ var getDataPermission = function() {
  * @param {string} id of the clicked record
  */
 openEditRecord = function(id) {
-
+    $('.loading-spinner').attr("hidden",true);
     $.ajax({
         url : editRecordUrl,
         type : "POST",
@@ -134,6 +135,8 @@ openEditRecord = function(id) {
         error:function(data){
             $.notify("Error while opening the edit page.", {style: 'error'});
         }
+    }).always(function(data) {
+        $('.loading-spinner').attr("hidden",true);
     });
 };
 
