@@ -1,6 +1,5 @@
 """ REST views for the query API
 """
-
 import pytz
 from django.urls import reverse
 
@@ -50,7 +49,7 @@ class ExecuteLocalQueryView(AbstractExecuteLocalQueryView):
 
             detail_url = "{0}?id={1}".format(detail_url_base, str(data.id))
 
-            # Use the PID link if the app is installed and a PID is defined for the
+            # Use the PID link if the app is installed, and a PID is defined for the
             # document
             if "core_linked_records_app" in settings.INSTALLED_APPS:
                 from core_linked_records_app.components.pid_settings import (
@@ -59,10 +58,9 @@ class ExecuteLocalQueryView(AbstractExecuteLocalQueryView):
                 from core_linked_records_app.components.data import api as data_api
 
                 if pid_settings_api.get().auto_set_pid:
-                    pid_url = data_api.get_pids_for_data_list([data.id], self.request)
-
-                    if len(pid_url) == 1:  # If a PID is defined for the document
-                        detail_url = pid_url[0].replace(settings.SERVER_URI, "")
+                    pid_url = data_api.get_pid_for_data(data.id, self.request)
+                    if pid_url is not None:  # Ensure the PID is set
+                        detail_url = pid_url
 
             results.append(
                 Result(
