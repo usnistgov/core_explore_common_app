@@ -192,7 +192,7 @@ class ResultQueryRedirectView(RedirectView, metaclass=ABCMeta):
             # add error message
             messages.add_message(self.request, messages.ERROR, "Access Forbidden.")
             return self._get_reversed_url_if_failed()
-        except Exception as e:
+        except Exception:
             # add error message
             messages.add_message(
                 self.request, messages.ERROR, "The given URL is not valid."

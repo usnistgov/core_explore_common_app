@@ -4,9 +4,7 @@ import logging
 from datetime import timedelta
 
 from celery import shared_task
-from django.core.exceptions import ObjectDoesNotExist
 from django.utils import timezone
-from django_celery_beat.models import CrontabSchedule, PeriodicTask
 
 from core_explore_common_app.settings import QUERIES_MAX_DAYS_IN_DATABASE
 from core_explore_common_app.system.api import get_all_queries

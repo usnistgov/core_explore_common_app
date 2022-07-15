@@ -79,7 +79,7 @@ def get_local_data_source(request):
             )
         else:
             return HttpResponseBadRequest("Expected query_id parameter is missing.")
-    except Exception as e:
+    except Exception:
         return HttpResponseBadRequest(
             "An unexpected error occurred while getting local data source selector."
         )
