@@ -1,5 +1,6 @@
 """ REST views for the query API
 """
+import logging
 import pytz
 from django.urls import reverse
 
@@ -7,10 +8,13 @@ from core_explore_common_app import settings
 from core_explore_common_app.components.result.models import Result
 from core_explore_common_app.rest.result.serializers import ResultSerializer
 from core_explore_common_app.utils.result import result as result_utils
+from core_main_app.commons.exceptions import ApiError
 from core_main_app.rest.data.abstract_views import AbstractExecuteLocalQueryView
 from core_main_app.utils.pagination.rest_framework_paginator.pagination import (
     StandardResultsSetPagination,
 )
+
+logger = logging.getLogger(__name__)
 
 
 class ExecuteLocalQueryView(AbstractExecuteLocalQueryView):
@@ -18,11 +22,9 @@ class ExecuteLocalQueryView(AbstractExecuteLocalQueryView):
         """Build the paginated list of data
 
         Args:
-
             data_list: List of data
 
         Returns:
-
             Paginated list of data
         """
         # get paginator
@@ -58,9 +60,17 @@ class ExecuteLocalQueryView(AbstractExecuteLocalQueryView):
                 from core_linked_records_app.components.data import api as data_api
 
                 if pid_settings_api.get().auto_set_pid:
-                    pid_url = data_api.get_pid_for_data(data.id, self.request)
-                    if pid_url is not None:  # Ensure the PID is set
-                        detail_url = pid_url
+                    try:
+                        pid_url = data_api.get_pid_for_data(data.id, self.request)
+                        if pid_url is not None:  # Ensure the PID is set
+                            detail_url = pid_url
+                    except ApiError as exc:
+                        # If there is an error with the PID, fallback to regular data
+                        # url.
+                        logger.warning(
+                            f"An error occured while retrieving PID url: {str(exc)}"
+                        )
+                        pass
 
             results.append(
                 Result(
