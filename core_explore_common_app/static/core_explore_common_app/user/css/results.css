@@ -141,3 +141,7 @@ span.expand {
     width: 100%;
     overflow: auto;
 }
+
+#data_sources_selector {
+    word-break: break-all;
+}
