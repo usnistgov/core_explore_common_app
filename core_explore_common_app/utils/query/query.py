@@ -77,6 +77,8 @@ def send(request, query, data_source_index, page):
                     data_source["name"], str(response.status_code)
                 )
             )
+    except IndexError:
+        raise ExploreRequestError("The selected data source is not available.")
     except ConnectionError:
         raise ExploreRequestError("Unable to contact the remote server.")
     except Exception as e:
