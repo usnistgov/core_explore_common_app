@@ -103,7 +103,7 @@ var getDataPermission = function() {
                             (function () {
                                 var target_id = id;
                                 $(editLinkElement).click(function() {
-                                  openEditRecord(target_id);
+                                  openEditRecord(target_id,$(editLinkElement));
                                 });
                             }());
                     }
@@ -119,9 +119,12 @@ var getDataPermission = function() {
 /*
  * Navigate to the edit page with the correct record id
  * @param {string} id of the clicked record
+ * @param {selector} edit button selector of the clicked record
  */
-openEditRecord = function(id) {
-    $('.loading-spinner').attr("hidden",true);
+openEditRecord = function(id, btnSelector) {
+    var icon = btnSelector.find( "i" ).attr("class");
+    // Show loading spinner
+    showSpinner(btnSelector.find("i"))
     $.ajax({
         url : editRecordUrl,
         type : "POST",
@@ -136,7 +139,8 @@ openEditRecord = function(id) {
             $.notify("Error while opening the edit page.", {style: 'error'});
         }
     }).always(function(data) {
-        $('.loading-spinner').attr("hidden",true);
+         // get old button icon
+        hideSpinner(btnSelector.find("i"), icon)
     });
 };
 
