@@ -9,7 +9,7 @@ class CoreExploreCommonAppConfig(AppConfig):
     """Explore common configuration"""
 
     name = "core_explore_common_app"
-    verbose_name = "Core Explore Common App Config"
+    verbose_name = "Core Explore Common App"
 
     def ready(self):
         """Run once at startup"""
