@@ -1,6 +1,9 @@
 """ Query api
 """
 
+from core_main_app.access_control.decorators import access_control
+from core_main_app.commons.exceptions import DoesNotExist
+from core_main_app.utils.query.constants import VISIBILITY_OPTION
 from core_explore_common_app import settings
 from core_explore_common_app.access_control.api import can_read, can_access
 from core_explore_common_app.components.query.models import Query
@@ -9,9 +12,6 @@ from core_explore_common_app.settings import (
     EXPLORE_ADD_DEFAULT_LOCAL_DATA_SOURCE_TO_QUERY,
 )
 from core_explore_common_app.utils.query.query import add_local_data_source
-from core_main_app.access_control.decorators import access_control
-from core_main_app.commons.exceptions import DoesNotExist
-from core_main_app.utils.query.constants import VISIBILITY_OPTION
 
 
 @access_control(can_access)

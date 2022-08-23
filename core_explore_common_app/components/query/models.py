@@ -3,14 +3,16 @@ Query models
 """
 from django.core.exceptions import ObjectDoesNotExist
 
-from core_explore_common_app.components.abstract_query.models import AbstractQuery
 from core_main_app.commons import exceptions
+from core_explore_common_app.components.abstract_query.models import AbstractQuery
 
 
 class Query(AbstractQuery):
     """Query class"""
 
     class Meta:
+        """Meta"""
+
         verbose_name = "Query"
         verbose_name_plural = "Queries"
 
@@ -26,8 +28,8 @@ class Query(AbstractQuery):
         """
         try:
             return Query.objects.get(pk=str(query_id))
-        except ObjectDoesNotExist as e:
-            raise exceptions.DoesNotExist(str(e))
+        except ObjectDoesNotExist as exception:
+            raise exceptions.DoesNotExist(str(exception))
         except Exception as ex:
             raise exceptions.ModelError(str(ex))
 

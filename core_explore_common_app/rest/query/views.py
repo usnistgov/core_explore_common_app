@@ -4,20 +4,22 @@ import logging
 import pytz
 from django.urls import reverse
 
-from core_explore_common_app import settings
-from core_explore_common_app.components.result.models import Result
-from core_explore_common_app.rest.result.serializers import ResultSerializer
-from core_explore_common_app.utils.result import result as result_utils
 from core_main_app.commons.exceptions import ApiError
 from core_main_app.rest.data.abstract_views import AbstractExecuteLocalQueryView
 from core_main_app.utils.pagination.rest_framework_paginator.pagination import (
     StandardResultsSetPagination,
 )
+from core_explore_common_app import settings
+from core_explore_common_app.components.result.models import Result
+from core_explore_common_app.rest.result.serializers import ResultSerializer
+from core_explore_common_app.utils.result import result as result_utils
 
 logger = logging.getLogger(__name__)
 
 
 class ExecuteLocalQueryView(AbstractExecuteLocalQueryView):
+    """Execute Local Query View"""
+
     def build_response(self, data_list):
         """Build the paginated list of data
 
@@ -58,7 +60,7 @@ class ExecuteLocalQueryView(AbstractExecuteLocalQueryView):
                     data.template
                 )
 
-            detail_url = "{0}?id={1}".format(detail_url_base, str(data.id))
+            detail_url = f"{detail_url_base}?id={str(data.id)}"
 
             # Use the PID link if the app is installed, and a PID is defined for the
             # document
@@ -74,20 +76,17 @@ class ExecuteLocalQueryView(AbstractExecuteLocalQueryView):
                         # If there is an error with the PID, fallback to regular data
                         # url.
                         logger.warning(
-                            f"An error occured while retrieving PID url: {str(exc)}"
+                            "An error occured while retrieving PID url: %s", str(exc)
                         )
-                        pass
 
             results.append(
                 Result(
                     title=data.title,
                     xml_content=data.xml_content,
                     template_info=template_info[template_id],
-                    permission_url="{0}?ids={1}".format(
-                        url_permission_data, f'%5B"{str(data.id)}"%5D'
-                    ),
+                    permission_url=f'{url_permission_data}?ids=%5B"{str(data.id)}"%5D',
                     detail_url=detail_url,
-                    access_data_url="{0}?id={1}".format(url_access_data, str(data.id)),
+                    access_data_url=f"{url_access_data}?id={data.id}",
                     last_modification_date=data.last_modification_date.replace(
                         tzinfo=pytz.UTC
                     ),

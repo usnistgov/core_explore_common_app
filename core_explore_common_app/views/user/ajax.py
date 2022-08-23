@@ -14,6 +14,12 @@ from django.utils.decorators import method_decorator
 from django.utils.html import escape
 from django.views import View
 
+from core_main_app.commons.exceptions import DoesNotExist
+from core_main_app.utils.pagination.rest_framework_paginator.rest_framework_paginator import (
+    get_page_number,
+)
+from core_main_app.views.common.views import CommonView
+
 from core_explore_common_app import settings
 from core_explore_common_app.commons.exceptions import ExploreRequestError
 from core_explore_common_app.components.abstract_persistent_query import (
@@ -29,11 +35,6 @@ from core_explore_common_app.utils.query.query import (
     add_local_data_source,
     get_local_query_absolute_url,
 )
-from core_main_app.commons.exceptions import DoesNotExist
-from core_main_app.utils.pagination.rest_framework_paginator.rest_framework_paginator import (
-    get_page_number,
-)
-from core_main_app.views.common.views import CommonView
 
 
 def get_local_data_source(request):
@@ -77,8 +78,11 @@ def get_local_data_source(request):
                 "core_explore_common_app/user/selector/local_content.html",
                 context=context,
             )
-        else:
-            return HttpResponseBadRequest("Expected query_id parameter is missing.")
+
+        return HttpResponseBadRequest("Expected query_id parameter is missing.")
+
+    except DoesNotExist:
+        return HttpResponseBadRequest("The query does not exist.")
     except Exception:
         return HttpResponseBadRequest(
             "An unexpected error occurred while getting local data source selector."
@@ -113,8 +117,11 @@ def update_local_data_source(request):
             query_api.remove_data_source(query, data_source, request.user)
 
         return HttpResponse()
-    except Exception as e:
-        return HttpResponseBadRequest(escape(str(e)))
+
+    except DoesNotExist:
+        return HttpResponseBadRequest("The query does not exist.")
+    except Exception as exception:
+        return HttpResponseBadRequest(escape(str(exception)))
 
 
 def get_data_sources_html(request):
@@ -165,8 +172,10 @@ def get_data_sources_html(request):
 
         response_dict = {"results": html_results_holders}
         return HttpResponse(json.dumps(response_dict), content_type="application/json")
-    except Exception as e:
-        return HttpResponseBadRequest(escape(str(e)))
+    except DoesNotExist:
+        return HttpResponseBadRequest("The query does not exist.")
+    except Exception as exception:
+        return HttpResponseBadRequest(escape(str(exception)))
 
 
 def get_data_source_results(request, query_id, data_source_index, page=1):
@@ -238,13 +247,16 @@ def get_data_source_results(request, query_id, data_source_index, page=1):
         # set response with html results
         response_dict = {"results": results_html, "nb_results": results["count"]}
         return HttpResponse(json.dumps(response_dict), content_type="application/json")
+
+    except DoesNotExist:
+        return HttpResponseBadRequest("The query does not exist.")
     except ExploreRequestError as ex:
         return HttpResponseBadRequest(
             "An error occurred while sending the query: " + escape(str(ex)),
         )
-    except Exception as e:
+    except Exception as exception:
         return HttpResponseBadRequest(
-            "An unexpected error occurred: " + escape(str(e)),
+            "An unexpected error occurred: " + escape(str(exception)),
         )
 
 
@@ -266,10 +278,7 @@ class CreatePersistentQueryUrlView(View, metaclass=ABCMeta):
             query_id = request.POST.get("queryId", None)
 
             # get the matching query
-            try:
-                query = query_api.get_by_id(query_id, request.user)
-            except DoesNotExist:
-                return HttpResponseBadRequest("The query does not exist anymore.")
+            query = query_api.get_by_id(query_id, request.user)
 
             # create the persistent query
             persistent_query = abstract_persistent_query_api.upsert(
@@ -284,9 +293,11 @@ class CreatePersistentQueryUrlView(View, metaclass=ABCMeta):
                 json.dumps({"url": url_reversed + "?id=" + str(persistent_query.id)}),
                 content_type="application/javascript",
             )
-        except Exception as e:
+        except DoesNotExist:
+            return HttpResponseBadRequest("The query does not exist anymore.")
+        except Exception as exception:
             return HttpResponseBadRequest(
-                escape(str(e)), content_type="application/javascript"
+                escape(str(exception)), content_type="application/javascript"
             )
 
     @staticmethod
@@ -314,6 +325,14 @@ class ContentPersistentQueryView(CommonView):
     )
 
     def get(self, request, *args, **kwargs):
+        """Gets persistent query
+
+        Args:
+            request:
+
+        Returns:
+
+        """
 
         try:
             # get persistent query id
@@ -335,7 +354,9 @@ class ContentPersistentQueryView(CommonView):
             persistent_query = abstract_persistent_query_api.get_by_id(
                 persistent_query_class, persistent_query_id, request.user
             )
-        except:
+        except DoesNotExist:
+            return HttpResponseBadRequest("The query does not exist.")
+        except Exception:
             return HttpResponseBadRequest("Something wrong happened.")
 
         # create context

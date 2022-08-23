@@ -8,7 +8,7 @@ from core_explore_common_app.components.result.models import Result
 class ResultSerializer(ModelSerializer):
     """Result serializer"""
 
-    class Meta(object):
+    class Meta:
         """Meta"""
 
         model = Result
@@ -18,7 +18,7 @@ class ResultSerializer(ModelSerializer):
 class ResultBaseSerializer(ModelSerializer):
     """Result Serializer"""
 
-    class Meta(object):
+    class Meta:
         """Meta"""
 
         model = Result

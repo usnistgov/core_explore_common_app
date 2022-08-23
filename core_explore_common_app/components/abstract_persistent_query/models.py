@@ -11,6 +11,8 @@ class AbstractPersistentQuery(AbstractQuery):
     name = models.CharField(unique=True, blank=True, max_length=200, null=True)
 
     class Meta:
+        """Meta"""
+
         abstract = True
 
     @staticmethod

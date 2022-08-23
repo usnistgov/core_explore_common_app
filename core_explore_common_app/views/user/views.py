@@ -6,10 +6,11 @@ from django.contrib import messages
 from django.views.generic import RedirectView
 from django.views.generic import View
 
+from core_main_app.access_control.exceptions import AccessControlError
+
 from core_explore_common_app import settings
 from core_explore_common_app.components.query import api as query_api
 from core_explore_common_app.components.query.models import Query
-from core_main_app.access_control.exceptions import AccessControlError
 from core_explore_common_app.settings import (
     EXPLORE_ADD_DEFAULT_LOCAL_DATA_SOURCE_TO_QUERY,
 )
@@ -17,6 +18,8 @@ from core_explore_common_app.utils.query.query import add_local_data_source
 
 
 class ResultsView(View):
+    """Results View"""
+
     def __init__(self, **kwargs):
         self.assets = self._load_assets()
         self.modals = self._load_modals()
@@ -56,9 +59,7 @@ class ResultsView(View):
                     "is_raw": False,
                 },
                 {
-                    "path": "core_explore_common_app/user/js/sorting_{0}_criteria.js".format(
-                        settings.SORTING_DISPLAY_TYPE
-                    ),
+                    "path": f"core_explore_common_app/user/js/sorting_{settings.SORTING_DISPLAY_TYPE}_criteria.js",
                     "is_raw": False,
                 },
             ],
@@ -144,6 +145,8 @@ class ResultsView(View):
 
 
 class ResultQueryRedirectView(RedirectView, metaclass=ABCMeta):
+    """Results Query Redirect View"""
+
     model_name = None
     object_name = None
     redirect_url = None
@@ -178,7 +181,7 @@ class ResultQueryRedirectView(RedirectView, metaclass=ABCMeta):
             )
             # add the local data source by default
             if (
-                query.data_sources == []
+                not query.data_sources
                 and EXPLORE_ADD_DEFAULT_LOCAL_DATA_SOURCE_TO_QUERY
             ):
                 add_local_data_source(self.request, query)

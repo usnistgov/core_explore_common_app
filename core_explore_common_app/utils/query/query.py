@@ -6,6 +6,9 @@ from django.urls import reverse
 from django.utils import timezone
 from requests import ConnectionError
 
+from core_main_app.settings import DATA_SORTING_FIELDS
+from core_main_app.utils.requests_utils.requests_utils import send_get_request
+
 from core_explore_common_app import settings
 from core_explore_common_app.commons.exceptions import ExploreRequestError
 from core_explore_common_app.components.abstract_query.models import (
@@ -18,8 +21,6 @@ from core_explore_common_app.rest.result.serializers import ResultSerializer
 from core_explore_common_app.utils.protocols.oauth2 import (
     send_post_request as oauth2_request,
 )
-from core_main_app.settings import DATA_SORTING_FIELDS
-from core_main_app.utils.requests_utils.requests_utils import send_get_request
 
 
 def send(request, query, data_source_index, page):
@@ -71,18 +72,17 @@ def send(request, query, data_source_index, page):
             results_serializer.is_valid(True)
 
             return json_response
-        else:
-            raise ExploreRequestError(
-                "Data source {0} responded with status code {1}.".format(
-                    data_source["name"], str(response.status_code)
-                )
-            )
+
+        raise ExploreRequestError(
+            f'Data source {data_source["name"]} '
+            f"responded with status code {str(response.status_code)}."
+        )
     except IndexError:
         raise ExploreRequestError("The selected data source is not available.")
     except ConnectionError:
         raise ExploreRequestError("Unable to contact the remote server.")
-    except Exception as e:
-        raise ExploreRequestError(str(e))
+    except Exception as exception:
+        raise ExploreRequestError(str(exception))
 
 
 def add_local_data_source(request, query):
@@ -167,4 +167,4 @@ def _get_paginated_url(url, page):
     Returns:
 
     """
-    return "{0}/?page={1}".format(url, page)
+    return f"{url}/?page={page}"

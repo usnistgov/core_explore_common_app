@@ -1,11 +1,11 @@
 """Persistent Query api
 """
 
+from core_main_app.access_control.decorators import access_control
 from core_explore_common_app.access_control.api import (
     can_write_persistent_query,
     can_read_persistent_query,
 )
-from core_main_app.access_control.decorators import access_control
 
 
 @access_control(can_write_persistent_query)
