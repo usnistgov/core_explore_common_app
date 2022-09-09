@@ -29,7 +29,7 @@ def delete_old_queries():
         ]
         # remove old queries from database
         for query in old_queries:
-            logger.info("Periodic task: delete query %s.".str(query.id))
+            logger.info("Periodic task: delete query %s.", str(query.id))
             query.delete()
     except Exception as exception:
         logger.error(
