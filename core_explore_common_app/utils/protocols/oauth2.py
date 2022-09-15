@@ -1,8 +1,8 @@
 """ oauth2 utils
 """
 
-from core_explore_common_app.commons.exceptions import UsernamePasswordRequiredError
 from core_main_app.utils.requests_utils import requests_utils
+from core_explore_common_app.commons.exceptions import UsernamePasswordRequiredError
 
 HEADER = {"content-type": "application/x-www-form-urlencoded"}
 TOKEN_SUFFIX = "/o/token/"
@@ -54,7 +54,7 @@ def post_request_token(url, client_id, client_secret, timeout, username, passwor
 
     """
     # Complete Url
-    token_url = "{0}{1}".format(url, TOKEN_SUFFIX)
+    token_url = f"{url}{TOKEN_SUFFIX}"
 
     data = _get_data_for_request(
         client_id, client_secret, username=username, password=password
@@ -79,7 +79,7 @@ def post_refresh_token(url, client_id, client_secret, timeout, refresh_token):
 
     """
     # Complete Url
-    token_url = "{0}{1}".format(url, TOKEN_SUFFIX)
+    token_url = f"{url}{TOKEN_SUFFIX}"
 
     data = _get_data_for_request(client_id, client_secret, refresh_token=refresh_token)
 

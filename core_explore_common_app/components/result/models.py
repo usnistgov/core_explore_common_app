@@ -1,23 +1,15 @@
 """Result models
 """
-from django_mongoengine import fields, Document, EmbeddedDocument
+from django.db import models
 
 
-class TemplateInfo(EmbeddedDocument):
-    """Template information class"""
-
-    id = fields.StringField(blank=True)
-    name = fields.StringField(blank=False)
-    hash = fields.StringField(blank=False)
-
-
-class Result(Document):
+class Result(models.Model):
     """Result class"""
 
-    title = fields.StringField(blank=False)
-    xml_content = fields.StringField(blank=False)
-    template_info = fields.EmbeddedDocumentField(TemplateInfo)
-    permission_url = fields.StringField(blank=True, null=True)
-    detail_url = fields.StringField(blank=True)
-    access_data_url = fields.StringField(blank=True)
-    last_modification_date = fields.DateTimeField(blank=True, default=None)
+    title = models.CharField(blank=False, max_length=200)
+    xml_content = models.TextField(blank=False)
+    template_info = models.JSONField(default=dict)
+    permission_url = models.CharField(blank=True, null=True, max_length=200)
+    detail_url = models.CharField(blank=True, null=True, max_length=200)
+    access_data_url = models.CharField(blank=True, null=True, max_length=200)
+    last_modification_date = models.DateTimeField(blank=True, default=None)

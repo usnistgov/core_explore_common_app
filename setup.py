@@ -1,3 +1,5 @@
+""" Setup for core explore common app
+"""
 from os import chdir, pardir
 from os.path import join, exists, dirname, normpath, abspath
 from re import sub
@@ -6,6 +8,8 @@ from setuptools import find_packages, setup
 
 
 def req_link(external_url):
+    """req_link"""
+
     egg_link = sub(r"https://[^=]+=", "", external_url)
     return "==".join(egg_link.rsplit("-", 1))
 
@@ -15,14 +19,14 @@ reqs_core = join(dirname(__file__), "requirements.core.txt")
 required = []
 
 if exists(reqs_default):
-    with open(reqs_default) as f:
+    with open(reqs_default, encoding="UTF-8") as f:
         required += f.read().splitlines()
 
 if exists(reqs_core):
-    with open(reqs_core) as f:
+    with open(reqs_core, encoding="UTF-8") as f:
         required += f.read().splitlines()
 
-with open(join(dirname(__file__), "README.rst")) as f:
+with open(join(dirname(__file__), "README.rst"), encoding="UTF-8") as f:
     long_desc = f.read()
 
 # Allow setup.py to be run from any path
@@ -33,7 +37,7 @@ required = [req_link(r) if r.startswith("https://") else r for r in required]
 
 setup(
     name="core_explore_common_app",
-    version="1.21.0",
+    version="2.0.0-beta2",
     description="Base exploration function for the curator core project",
     long_description=long_desc,
     author="NIST IT Lab",

@@ -1,3 +1,6 @@
+""" Test settings
+
+"""
 SECRET_KEY = "fake-key"
 
 INSTALLED_APPS = [
@@ -8,9 +11,24 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.sites",
+    "django_celery_beat",
     # Local apps
     "tests",
+    "core_main_app",
+    "core_explore_common_app",
 ]
+
+# IN-MEMORY TEST DATABASE
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": ":memory:",
+        "USER": "",
+        "PASSWORD": "",
+        "HOST": "",
+        "PORT": "",
+    },
+}
 
 CUSTOM_NAME = "Local"
 """ :py:class:`str`: Name of the local instance
@@ -38,3 +56,6 @@ TEMPLATES = [
         },
     },
 ]
+
+DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
+CELERYBEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"

@@ -4,6 +4,7 @@ from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
+from core_main_app.commons import exceptions
 import core_main_app.components.data.api as data_api
 from core_explore_common_app.components.result.models import Result
 from core_explore_common_app.rest.result.serializers import ResultSerializer
@@ -51,7 +52,10 @@ def get_result_from_data_id(request):
         # Returns the response
         return Response(return_value.data, status=status.HTTP_200_OK)
 
-    except Exception as e:
+    except exceptions.DoesNotExist as does_not_exist_exception:
+        content = {"message": str(does_not_exist_exception)}
+        return Response(content, status=status.HTTP_404_NOT_FOUND)
+    except Exception as exception:
         # if something went wrong, return an internal server error
-        content = {"message": str(e)}
+        content = {"message": str(exception)}
         return Response(content, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

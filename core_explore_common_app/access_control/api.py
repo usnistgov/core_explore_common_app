@@ -4,13 +4,12 @@ import logging
 
 from django.contrib.auth.models import User, AnonymousUser
 
-from core_explore_common_app.components.query.models import Query
-from core_explore_common_app.settings import CAN_ANONYMOUS_ACCESS_PUBLIC_DOCUMENT
 from core_main_app.access_control.exceptions import AccessControlError
-
 from core_explore_common_app.components.abstract_persistent_query.models import (
     AbstractPersistentQuery,
 )
+from core_explore_common_app.components.query.models import Query
+from core_explore_common_app.settings import CAN_ANONYMOUS_ACCESS_PUBLIC_DOCUMENT
 
 logger = logging.getLogger(__name__)
 
@@ -51,11 +50,7 @@ def can_access(func, *args, **kwargs):
     """
     # Get user from parameters
     user = next(
-        (
-            arg
-            for arg in args
-            if isinstance(arg, User) or isinstance(arg, AnonymousUser)
-        ),
+        (arg for arg in args if isinstance(arg, (User, AnonymousUser))),
         None,
     )
     # No user, raise ACL error
@@ -99,11 +94,7 @@ def can_read_persistent_query(func, *args, **kwargs):
 
     """
     user = next(
-        (
-            arg
-            for arg in args
-            if isinstance(arg, User) or isinstance(arg, AnonymousUser)
-        ),
+        (arg for arg in args if isinstance(arg, (User, AnonymousUser))),
         None,
     )
     if user is None:
@@ -120,10 +111,10 @@ def can_read_persistent_query(func, *args, **kwargs):
             query, AbstractPersistentQuery
         ):
             return query
-        else:
-            raise AccessControlError(
-                "The user doesn't have enough rights to read this query."
-            )
+
+        raise AccessControlError(
+            "The user doesn't have enough rights to read this query."
+        )
 
     # Superuser and user can always read queries
     return query
@@ -141,11 +132,7 @@ def can_write_persistent_query(func, *args, **kwargs):
 
     """
     user = next(
-        (
-            arg
-            for arg in args
-            if isinstance(arg, User) or isinstance(arg, AnonymousUser)
-        ),
+        (arg for arg in args if isinstance(arg, (User, AnonymousUser))),
         None,
     )
     if user is None:
@@ -165,10 +152,10 @@ def can_write_persistent_query(func, *args, **kwargs):
     if user.is_anonymous:
         if query.id is None and CAN_ANONYMOUS_ACCESS_PUBLIC_DOCUMENT:
             return func(*args, **kwargs)
-        else:
-            raise AccessControlError(
-                "The user doesn't have enough rights to access this query."
-            )
+
+        raise AccessControlError(
+            "The user doesn't have enough rights to access this query."
+        )
 
     # Owner can create and update own queries
     if query.user_id == str(user.id):

@@ -6,10 +6,11 @@ from django.contrib import messages
 from django.views.generic import RedirectView
 from django.views.generic import View
 
+from core_main_app.access_control.exceptions import AccessControlError
+
+from core_explore_common_app import settings
 from core_explore_common_app.components.query import api as query_api
 from core_explore_common_app.components.query.models import Query
-from core_explore_common_app import settings
-from core_main_app.access_control.exceptions import AccessControlError
 from core_explore_common_app.settings import (
     EXPLORE_ADD_DEFAULT_LOCAL_DATA_SOURCE_TO_QUERY,
 )
@@ -17,6 +18,8 @@ from core_explore_common_app.utils.query.query import add_local_data_source
 
 
 class ResultsView(View):
+    """Results View"""
+
     def __init__(self, **kwargs):
         self.assets = self._load_assets()
         self.modals = self._load_modals()
@@ -32,7 +35,7 @@ class ResultsView(View):
         """
         context_array = []
         for data_source in query.data_sources:
-            context_array.append(data_source.order_by_field)
+            context_array.append(data_source["order_by_field"])
 
         return ";".join(context_array)
 
@@ -56,9 +59,7 @@ class ResultsView(View):
                     "is_raw": False,
                 },
                 {
-                    "path": "core_explore_common_app/user/js/sorting_{0}_criteria.js".format(
-                        settings.SORTING_DISPLAY_TYPE
-                    ),
+                    "path": f"core_explore_common_app/user/js/sorting_{settings.SORTING_DISPLAY_TYPE}_criteria.js",
                     "is_raw": False,
                 },
             ],
@@ -144,6 +145,8 @@ class ResultsView(View):
 
 
 class ResultQueryRedirectView(RedirectView, metaclass=ABCMeta):
+    """Results Query Redirect View"""
+
     model_name = None
     object_name = None
     redirect_url = None
@@ -174,17 +177,17 @@ class ResultQueryRedirectView(RedirectView, metaclass=ABCMeta):
             query = Query(
                 user_id=str(self.request.user.id),
                 content=persistent_query.content,
-                templates=persistent_query.templates,
                 data_sources=persistent_query.data_sources,
             )
             # add the local data source by default
             if (
-                query.data_sources == []
+                not query.data_sources
                 and EXPLORE_ADD_DEFAULT_LOCAL_DATA_SOURCE_TO_QUERY
             ):
                 add_local_data_source(self.request, query)
 
             query = query_api.upsert(query, self.request.user)
+            query.templates.set(persistent_query.templates.all())
 
             # then redirect to the result page core_explore_example_results with /<template_id>/<query_id>
             return self._get_reversed_url(query)
@@ -192,7 +195,7 @@ class ResultQueryRedirectView(RedirectView, metaclass=ABCMeta):
             # add error message
             messages.add_message(self.request, messages.ERROR, "Access Forbidden.")
             return self._get_reversed_url_if_failed()
-        except Exception as e:
+        except Exception:
             # add error message
             messages.add_message(
                 self.request, messages.ERROR, "The given URL is not valid."
