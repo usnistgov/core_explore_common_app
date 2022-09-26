@@ -79,7 +79,9 @@ def get_local_data_source(request):
                 context=context,
             )
 
-        return HttpResponseBadRequest("Expected query_id parameter is missing.")
+        return HttpResponseBadRequest(
+            "Expected query_id parameter is missing."
+        )
 
     except DoesNotExist:
         return HttpResponseBadRequest("The query does not exist.")
@@ -171,7 +173,9 @@ def get_data_sources_html(request):
         html_results_holders = html_template.render(context)
 
         response_dict = {"results": html_results_holders}
-        return HttpResponse(json.dumps(response_dict), content_type="application/json")
+        return HttpResponse(
+            json.dumps(response_dict), content_type="application/json"
+        )
     except DoesNotExist:
         return HttpResponseBadRequest("The query does not exist.")
     except Exception as exception:
@@ -201,7 +205,9 @@ def get_data_source_results(request, query_id, data_source_index, page=1):
         previous_page_number = get_page_number(results["previous"])
         next_page_number = get_page_number(results["next"])
         results_count = results["count"]
-        page_count = int(math.ceil(float(results_count) / settings.RESULTS_PER_PAGE))
+        page_count = int(
+            math.ceil(float(results_count) / settings.RESULTS_PER_PAGE)
+        )
 
         # pagination has other pages?
         has_other_pages = results_count > settings.RESULTS_PER_PAGE
@@ -210,7 +216,9 @@ def get_data_source_results(request, query_id, data_source_index, page=1):
         has_previous = previous_page_number is not None
 
         # pagination has next?
-        has_next = next_page_number is not None and next_page_number <= page_count
+        has_next = (
+            next_page_number is not None and next_page_number <= page_count
+        )
 
         # set results in context
         context_data = {
@@ -226,7 +234,8 @@ def get_data_source_results(request, query_id, data_source_index, page=1):
                 "has_previous": has_previous,
                 "has_next": has_next,
             },
-            "blobs_preview": "core_file_preview_app" in settings.INSTALLED_APPS,
+            "blobs_preview": "core_file_preview_app"
+            in settings.INSTALLED_APPS,
             "display_edit_button": settings.DISPLAY_EDIT_BUTTON,
             "exporter_app": "core_exporters_app" in settings.INSTALLED_APPS,
         }
@@ -239,14 +248,22 @@ def get_data_source_results(request, query_id, data_source_index, page=1):
         # generate html with context
         html_template = loader.get_template(
             join(
-                "core_explore_common_app", "user", "results", "data_source_results.html"
+                "core_explore_common_app",
+                "user",
+                "results",
+                "data_source_results.html",
             )
         )
         # render html
         results_html = html_template.render(context)
         # set response with html results
-        response_dict = {"results": results_html, "nb_results": results["count"]}
-        return HttpResponse(json.dumps(response_dict), content_type="application/json")
+        response_dict = {
+            "results": results_html,
+            "nb_results": results["count"],
+        }
+        return HttpResponse(
+            json.dumps(response_dict), content_type="application/json"
+        )
 
     except DoesNotExist:
         return HttpResponseBadRequest("The query does not exist.")
@@ -287,10 +304,14 @@ class CreatePersistentQueryUrlView(View, metaclass=ABCMeta):
                 request.user,
             )
             # reverse to the url
-            url_reversed = request.build_absolute_uri(reverse(self.view_to_reverse))
+            url_reversed = request.build_absolute_uri(
+                reverse(self.view_to_reverse)
+            )
             # context
             return HttpResponse(
-                json.dumps({"url": url_reversed + "?id=" + str(persistent_query.id)}),
+                json.dumps(
+                    {"url": url_reversed + "?id=" + str(persistent_query.id)}
+                ),
                 content_type="application/javascript",
             )
         except DoesNotExist:
@@ -311,7 +332,9 @@ class CreatePersistentQueryUrlView(View, metaclass=ABCMeta):
         Returns:
 
         """
-        raise NotImplementedError("_create_persistent_query method is not implemented.")
+        raise NotImplementedError(
+            "_create_persistent_query method is not implemented."
+        )
 
 
 @method_decorator(login_required, name="dispatch")
@@ -320,9 +343,7 @@ class ContentPersistentQueryView(CommonView):
     View persistent query content
     """
 
-    template = (
-        "core_explore_common_app/user/persistent_query/persistent_query_content.html"
-    )
+    template = "core_explore_common_app/user/persistent_query/persistent_query_content.html"
 
     def get(self, request, *args, **kwargs):
         """Gets persistent query
@@ -361,10 +382,16 @@ class ContentPersistentQueryView(CommonView):
 
         # create context
         content = json.loads(persistent_query.content)
-        context = {"query": persistent_query, "content": json.dumps(content, indent=4)}
+        context = {
+            "query": persistent_query,
+            "content": json.dumps(content, indent=4),
+        }
         assets = {
             "js": [
-                {"path": "core_main_app/common/js/backtoprevious.js", "is_raw": True},
+                {
+                    "path": "core_main_app/common/js/backtoprevious.js",
+                    "is_raw": True,
+                },
                 {
                     "path": "core_main_app/libs/highlight/11.0.0/js/highlight.min.js",
                     "is_raw": False,
@@ -374,7 +401,9 @@ class ContentPersistentQueryView(CommonView):
                     "is_raw": False,
                 },
             ],
-            "css": ["core_main_app/libs/highlight/11.0.0/css/atom-one-light.css"],
+            "css": [
+                "core_main_app/libs/highlight/11.0.0/css/atom-one-light.css"
+            ],
         }
 
         return self.common_render(

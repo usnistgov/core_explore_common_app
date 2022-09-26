@@ -9,7 +9,9 @@ from core_explore_common_app.components.abstract_persistent_query.models import 
     AbstractPersistentQuery,
 )
 from core_explore_common_app.components.query.models import Query
-from core_explore_common_app.settings import CAN_ANONYMOUS_ACCESS_PUBLIC_DOCUMENT
+from core_explore_common_app.settings import (
+    CAN_ANONYMOUS_ACCESS_PUBLIC_DOCUMENT,
+)
 
 logger = logging.getLogger(__name__)
 

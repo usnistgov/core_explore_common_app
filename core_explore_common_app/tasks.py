@@ -33,5 +33,6 @@ def delete_old_queries():
             query.delete()
     except Exception as exception:
         logger.error(
-            "An error occurred while deleting old queries (%s).", str(exception)
+            "An error occurred while deleting old queries (%s).",
+            str(exception),
         )

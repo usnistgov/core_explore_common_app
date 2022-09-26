@@ -33,7 +33,10 @@ class Migration(migrations.Migration):
                     "permission_url",
                     models.CharField(blank=True, max_length=200, null=True),
                 ),
-                ("detail_url", models.CharField(blank=True, max_length=200, null=True)),
+                (
+                    "detail_url",
+                    models.CharField(blank=True, max_length=200, null=True),
+                ),
                 (
                     "access_data_url",
                     models.CharField(blank=True, max_length=200, null=True),

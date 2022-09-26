@@ -25,7 +25,10 @@ class TestResultFromDataIdGetPermissions(SimpleTestCase):
 
         """
         mock_data = Data(
-            template=Template(), user_id="1", dict_content=OrderedDict(), title="title"
+            template=Template(),
+            user_id="1",
+            dict_content=OrderedDict(),
+            title="title",
         )
         mock_data_get_by_id.return_value = mock_data
 
@@ -43,7 +46,10 @@ class TestResultFromDataIdGetPermissions(SimpleTestCase):
 
         """
         mock_data = Data(
-            template=Template(), user_id="1", dict_content=OrderedDict(), title="title"
+            template=Template(),
+            user_id="1",
+            dict_content=OrderedDict(),
+            title="title",
         )
         mock_data_get_by_id.return_value = mock_data
         mock_user = create_mock_user("1")
@@ -62,7 +68,10 @@ class TestResultFromDataIdGetPermissions(SimpleTestCase):
 
         """
         mock_data = Data(
-            template=Template(), user_id="1", dict_content=OrderedDict(), title="title"
+            template=Template(),
+            user_id="1",
+            dict_content=OrderedDict(),
+            title="title",
         )
         mock_data_get_by_id.return_value = mock_data
         mock_user = create_mock_user("1", is_staff=True)

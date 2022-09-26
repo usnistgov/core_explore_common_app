@@ -5,7 +5,9 @@ import pytz
 from django.urls import reverse
 
 from core_main_app.commons.exceptions import ApiError
-from core_main_app.rest.data.abstract_views import AbstractExecuteLocalQueryView
+from core_main_app.rest.data.abstract_views import (
+    AbstractExecuteLocalQueryView,
+)
 from core_main_app.utils.pagination.rest_framework_paginator.pagination import (
     StandardResultsSetPagination,
 )
@@ -36,7 +38,9 @@ class ExecuteLocalQueryView(AbstractExecuteLocalQueryView):
 
         # Get detail view base url (to be completed with data id)
         detail_url_base = reverse("core_main_app_data_detail")
-        url_access_data = reverse("core_explore_common_app_get_result_from_data_id")
+        url_access_data = reverse(
+            "core_explore_common_app_get_result_from_data_id"
+        )
         url_permission_data = reverse("core_main_app_rest_data_permissions")
 
         # Build list of results
@@ -65,18 +69,23 @@ class ExecuteLocalQueryView(AbstractExecuteLocalQueryView):
             # Use the PID link if the app is installed, and a PID is defined for the
             # document
             if "core_linked_records_app" in settings.INSTALLED_APPS:
-                from core_linked_records_app.components.data import api as data_api
+                from core_linked_records_app.components.data import (
+                    api as data_api,
+                )
 
                 if auto_set_pid:
                     try:
-                        pid_url = data_api.get_pid_for_data(data.id, self.request)
+                        pid_url = data_api.get_pid_for_data(
+                            data.id, self.request
+                        )
                         if pid_url is not None:  # Ensure the PID is set
                             detail_url = pid_url
                     except ApiError as exc:
                         # If there is an error with the PID, fallback to regular data
                         # url.
                         logger.warning(
-                            "An error occured while retrieving PID url: %s", str(exc)
+                            "An error occured while retrieving PID url: %s",
+                            str(exc),
                         )
 
             results.append(

@@ -42,18 +42,30 @@ class ResultsView(View):
     def _load_assets(self):
         assets = {
             "js": [
-                {"path": "core_main_app/common/js/XMLTree.js", "is_raw": False},
+                {
+                    "path": "core_main_app/common/js/XMLTree.js",
+                    "is_raw": False,
+                },
                 {
                     "path": "core_main_app/common/js/modals/error_page_modal.js",
                     "is_raw": True,
                 },
-                {"path": "core_main_app/common/js/debounce.js", "is_raw": False},
-                {"path": "core_explore_common_app/user/js/results.js", "is_raw": False},
+                {
+                    "path": "core_main_app/common/js/debounce.js",
+                    "is_raw": False,
+                },
+                {
+                    "path": "core_explore_common_app/user/js/results.js",
+                    "is_raw": False,
+                },
                 {
                     "path": "core_explore_common_app/user/js/results.raw.js",
                     "is_raw": True,
                 },
-                {"path": "core_main_app/user/js/sharing_modal.js", "is_raw": False},
+                {
+                    "path": "core_main_app/user/js/sharing_modal.js",
+                    "is_raw": False,
+                },
                 {
                     "path": "core_explore_common_app/user/js/persistent_query_config.js",
                     "is_raw": False,
@@ -93,7 +105,9 @@ class ResultsView(View):
                     }
                 ]
             )
-            assets["css"].append("core_file_preview_app/user/css/file_preview.css")
+            assets["css"].append(
+                "core_file_preview_app/user/css/file_preview.css"
+            )
 
         # Add assets needed for the PID sharing
         if "core_linked_records_app" in settings.INSTALLED_APPS:
@@ -110,7 +124,9 @@ class ResultsView(View):
                         }
                     ]
                 )
-                assets["css"].append("core_linked_records_app/user/css/sharing.css")
+                assets["css"].append(
+                    "core_linked_records_app/user/css/sharing.css"
+                )
 
         return assets
 
@@ -139,7 +155,9 @@ class ResultsView(View):
             )
 
             if pid_settings_api.get().auto_set_pid:
-                modals.append("core_linked_records_app/user/sharing/explore/modal.html")
+                modals.append(
+                    "core_linked_records_app/user/sharing/explore/modal.html"
+                )
 
         return modals
 
@@ -193,7 +211,9 @@ class ResultQueryRedirectView(RedirectView, metaclass=ABCMeta):
             return self._get_reversed_url(query)
         except AccessControlError:
             # add error message
-            messages.add_message(self.request, messages.ERROR, "Access Forbidden.")
+            messages.add_message(
+                self.request, messages.ERROR, "Access Forbidden."
+            )
             return self._get_reversed_url_if_failed()
         except Exception:
             # add error message
@@ -205,12 +225,16 @@ class ResultQueryRedirectView(RedirectView, metaclass=ABCMeta):
     @staticmethod
     @abstractmethod
     def _get_persistent_query_by_id(persistent_query_id, user):
-        raise NotImplementedError("_get_persistent_query method is not implemented.")
+        raise NotImplementedError(
+            "_get_persistent_query method is not implemented."
+        )
 
     @staticmethod
     @abstractmethod
     def _get_persistent_query_by_name(persistent_query_name, user):
-        raise NotImplementedError("_get_persistent_query method is not implemented.")
+        raise NotImplementedError(
+            "_get_persistent_query method is not implemented."
+        )
 
     @staticmethod
     @abstractmethod
@@ -220,7 +244,9 @@ class ResultQueryRedirectView(RedirectView, metaclass=ABCMeta):
     @staticmethod
     @abstractmethod
     def _get_reversed_url(query):
-        raise NotImplementedError("_get_reversed_url method is not implemented.")
+        raise NotImplementedError(
+            "_get_reversed_url method is not implemented."
+        )
 
     @staticmethod
     @abstractmethod

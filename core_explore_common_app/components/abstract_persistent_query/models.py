@@ -2,7 +2,9 @@
 """
 from django.db import models
 
-from core_explore_common_app.components.abstract_query.models import AbstractQuery
+from core_explore_common_app.components.abstract_query.models import (
+    AbstractQuery,
+)
 
 
 class AbstractPersistentQuery(AbstractQuery):

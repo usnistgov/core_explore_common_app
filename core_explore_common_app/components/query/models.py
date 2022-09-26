@@ -4,7 +4,9 @@ Query models
 from django.core.exceptions import ObjectDoesNotExist
 
 from core_main_app.commons import exceptions
-from core_explore_common_app.components.abstract_query.models import AbstractQuery
+from core_explore_common_app.components.abstract_query.models import (
+    AbstractQuery,
+)
 
 
 class Query(AbstractQuery):
@@ -44,7 +46,10 @@ class Query(AbstractQuery):
 
         """
         for data_source in self.data_sources:
-            if data_source["name"] == name and data_source["url_query"] == url_query:
+            if (
+                data_source["name"] == name
+                and data_source["url_query"] == url_query
+            ):
                 return data_source
         raise exceptions.DoesNotExist(
             "No data source found fot the given name and url."

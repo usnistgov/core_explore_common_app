@@ -34,7 +34,9 @@ class TestQueryGetById(TestCase):
     """Test Query Get By Id"""
 
     @patch.object(Query, "get_by_id")
-    def test_saved_query_get_by_id_raises_api_error_if_not_found(self, mock_get):
+    def test_saved_query_get_by_id_raises_api_error_if_not_found(
+        self, mock_get
+    ):
         """test_saved_query_get_by_id_raises_api_error_if_not_found
 
         Returns:
@@ -112,7 +114,9 @@ class TestQueryAddDataSource(TestCase):
 
     @patch.object(Query, "save")
     @patch.object(Query, "get_data_source_by_name_and_url_query")
-    def test_add_data_source_adds_data_source_if_not_found(self, mock_get, mock_save):
+    def test_add_data_source_adds_data_source_if_not_found(
+        self, mock_get, mock_save
+    ):
         """test_add_data_source_adds_data_source_if_not_found
 
         Returns:
@@ -177,7 +181,9 @@ class TestQueryRemoveDataSource(TestCase):
 
 def _create_data_source(name="Local", url="/url"):
     authentication = Authentication(auth_type="session")
-    data_source = DataSource(name=name, url_query=url, authentication=authentication)
+    data_source = DataSource(
+        name=name, url_query=url, authentication=authentication
+    )
     return data_source
 
 

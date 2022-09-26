@@ -8,7 +8,9 @@ from rest_framework.status import HTTP_200_OK
 
 from core_main_app.utils.tests_tools.RequestMock import RequestMock
 from core_explore_common_app.rest.query import views as explore_rest_views
-from core_explore_common_app.rest.query.views import AbstractExecuteLocalQueryView
+from core_explore_common_app.rest.query.views import (
+    AbstractExecuteLocalQueryView,
+)
 
 
 class TestExecuteLocalQueryViewGetPermissions(SimpleTestCase):

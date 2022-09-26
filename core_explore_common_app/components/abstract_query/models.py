@@ -15,7 +15,9 @@ class Authentication(dict):
     def __init__(self, auth_type="", params=None):
         if auth_type not in AUTH_TYPES:
             raise CoreError("Invalid AUTH_TYPE.")
-        dict.__init__(self, auth_type=auth_type, params=params if params else dict())
+        dict.__init__(
+            self, auth_type=auth_type, params=params if params else dict()
+        )
 
 
 class DataSource(dict):
