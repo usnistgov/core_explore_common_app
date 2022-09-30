@@ -3,7 +3,7 @@
 from collections import OrderedDict
 
 from django.test import SimpleTestCase
-from mock import patch
+from unittest.mock import patch
 from rest_framework import status
 
 from core_main_app.components.data.models import Data

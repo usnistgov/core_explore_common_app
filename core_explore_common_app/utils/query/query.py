@@ -69,7 +69,7 @@ def send(request, query, data_source_index, page):
             )
 
             # Validate data
-            results_serializer.is_valid(True)
+            results_serializer.is_valid(raise_exception=True)
 
             return json_response
 

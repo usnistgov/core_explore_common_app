@@ -41,7 +41,7 @@ def get_result_from_rest_data_response(response):
     # data serialization
     result_serialized = ResultBaseSerializer(data=json.loads(response.text))
     # Validate data
-    result_serialized.is_valid(True)
+    result_serialized.is_valid(raise_exception=True)
     # Build a Result
     result = Result(
         title=result_serialized.data["title"],

@@ -1,7 +1,7 @@
 """ Authentication tests for Local Query REST API
 """
 from django.test import SimpleTestCase
-from mock import patch
+from unittest.mock import patch
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.status import HTTP_200_OK

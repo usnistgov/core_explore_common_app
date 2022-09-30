@@ -3,7 +3,7 @@
 import unittest
 from unittest.case import TestCase
 
-from mock import patch
+from unittest.mock import patch
 from core_main_app.commons import exceptions
 from core_main_app.utils.tests_tools.MockUser import create_mock_user
 from core_explore_common_app.components.abstract_query.models import (
