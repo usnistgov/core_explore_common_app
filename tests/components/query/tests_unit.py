@@ -1,6 +1,5 @@
 """ Unit Test Query
 """
-import unittest
 from unittest.case import TestCase
 
 from unittest.mock import patch
@@ -10,6 +9,7 @@ from core_explore_common_app.components.abstract_query.models import (
     Authentication,
     DataSource,
 )
+from core_explore_common_app.settings import QUERY_VISIBILITY
 from core_explore_common_app.components.query import api as query_api
 from core_explore_common_app.components.query.models import Query
 
@@ -134,11 +134,10 @@ class TestQueryAddDataSource(TestCase):
         query_api.add_data_source(query, data_source, mock_user)
         self.assertTrue(len(query.data_sources) == origin_data_sources + 1)
 
-    @unittest.skip("Need database to set data sources")
-    @patch.object(Query, "save")
     @patch.object(Query, "get_data_source_by_name_and_url_query")
     def test_add_data_source_does_not_add_data_source_if_found(
-        self, mock_get, mock_save
+        self,
+        mock_get,
     ):
         """test_add_data_source_does_not_add_data_source_if_found
 
@@ -148,20 +147,19 @@ class TestQueryAddDataSource(TestCase):
         # create query
         query = _create_query()
         # Arrange
-        mock_get.return_value = query.data_sources[0]
-        mock_save.return_value = query
+        data_source = _create_data_source("Remote", "/remote/url")
+        query.data_sources = [data_source]
+        mock_get.return_value = data_source
+
         mock_user = create_mock_user("1")
 
-        origin_data_sources = len(query.data_sources)
-        data_source = _create_data_source("Remote", "/remote/url")
-        query_api.add_data_source(query, data_source, mock_user)
-        self.assertTrue(len(query.data_sources) == origin_data_sources)
+        result = query_api.add_data_source(query, data_source, mock_user)
+        self.assertTrue(result.data_sources == query.data_sources)
 
 
 class TestQueryRemoveDataSource(TestCase):
     """Test Query Remove Data Source"""
 
-    @unittest.skip("Need database to set data sources")
     @patch.object(Query, "save")
     def test_remove_data_source(self, mock_save):
         """test_remove_data_source
@@ -173,13 +171,41 @@ class TestQueryRemoveDataSource(TestCase):
         query = _create_query()
         mock_save.return_value = query
         mock_user = create_mock_user("1")
-        origin_data_sources = len(query.data_sources)
         data_source = _create_data_source()
+        query.data_sources = [data_source]
+        origin_data_sources = len(query.data_sources)
         query_api.remove_data_source(query, data_source, mock_user)
         self.assertTrue(len(query.data_sources) == origin_data_sources - 1)
 
 
+class TestSetVisibilityToQuery(TestCase):
+    """Test Set Visibility To Query"""
+
+    def test_set_visibility_to_query_changes_visibility_to_public(self):
+        """test_set_visibility_to_query_changes_visibility_to_public
+
+        Returns:
+
+        """
+        # create query
+        query = _create_query()
+        query.data_sources = [_create_data_source()]
+
+        mock_user = create_mock_user("1")
+
+        query_api.set_visibility_to_query(query, mock_user)
+
+        for data_source in query.data_sources:
+            self.assertTrue(
+                data_source["query_options"]["visibility"], QUERY_VISIBILITY
+            )
+
+
 def _create_data_source(name="Local", url="/url"):
+    """_create_data_source
+
+    Returns:
+    """
     authentication = Authentication(auth_type="session")
     data_source = DataSource(
         name=name, url_query=url, authentication=authentication
@@ -188,7 +214,12 @@ def _create_data_source(name="Local", url="/url"):
 
 
 def _create_query():
+    """_create_query
+
+    Returns:
+    """
     query = Query(
+        id=1,
         user_id="1",
         content="{'root.value': 'test'}",
     )
