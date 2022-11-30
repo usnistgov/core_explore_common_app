@@ -61,3 +61,5 @@ TEMPLATES = [
 ROOT_URLCONF = "core_explore_common_app.urls"
 DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
 CELERYBEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
+MONGODB_INDEXING = False
+MONGODB_ASYNC_SAVE = False
