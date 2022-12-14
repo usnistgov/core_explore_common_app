@@ -37,7 +37,7 @@ required = [req_link(r) if r.startswith("https://") else r for r in required]
 
 setup(
     name="core_explore_common_app",
-    version="2.1.0",
+    version="2.2.0",
     description="Base exploration function for the curator core project",
     long_description=long_desc,
     author="NIST IT Lab",
