@@ -1,17 +1,19 @@
 """ Query api
 """
 
-from core_main_app.access_control.decorators import access_control
-from core_main_app.commons.exceptions import DoesNotExist
-from core_main_app.utils.query.constants import VISIBILITY_OPTION
 from core_explore_common_app import settings
 from core_explore_common_app.access_control.api import can_read, can_access
 from core_explore_common_app.components.query.models import Query
-from core_explore_common_app.constants import LOCAL_QUERY_NAME
 from core_explore_common_app.settings import (
     EXPLORE_ADD_DEFAULT_LOCAL_DATA_SOURCE_TO_QUERY,
 )
-from core_explore_common_app.utils.query.query import add_local_data_source
+from core_explore_common_app.utils.query.query import (
+    create_local_data_source,
+    is_local_data_source,
+)
+from core_main_app.access_control.decorators import access_control
+from core_main_app.commons.exceptions import DoesNotExist
+from core_main_app.utils.query.constants import VISIBILITY_OPTION
 
 
 @access_control(can_access)
@@ -20,6 +22,7 @@ def upsert(query, user):
 
     Args:
         query:
+        user:
 
     Returns:
 
@@ -52,12 +55,29 @@ def create_default_query(request, template_ids):
     return query
 
 
+def add_local_data_source(request, query):
+    """Add local data source to query
+
+    Args:
+        request:
+        query:
+
+    Returns:
+
+    """
+    # Add Local to the query as a data source
+    data_source = create_local_data_source(request)
+    # Add data source to query (with access control)
+    add_data_source(query, data_source, request.user)
+
+
 @access_control(can_read)
 def get_by_id(id_query, user):
     """Returns a query with the given id
 
     Args:
         id_query:
+        user:
 
     Returns:
 
@@ -139,7 +159,7 @@ def set_visibility_to_query(query, user):
     # Set visibility option for local data source
     for data_source in query.data_sources:
         # find local data source
-        if data_source["name"] == LOCAL_QUERY_NAME:
+        if is_local_data_source(data_source):
             # set visibility to public
             data_source["query_options"] = {
                 VISIBILITY_OPTION: settings.QUERY_VISIBILITY

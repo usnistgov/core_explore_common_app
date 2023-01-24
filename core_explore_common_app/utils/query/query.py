@@ -1,56 +1,42 @@
 """Explore Common query utils
 """
+
 import json
 
+from django.conf import settings as conf_settings
 from django.urls import reverse
 from django.utils import timezone
 from requests import ConnectionError
 
-from core_main_app.settings import DATA_SORTING_FIELDS
-from core_main_app.utils.requests_utils.requests_utils import send_get_request
-
-from core_explore_common_app import settings
 from core_explore_common_app.commons.exceptions import ExploreRequestError
 from core_explore_common_app.components.abstract_query.models import (
     Authentication,
     DataSource,
 )
-from core_explore_common_app.components.query import api as query_api
-from core_explore_common_app.constants import LOCAL_QUERY_NAME, LOCAL_QUERY_URL
+from core_explore_common_app.constants import LOCAL_QUERY_NAME
 from core_explore_common_app.rest.result.serializers import ResultSerializer
-from core_explore_common_app.utils.protocols.oauth2 import (
-    send_post_request as oauth2_request,
-)
+from core_explore_common_app.utils.protocols import oauth2
+from core_main_app.settings import DATA_SORTING_FIELDS, SERVER_URI
 
 
-def send(request, query, data_source_index, page):
+def send(request, json_query, data_source, page):
     """
 
     Args:
         request:
-        query:
-        data_source_index:
+        json_query:
+        data_source:
         page:
 
     Returns:
 
     """
     try:
-        # get data source to reach
-        data_source = query.data_sources[data_source_index]
-        # get serialized query to send to data source
-        json_query = _serialize_query(query, data_source)
         # add page number to query url
-        query_url = _get_paginated_url(data_source["url_query"], page)
+        query_url = f"{data_source['url_query']}/?page={page}"
         # send query to data source
-        if data_source["authentication"]["auth_type"] == "session":
-            response = send_get_request(
-                query_url,
-                data=json_query,
-                cookies={"sessionid": request.session.session_key},
-            )
-        elif data_source["authentication"]["auth_type"] == "oauth2":
-            response = oauth2_request(
+        if data_source["authentication"]["auth_type"] == "oauth2":
+            response = oauth2.send_post_request(
                 query_url,
                 json_query,
                 data_source["authentication"]["params"]["access_token"],
@@ -85,21 +71,6 @@ def send(request, query, data_source_index, page):
         raise ExploreRequestError(str(exception))
 
 
-def add_local_data_source(request, query):
-    """Add local data source to query
-
-    Args:
-        request:
-        query:
-
-    Returns:
-
-    """
-    # Add Local to the query as a data source
-    data_source = create_local_data_source(request)
-    query_api.add_data_source(query, data_source, request.user)
-
-
 def create_local_data_source(request):
     """Create local datasource
 
@@ -109,16 +80,15 @@ def create_local_data_source(request):
     Returns:
     """
     local_name = LOCAL_QUERY_NAME
-    local_query_url = get_local_query_absolute_url(request)
     authentication = Authentication(auth_type="session")
     data_source = DataSource(
         name=local_name,
-        url_query=local_query_url,
+        url_query=SERVER_URI,
         authentication=authentication,
         order_by_field=",".join(DATA_SORTING_FIELDS),
     )
 
-    if "core_linked_records_app" in settings.INSTALLED_APPS:
+    if "core_linked_records_app" in conf_settings.INSTALLED_APPS:
         data_source["capabilities"] = {
             "url_pid": request.build_absolute_uri(
                 reverse("core_linked_records_app_query_local")
@@ -128,22 +98,31 @@ def create_local_data_source(request):
     return data_source
 
 
-def get_local_query_absolute_url(request):
-    """Return local query absolute URL.
+def is_local_data_source(data_source):
+    """Check if local data source
 
     Args:
-        request:
-        query:
+        data_source:
 
     Returns:
-        String: Absolute URL
 
     """
-    return request.build_absolute_uri(reverse(LOCAL_QUERY_URL))
+    return (
+        data_source["name"] == LOCAL_QUERY_NAME
+        and data_source["url_query"] == SERVER_URI
+    )
 
 
-# TODO: see if can be done using a Serializer
-def _serialize_query(query, data_source):
+def serialize_query(query, data_source):
+    """Serialize the query
+
+    Args:
+        query:
+        data_source:
+
+    Returns:
+
+    """
     return {
         "query": query.content,
         "templates": json.dumps(
@@ -155,16 +134,3 @@ def _serialize_query(query, data_source):
         "options": json.dumps(data_source["query_options"]),
         "order_by_field": data_source["order_by_field"],
     }
-
-
-def _get_paginated_url(url, page):
-    """Add a page number to the url
-
-    Args:
-        url:
-        page:
-
-    Returns:
-
-    """
-    return f"{url}/?page={page}"

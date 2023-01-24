@@ -1,17 +1,20 @@
 """ Unit Test Query
 """
 from unittest.case import TestCase
+from unittest.mock import patch, MagicMock
 
-from unittest.mock import patch
-from core_main_app.commons import exceptions
-from core_main_app.utils.tests_tools.MockUser import create_mock_user
+from django.test import override_settings
+
 from core_explore_common_app.components.abstract_query.models import (
     Authentication,
     DataSource,
 )
-from core_explore_common_app.settings import QUERY_VISIBILITY
 from core_explore_common_app.components.query import api as query_api
 from core_explore_common_app.components.query.models import Query
+from core_explore_common_app.settings import QUERY_VISIBILITY, SERVER_URI
+from core_main_app.commons import exceptions
+from core_main_app.utils.tests_tools.MockUser import create_mock_user
+from core_main_app.utils.tests_tools.RequestMock import create_mock_request
 
 
 class TestQueryUpsert(TestCase):
@@ -201,7 +204,33 @@ class TestSetVisibilityToQuery(TestCase):
             )
 
 
-def _create_data_source(name="Local", url="/url"):
+class TestAddLocalDataSource(TestCase):
+    """TestAddLocalDataSource"""
+
+    @override_settings(INSTALLED_APPS=[])
+    @patch(
+        "core_explore_common_app.utils.query.query.create_local_data_source"
+    )
+    @patch("core_explore_common_app.components.query.api.add_data_source")
+    def test_add_local_data_source(
+        self, mock_create_local_data_source, mock_add_data_source
+    ):
+        """test_upsert_query_returns_query
+
+        Returns:
+
+        """
+        # Arrange
+        mock_user = create_mock_user(1)
+        mock_request = create_mock_request(mock_user)
+
+        mock_data_source = MagicMock()
+        mock_create_local_data_source.return_value = mock_data_source
+        mock_add_data_source.return_value = None
+        query_api.add_local_data_source(mock_request, mock_data_source)
+
+
+def _create_data_source(name="Local", url=SERVER_URI):
     """_create_data_source
 
     Returns:

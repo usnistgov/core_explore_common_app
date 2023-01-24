@@ -14,7 +14,6 @@ from core_explore_common_app.components.query.models import Query
 from core_explore_common_app.settings import (
     EXPLORE_ADD_DEFAULT_LOCAL_DATA_SOURCE_TO_QUERY,
 )
-from core_explore_common_app.utils.query.query import add_local_data_source
 
 
 class ResultsView(View):
@@ -202,7 +201,7 @@ class ResultQueryRedirectView(RedirectView, metaclass=ABCMeta):
                 not query.data_sources
                 and EXPLORE_ADD_DEFAULT_LOCAL_DATA_SOURCE_TO_QUERY
             ):
-                add_local_data_source(self.request, query)
+                query_api.add_local_data_source(self.request, query)
 
             query = query_api.upsert(query, self.request.user)
             query.templates.set(persistent_query.templates.all())

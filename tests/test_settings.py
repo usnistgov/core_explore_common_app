@@ -16,7 +16,10 @@ INSTALLED_APPS = [
     # Local apps
     "tests",
     "core_main_app",
+    "core_linked_records_app",
+    "core_oaipmh_harvester_app",
     "core_explore_common_app",
+    "core_explore_oaipmh_app",
 ]
 
 # IN-MEMORY TEST DATABASE
@@ -58,7 +61,7 @@ TEMPLATES = [
     },
 ]
 
-ROOT_URLCONF = "core_explore_common_app.urls"
+ROOT_URLCONF = "tests.urls"
 DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
 CELERYBEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
 MONGODB_INDEXING = False

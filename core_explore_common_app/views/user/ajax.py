@@ -6,6 +6,7 @@ from abc import ABCMeta, abstractmethod
 from os.path import join
 
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import EmptyPage
 from django.http.response import HttpResponse, HttpResponseBadRequest
 from django.shortcuts import render as django_render
 from django.template import loader
@@ -13,12 +14,6 @@ from django.urls import reverse
 from django.utils.decorators import method_decorator
 from django.utils.html import escape
 from django.views import View
-
-from core_main_app.commons.exceptions import DoesNotExist
-from core_main_app.utils.pagination.rest_framework_paginator.rest_framework_paginator import (
-    get_page_number,
-)
-from core_main_app.views.common.views import CommonView
 
 from core_explore_common_app import settings
 from core_explore_common_app.commons.exceptions import ExploreRequestError
@@ -30,11 +25,15 @@ from core_explore_common_app.components.abstract_persistent_query.models import 
 )
 from core_explore_common_app.components.query import api as query_api
 from core_explore_common_app.constants import LOCAL_QUERY_NAME
-from core_explore_common_app.utils.query.query import (
-    send as send_query,
-    add_local_data_source,
-    get_local_query_absolute_url,
+from core_explore_common_app.rest.query import views as query_views
+from core_explore_common_app.utils.oaipmh import oaipmh as oaipmh_utils
+from core_explore_common_app.utils.query import query as query_utils
+from core_main_app.commons.exceptions import DoesNotExist
+from core_main_app.settings import SERVER_URI
+from core_main_app.utils.pagination.rest_framework_paginator.rest_framework_paginator import (
+    get_page_number,
 )
+from core_main_app.views.common.views import CommonView
 
 
 def get_local_data_source(request):
@@ -58,16 +57,12 @@ def get_local_data_source(request):
                 "selected": False,
             }
             if len(settings.DATA_SOURCES_EXPLORE_APPS) == 0:
-                add_local_data_source(request, query)
+                query_api.add_local_data_source(request, query)
                 context_params["enabled"] = False
 
             # check query to see if local data source was selected
-            local_query_url = get_local_query_absolute_url(request)
             for data_source in query.data_sources:
-                if (
-                    data_source["name"] == LOCAL_QUERY_NAME
-                    and data_source["url_query"] == local_query_url
-                ):
+                if query_utils.is_local_data_source(data_source):
                     context_params["selected"] = True
 
             context = {}
@@ -109,12 +104,11 @@ def update_local_data_source(request):
 
         if selected:
             # Local data source is selected, add it to the query as a data source
-            add_local_data_source(request, query)
+            query_api.add_local_data_source(request, query)
         else:
             # Local data source is not selected, remove it from the query
-            local_query_url = get_local_query_absolute_url(request)
             data_source = query_api.get_data_source_by_name_and_url_query(
-                query, LOCAL_QUERY_NAME, local_query_url, request.user
+                query, LOCAL_QUERY_NAME, SERVER_URI, request.user
             )
             query_api.remove_data_source(query, data_source, request.user)
 
@@ -194,35 +188,76 @@ def get_data_source_results(request, query_id, data_source_index, page=1):
     Returns:
 
     """
+
     try:
         # get query
         query = query_api.get_by_id(query_id, request.user)
+        data_source = query.data_sources[int(data_source_index)]
+        json_query = query_utils.serialize_query(query, data_source)
 
-        # send query, and get results from data source
-        results = send_query(request, query, int(data_source_index), page)
+        # If querying the local system
+        if data_source["authentication"]["auth_type"] == "session":
+            if query_utils.is_local_data_source(data_source):
+                results = query_views.execute_local_query(
+                    json_query, page, request
+                )
+                data_list = query_views.format_local_results(results, request)
+            elif oaipmh_utils.is_oai_data_source(data_source):
+                from core_explore_oaipmh_app.rest.query.views import (
+                    execute_oaipmh_query,
+                    format_oaipmh_results,
+                )
 
-        # get pagination information
-        previous_page_number = get_page_number(results["previous"])
-        next_page_number = get_page_number(results["next"])
-        results_count = results["count"]
-        page_count = int(
-            math.ceil(float(results_count) / settings.RESULTS_PER_PAGE)
-        )
+                results = execute_oaipmh_query(json_query, page, request)
+                data_list = format_oaipmh_results(results, request)
+            else:
+                raise ExploreRequestError("Unknown data source.")
+            # Get pagination info for local sources
+            results_count = results.paginator.count
+            page_count = int(
+                math.ceil(float(results_count) / settings.RESULTS_PER_PAGE)
+            )
 
-        # pagination has other pages?
-        has_other_pages = results_count > settings.RESULTS_PER_PAGE
+            try:
+                previous_page_number = results.previous_page_number()
+            except EmptyPage:
+                previous_page_number = None
 
-        # pagination has previous?
-        has_previous = previous_page_number is not None
+            try:
+                next_page_number = results.next_page_number()
+            except EmptyPage:
+                next_page_number = None
 
-        # pagination has next?
-        has_next = (
-            next_page_number is not None and next_page_number <= page_count
-        )
+            has_other_pages = results.has_other_pages()
+            has_previous = results.has_previous()
+            has_next = results.has_next()
+        else:
+            # send query, and get results from data source
+            results = query_utils.send(request, json_query, data_source, page)
+            data_list = results["results"]
+
+            # get pagination information
+            previous_page_number = get_page_number(results["previous"])
+            next_page_number = get_page_number(results["next"])
+            results_count = results["count"]
+            page_count = int(
+                math.ceil(float(results_count) / settings.RESULTS_PER_PAGE)
+            )
+
+            # pagination has other pages?
+            has_other_pages = results_count > settings.RESULTS_PER_PAGE
+
+            # pagination has previous?
+            has_previous = previous_page_number is not None
+
+            # pagination has next?
+            has_next = (
+                next_page_number is not None and next_page_number <= page_count
+            )
 
         # set results in context
         context_data = {
-            "results": results["results"],
+            "results": data_list,
             "query_id": query_id,
             "data_source_index": data_source_index,
             "pagination": {
@@ -259,7 +294,7 @@ def get_data_source_results(request, query_id, data_source_index, page=1):
         # set response with html results
         response_dict = {
             "results": results_html,
-            "nb_results": results["count"],
+            "nb_results": results_count,
         }
         return HttpResponse(
             json.dumps(response_dict), content_type="application/json"
