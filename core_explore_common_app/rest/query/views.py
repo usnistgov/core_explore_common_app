@@ -52,6 +52,7 @@ def execute_local_query(query_data, page, request):
     options = query_data.get("options", {})
     if type(options) is str:
         options = json.loads(options)
+    title = query_data.get("title", None)
     order_by_field = query_data.get("order_by_field", "")
     order_by_field = (
         order_by_field.split(",") if order_by_field else DATA_SORTING_FIELDS
@@ -70,6 +71,9 @@ def execute_local_query(query_data, page, request):
     # update the criteria with visibility information
     if options is not None and VISIBILITY_OPTION in options:
         query_builder.add_visibility_criteria(options[VISIBILITY_OPTION])
+    # update the criteria with title information
+    if title is not None:
+        query_builder.add_title_criteria(title)
 
     # get raw query
     raw_query = query_builder.get_raw_query()

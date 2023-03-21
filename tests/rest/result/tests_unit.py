@@ -60,6 +60,7 @@ class TestExecuteLocalQuery(SimpleTestCase):
         mock_query_data = {
             "query": {},
             "templates": '[{"id": 1}]',
+            "title": "test",
             "options": '{"visibility": "public"}',
         }
         mock_request = create_mock_request(user=mock_user)
