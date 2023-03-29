@@ -18,6 +18,9 @@
             <span class="template-info-name">{{result.template_info.name}}</span>
             {% if result.permission_url and display_edit_button %}
                 <input class="input-permission-url" type="hidden" value="{{result.permission_url}}">
+                <a class="permissions-link-open" href="#">
+                    <i class="fas fa-code" aria-hidden="true"></i>
+                </a>
                 <a class="permissions-link" href="#">
                     <i class="fas fa-pencil-alt permissions-icon edit" aria-hidden="true"></i>
                 </a>

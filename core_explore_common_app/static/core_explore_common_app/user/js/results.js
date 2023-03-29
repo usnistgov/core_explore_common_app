@@ -106,6 +106,19 @@ var getDataPermission = function() {
                                   openEditRecord(target_id,$(editLinkElement));
                                 });
                             }());
+                        // show the open icon
+                        var openLinkElement = inputElement.siblings(".permissions-link-open");
+                        openLinkElement.css('display', "inline");
+                        // create the click event listener
+                            (function () {
+                                var target_id = id;
+                                $(openLinkElement).click(function() {
+                                    var icon = $(openLinkElement).find( "i" ).attr("class");
+                                    // Show loading spinner
+                                    showSpinner($(openLinkElement).find("i"))
+                                    window.location = openRecordUrl + '?id=' + id;
+                                });
+                            }());
                     }
                 }
             },
@@ -130,7 +143,7 @@ openEditRecord = function(id, btnSelector) {
         type : "POST",
         dataType: "json",
         data : {
-            "id": id
+           "id": id
         },
         success: function(data){
             window.location = data.url;
@@ -139,7 +152,7 @@ openEditRecord = function(id, btnSelector) {
             $.notify("Error while opening the edit page.", {style: 'error'});
         }
     }).always(function(data) {
-         // get old button icon
+        // get old button icon
         hideSpinner(btnSelector.find("i"), icon)
     });
 };

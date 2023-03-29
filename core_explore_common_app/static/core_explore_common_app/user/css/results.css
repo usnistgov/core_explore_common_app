@@ -112,7 +112,7 @@ span.expand {
     display: contents !important;
 }
 
-.permissions-link {
+.permissions-link, .permissions-link-open {
     float: right;
     display: none;
 }
