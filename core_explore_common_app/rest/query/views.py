@@ -29,16 +29,14 @@ from core_main_app.utils.query.mongo.query_builder import QueryBuilder
 logger = logging.getLogger(__name__)
 
 
-def execute_local_query(query_data, page, request):
-    """Execute query on local database
+def build_local_query(query_data):
+    """Build a query for local data.
 
     Args:
-        query_data:
-        page:
-        request:
+        query_data (dict): Query to execute locally.
 
     Returns:
-
+        dict: Raw query for local data.
     """
     # get query and templates
     query = query_data.get("query", None)
@@ -53,10 +51,6 @@ def execute_local_query(query_data, page, request):
     if type(options) is str:
         options = json.loads(options)
     title = query_data.get("title", None)
-    order_by_field = query_data.get("order_by_field", "")
-    order_by_field = (
-        order_by_field.split(",") if order_by_field else DATA_SORTING_FIELDS
-    )
 
     # build query builder
     query_builder = QueryBuilder(query, DATA_JSON_FIELD)
@@ -76,12 +70,32 @@ def execute_local_query(query_data, page, request):
         query_builder.add_title_criteria(title)
 
     # get raw query
-    raw_query = query_builder.get_raw_query()
+    return query_builder.get_raw_query()
+
+
+def execute_local_query(query_data, page, request):
+    """Execute query on local database
+
+    Args:
+        query_data:
+        page:
+        request:
+
+    Returns:
+
+    """
+    # build raw query
+    raw_query = build_local_query(query_data)
+    # retrieve order_by_field field
+    order_by_field = query_data.get("order_by_field", None)
+    order_by_field = (
+        order_by_field.split(",") if order_by_field else DATA_SORTING_FIELDS
+    )
     # execute query
     data_list = data_api.execute_json_query(
         raw_query, request.user, order_by_field
     )
-    # paginate results
+    # build result page
     if conf_settings.MONGODB_INDEXING:
         paginator = MongoenginePaginator(data_list, RESULTS_PER_PAGE)
         page = paginator.get_page(page)

@@ -3,8 +3,6 @@
 
 import json
 
-from django.conf import settings as conf_settings
-from django.urls import reverse
 from django.utils import timezone
 from requests import ConnectionError
 
@@ -87,13 +85,6 @@ def create_local_data_source(request):
         authentication=authentication,
         order_by_field=",".join(DATA_SORTING_FIELDS),
     )
-
-    if "core_linked_records_app" in conf_settings.INSTALLED_APPS:
-        data_source["capabilities"] = {
-            "url_pid": request.build_absolute_uri(
-                reverse("core_linked_records_app_query_local")
-            )
-        }
 
     return data_source
 
