@@ -427,18 +427,8 @@ class ContentPersistentQueryView(CommonView):
                     "path": "core_main_app/common/js/backtoprevious.js",
                     "is_raw": True,
                 },
-                {
-                    "path": "core_main_app/libs/highlight/11.0.0/js/highlight.min.js",
-                    "is_raw": False,
-                },
-                {
-                    "path": "core_main_app/libs/highlight/11.0.0/js/init_highlight.js",
-                    "is_raw": False,
-                },
             ],
-            "css": [
-                "core_main_app/libs/highlight/11.0.0/css/atom-one-light.css"
-            ],
+            "css": ["core_main_app/common/css/highlight.css"],
         }
 
         return self.common_render(
