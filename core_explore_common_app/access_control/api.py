@@ -3,6 +3,7 @@
 import logging
 
 from django.contrib.auth.models import User, AnonymousUser
+from django.http import HttpRequest
 
 from core_main_app.access_control.exceptions import AccessControlError
 from core_explore_common_app.components.abstract_persistent_query.models import (
@@ -12,6 +13,7 @@ from core_explore_common_app.components.query.models import Query
 from core_explore_common_app.settings import (
     CAN_ANONYMOUS_ACCESS_PUBLIC_DOCUMENT,
 )
+from core_main_app.access_control import api as access_control_api
 
 logger = logging.getLogger(__name__)
 
@@ -167,3 +169,20 @@ def can_write_persistent_query(func, *args, **kwargs):
     raise AccessControlError(
         "The user doesn't have enough rights to access this query."
     )
+
+
+def can_access_explore_views(func, *args, **kwargs):
+    """Check if user can access explore views
+
+    Args:
+        func:
+        request:
+
+    Returns:
+
+    """
+    request = next((arg for arg in args if isinstance(arg, HttpRequest)), None)
+    access_control_api._check_anonymous_access(
+        request.user if request else None
+    )
+    return func(*args, **kwargs)

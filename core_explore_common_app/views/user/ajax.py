@@ -28,6 +28,10 @@ from core_explore_common_app.constants import LOCAL_QUERY_NAME
 from core_explore_common_app.rest.query import views as query_views
 from core_explore_common_app.utils.oaipmh import oaipmh as oaipmh_utils
 from core_explore_common_app.utils.query import query as query_utils
+from core_explore_common_app.access_control import (
+    api as explore_common_acl_api,
+)
+from core_main_app.access_control.decorators import access_control
 from core_main_app.commons.exceptions import DoesNotExist
 from core_main_app.settings import SERVER_URI
 from core_main_app.utils.pagination.rest_framework_paginator.rest_framework_paginator import (
@@ -36,6 +40,7 @@ from core_main_app.utils.pagination.rest_framework_paginator.rest_framework_pagi
 from core_main_app.views.common.views import CommonView
 
 
+@access_control(explore_common_acl_api.can_access_explore_views)
 def get_local_data_source(request):
     """Ajax method to get the local data source
 
@@ -86,6 +91,7 @@ def get_local_data_source(request):
         )
 
 
+@access_control(explore_common_acl_api.can_access_explore_views)
 def update_local_data_source(request):
     """Ajax method to update query with local data source
 
@@ -120,6 +126,7 @@ def update_local_data_source(request):
         return HttpResponseBadRequest(escape(str(exception)))
 
 
+@access_control(explore_common_acl_api.can_access_explore_views)
 def get_data_sources_html(request):
     """Gets data sources html for results
 
@@ -176,6 +183,7 @@ def get_data_sources_html(request):
         return HttpResponseBadRequest(escape(str(exception)))
 
 
+@access_control(explore_common_acl_api.can_access_explore_views)
 def get_data_source_results(request, query_id, data_source_index, page=1):
     """Gets results from a data source
 
