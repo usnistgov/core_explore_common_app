@@ -109,16 +109,8 @@ var getDataPermission = function() {
                         // show the open icon
                         var openLinkElement = inputElement.siblings(".permissions-link-open");
                         openLinkElement.css('display', "inline");
-                        // create the click event listener
-                            (function () {
-                                var target_id = id;
-                                $(openLinkElement).click(function() {
-                                    var icon = $(openLinkElement).find( "i" ).attr("class");
-                                    // Show loading spinner
-                                    showSpinner($(openLinkElement).find("i"))
-                                    window.location = openRecordUrl + '?id=' + id;
-                                });
-                            }());
+                        // add link to text editor
+                        openLinkElement.attr("href", openRecordUrl + '?id=' + id);
                     }
                 }
             },
