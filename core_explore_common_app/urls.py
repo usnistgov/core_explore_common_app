@@ -23,12 +23,12 @@ urlpatterns = [
         name="core_explore_common_data_sources_html",
     ),
     re_path(
-        r"^data-source-results/(?P<query_id>\w+)/(?P<data_source_index>\w+)/(?P<page>\w+)",
+        r"^data-source-results/(?P<query_id>\w+)/(?P<data_source_index>\w+)/(?P<page>\w+)$",
         user_ajax.get_data_source_results,
         name="core_explore_common_data_source_results",
     ),
     re_path(
-        r"^data-source-results/(?P<query_id>\w+)/(?P<data_source_index>\w+)",
+        r"^data-source-results/(?P<query_id>\w+)/(?P<data_source_index>\w+)$",
         user_ajax.get_data_source_results,
         name="core_explore_common_data_source_results",
     ),

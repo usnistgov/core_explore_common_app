@@ -116,7 +116,8 @@ def format_local_results(results, request):
 
     """
     # Get detail view base url (to be completed with data id)
-    detail_url_base = reverse("core_main_app_data_detail")
+    data_detail_url_base = reverse("core_main_app_data_detail")
+    blob_detail_url_base = reverse("core_main_app_blob_detail")
     url_access_data = reverse(
         "core_explore_common_app_get_result_from_data_id"
     )
@@ -136,7 +137,7 @@ def format_local_results(results, request):
                 data.template
             )
 
-        detail_url = f"{detail_url_base}?id={str(data.id)}"
+        detail_url = f"{data_detail_url_base}?id={str(data.id)}"
 
         # Use the PID link if the app is installed, and a PID is defined for the document
         if pid_utils.auto_set_pid_enabled(
@@ -146,9 +147,15 @@ def format_local_results(results, request):
             # Ensure the PID is set
             detail_url = pid_url if pid_url else detail_url
 
+        # # Get blob attached to data if any
+        blob = data.blob(request.user)
+        # Add Result to list of results
         data_list.append(
             Result(
                 title=data.title,
+                blob_url=f"{blob_detail_url_base}?id={blob.id}"
+                if blob
+                else None,
                 xml_content=data.xml_content,
                 template_info=template_info[template_id],
                 permission_url=f'{url_permission_data}?ids=%5B"{str(data.id)}"%5D',

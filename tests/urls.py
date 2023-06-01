@@ -24,4 +24,9 @@ urlpatterns = [
         result_views.get_result_from_data_id,
         name="core_explore_common_app_get_result_from_data_id",
     ),
+    re_path(
+        r"^blob",
+        common_views.ViewBlob.as_view(),
+        name="core_main_app_blob_detail",
+    ),
 ]

@@ -13,3 +13,4 @@ class Result(models.Model):
     detail_url = models.CharField(blank=True, null=True, max_length=200)
     access_data_url = models.CharField(blank=True, null=True, max_length=200)
     last_modification_date = models.DateTimeField(blank=True, default=None)
+    blob_url = models.CharField(blank=True, null=True, max_length=200)

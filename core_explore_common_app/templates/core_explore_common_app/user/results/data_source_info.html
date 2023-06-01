@@ -15,6 +15,11 @@
                 {{ result.title }}
                 {% endif %}
             </span>
+            {% if result.blob_url %}
+            <a href="{{ result.blob_url }}" class="badge bg-light">
+            file
+            </a>
+            {% endif %}
             <span class="template-info-name">{{result.template_info.name}}</span>
             {% if result.permission_url and display_edit_button %}
                 <input class="input-permission-url" type="hidden" value="{{result.permission_url}}">
