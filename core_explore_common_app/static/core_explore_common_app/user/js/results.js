@@ -141,7 +141,7 @@ openEditRecord = function(id, btnSelector) {
             window.location = data.url;
         },
         error:function(data){
-            $.notify("Error while opening the edit page.", {style: 'error'});
+            $.notify("Error while opening the edit page.", 'danger');
         }
     }).always(function(data) {
         // get old button icon
