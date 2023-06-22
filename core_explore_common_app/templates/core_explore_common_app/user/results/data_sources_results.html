@@ -3,7 +3,7 @@
         <ul class="nav nav-tabs"role="tablist">
             {% for data_source in query.data_sources %}
             <li role="presentation" class="nav-item">
-                <a class="nav-link{% if forloop.counter0 == 0 %} active {% endif %}" href="#results_{{forloop.counter0}}" id="tab_results_{{forloop.counter0}}" aria-controls="profile" role="tab" data-toggle="tab">
+                <a class="nav-link{% if forloop.counter0 == 0 %} active {% endif %}" href="#results_{{forloop.counter0}}" id="tab_results_{{forloop.counter0}}" aria-controls="profile" role="tab" {% if BOOTSTRAP_VERSION == "4.6.2" %}data-toggle{% elif BOOTSTRAP_VERSION == "5.1.3"%}data-bs-toggle{% endif %}="tab">
                     From {{ data_source.name }}
                     <span class="badge badge-secondary" id="results_infos_{{forloop.counter0}}">-</span>
                 </a>

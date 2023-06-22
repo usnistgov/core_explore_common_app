@@ -1,5 +1,5 @@
 <div class="filter">
-    <button id="result-button-filter{{data_source_index}}" class="result-toolbar-button" data-toggle="dropdown" aria-haspopup="true"
+    <button id="result-button-filter{{data_source_index}}" class="result-toolbar-button" {% if BOOTSTRAP_VERSION == "4.6.2" %}data-toggle{% elif BOOTSTRAP_VERSION == "5.1.3"%}data-bs-toggle{% endif %}="dropdown" aria-haspopup="true"
             aria-expanded="false">
         <i class="fas fa-sort-amount-up"></i> Sort
     </button>
