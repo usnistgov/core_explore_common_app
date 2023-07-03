@@ -4,8 +4,10 @@ from unittest.mock import patch, MagicMock
 
 from django.core.paginator import EmptyPage
 from django.test import RequestFactory, SimpleTestCase
+from django.urls import NoReverseMatch
 
 from core_explore_common_app.constants import LOCAL_QUERY_NAME
+from core_explore_common_app.rest.query.views import format_local_results
 from core_explore_common_app.settings import SERVER_URI
 from core_explore_common_app.views.user.ajax import (
     get_local_data_source,
@@ -403,6 +405,91 @@ class TestResultQueryRedirectView(SimpleTestCase):
         # Assert
         self.assertTrue(mock_add_local_data_source.called)
         self.assertTrue(url, "url")
+
+
+class TestFormatLocalResults(SimpleTestCase):
+    """TestFormatLocalResults"""
+
+    def setUp(self):
+        """setUp
+
+        Returns:
+
+        """
+        self.factory = RequestFactory()
+        self.user1 = create_mock_user(user_id="1")
+
+    @patch(
+        "core_explore_common_app.utils.linked_records.pid.auto_set_pid_enabled"
+    )
+    @patch("core_explore_common_app.utils.result.result.get_template_info")
+    @patch("django.urls.reverse")
+    def test_format_local_results_with_blob_url(
+        self, mock_reverse, mock_get_template_info, mock_auto_set_pid_enabled
+    ):
+        """test_format_local_results_with_blob_url
+
+        Returns:
+
+        """
+
+        def _side_effect_blob_url_exists(*args, **kwargs):
+            if args[0] == "core_main_app_blob_detail":
+                return "/blob"
+            else:
+                return ""
+
+        mock_auto_set_pid_enabled.return_value = False
+        request = MagicMock()
+        mock_get_template_info.return_value = MagicMock()
+        mock_data = MagicMock()
+        mock_data.template_id = None
+        mock_data_list = [mock_data]
+
+        results = MagicMock()
+        results.object_list = mock_data_list
+
+        mock_reverse.side_effect = _side_effect_blob_url_exists
+
+        data_list = format_local_results(results, request)
+
+        self.assertTrue("/blob" in data_list[0].blob_url)
+
+    @patch(
+        "core_explore_common_app.utils.linked_records.pid.auto_set_pid_enabled"
+    )
+    @patch("core_explore_common_app.utils.result.result.get_template_info")
+    @patch("django.urls.reverse")
+    def test_format_local_results_without_blob_url(
+        self, mock_reverse, mock_get_template_info, mock_auto_set_pid_enabled
+    ):
+        """test_format_local_results_without_blob_url
+
+        Returns:
+
+        """
+
+        def _side_effect_blob_url_does_not_exists(*args, **kwargs):
+            if args[0] == "core_main_app_blob_detail":
+                raise NoReverseMatch()
+            else:
+                return ""
+
+        mock_auto_set_pid_enabled.return_value = False
+        request = MagicMock()
+        mock_get_template_info.return_value = MagicMock()
+        mock_data = MagicMock()
+        mock_data.template_id = None
+        mock_data_list = [mock_data]
+
+        results = MagicMock()
+        results.object_list = mock_data_list
+
+        mock_reverse.side_effect = _side_effect_blob_url_does_not_exists
+
+        data_list = format_local_results(results, request)
+
+        self.assertIsNone(data_list[0].blob_url)
 
 
 class TestRQRView(ResultQueryRedirectView):

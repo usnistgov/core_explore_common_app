@@ -5,7 +5,7 @@ import logging
 
 import pytz
 from django.conf import settings as conf_settings
-from django.urls import reverse
+from django import urls as django_urls
 
 from core_explore_common_app.components.result.models import Result
 from core_explore_common_app.utils.linked_records import pid as pid_utils
@@ -116,12 +116,19 @@ def format_local_results(results, request):
 
     """
     # Get detail view base url (to be completed with data id)
-    data_detail_url_base = reverse("core_main_app_data_detail")
-    blob_detail_url_base = reverse("core_main_app_blob_detail")
-    url_access_data = reverse(
+    data_detail_url_base = django_urls.reverse("core_main_app_data_detail")
+    try:
+        # Get blob url if blob endpoint available
+        blob_detail_url_base = django_urls.reverse("core_main_app_blob_detail")
+    except django_urls.NoReverseMatch:
+        blob_detail_url_base = None
+
+    url_access_data = django_urls.reverse(
         "core_explore_common_app_get_result_from_data_id"
     )
-    url_permission_data = reverse("core_main_app_rest_data_permissions")
+    url_permission_data = django_urls.reverse(
+        "core_main_app_rest_data_permissions"
+    )
 
     # Template info
     template_info = dict()
@@ -154,7 +161,7 @@ def format_local_results(results, request):
             Result(
                 title=data.title,
                 blob_url=f"{blob_detail_url_base}?id={blob.id}"
-                if blob
+                if blob_detail_url_base and blob
                 else None,
                 xml_content=data.xml_content,
                 template_info=template_info[template_id],
