@@ -33,7 +33,7 @@ from core_explore_common_app.access_control import (
 )
 from core_main_app.access_control.decorators import access_control
 from core_main_app.commons.exceptions import DoesNotExist
-from core_main_app.settings import SERVER_URI
+from core_main_app.settings import SERVER_URI, BOOTSTRAP_VERSION
 from core_main_app.utils.pagination.rest_framework_paginator.rest_framework_paginator import (
     get_page_number,
 )
@@ -159,6 +159,7 @@ def get_data_sources_html(request):
             "sorting_display_type": settings.SORTING_DISPLAY_TYPE,
             "data_displayed_sorting_fields": settings.DATA_DISPLAYED_SORTING_FIELDS,
             "default_date_toggle_value": settings.DEFAULT_DATE_TOGGLE_VALUE,
+            "BOOTSTRAP_VERSION": BOOTSTRAP_VERSION,
         }
         context.update({"query": query})
 
