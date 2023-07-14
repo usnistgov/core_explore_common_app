@@ -1,4 +1,5 @@
 {% load json_date %}
+{% load parse_date %}
 {% load tz %}
 
 <div class="result-line-main-container" name="result">
@@ -32,7 +33,7 @@
                 </a>
             {% endif %}
             <div title="Last modification date" class="data-info-right-container">
-                {{result.last_modification_date|localtime|json_date:"N d Y g:iA"}}
+                {{result.last_modification_date|parse_date|localtime|json_date:"N d Y g:iA"}}
             </div>
         </div>
     </div>
