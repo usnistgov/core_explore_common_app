@@ -6,14 +6,16 @@
 {% block modal_submit_id %}persistent-query-submit{% endblock %}
 {% block modal_extra_content %}
     {% if request.user.is_authenticated %}
-        <div class="form-inline" id="rename_tools">
-          <div class="form-group mb-2">
+        <div class="row g-3 align-items-center">
+          <div class="col-auto">
             Do you want to name this query?
           </div>
-          <div class="form-group mx-sm-3 mb-2">
-            <input type="text" id="persistent-query-name" placeholder="Query name">
+          <div class="col-5">
+              <input type="text" id="persistent-query-name" class="form-control form-control-lg" placeholder="Query name">
           </div>
-          <button id="persistent-query-rename" class="btn btn-secondary" disabled="disabled">Rename</button>
+          <div class="col-auto">
+             <button id="persistent-query-rename" class="btn btn-secondary" disabled="disabled">Rename</button>
+          </div>
         </div>
     {% endif %}
 {% endblock %}
