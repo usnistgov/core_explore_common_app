@@ -10,6 +10,7 @@ from django import urls as django_urls
 from core_explore_common_app.components.result.models import Result
 from core_explore_common_app.utils.linked_records import pid as pid_utils
 from core_explore_common_app.utils.result import result as result_utils
+from core_main_app.access_control.exceptions import AccessControlError
 from core_main_app.commons.constants import DATA_JSON_FIELD
 from core_main_app.commons.exceptions import ApiError
 from core_main_app.components.data import api as data_api
@@ -155,7 +156,11 @@ def format_local_results(results, request):
             detail_url = pid_url if pid_url else detail_url
 
         # # Get blob attached to data if any
-        blob = data.blob(request.user)
+        try:
+            blob = data.blob(request.user)
+        except AccessControlError:
+            blob = None
+
         # Add Result to list of results
         data_list.append(
             Result(

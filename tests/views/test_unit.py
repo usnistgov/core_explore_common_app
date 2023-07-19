@@ -15,6 +15,7 @@ from core_explore_common_app.views.user.ajax import (
     update_local_data_source,
 )
 from core_explore_common_app.views.user.views import ResultQueryRedirectView
+from core_main_app.access_control.exceptions import AccessControlError
 from core_main_app.utils.tests_tools.MockUser import create_mock_user
 from core_main_app.utils.tests_tools.RequestMock import create_mock_request
 
@@ -486,6 +487,36 @@ class TestFormatLocalResults(SimpleTestCase):
         results.object_list = mock_data_list
 
         mock_reverse.side_effect = _side_effect_blob_url_does_not_exists
+
+        data_list = format_local_results(results, request)
+
+        self.assertIsNone(data_list[0].blob_url)
+
+    @patch(
+        "core_explore_common_app.utils.linked_records.pid.auto_set_pid_enabled"
+    )
+    @patch("core_explore_common_app.utils.result.result.get_template_info")
+    @patch("django.urls.reverse")
+    def test_format_local_results_with_acl_error_when_getting_blob(
+        self, mock_reverse, mock_get_template_info, mock_auto_set_pid_enabled
+    ):
+        """test_format_local_results_with_acl_error_when_getting_blob
+
+        Returns:
+
+        """
+        mock_auto_set_pid_enabled.return_value = False
+        request = MagicMock()
+        mock_get_template_info.return_value = MagicMock()
+        mock_data = MagicMock()
+        mock_data.blob.side_effect = AccessControlError("error")
+        mock_data.template_id = None
+        mock_data_list = [mock_data]
+
+        results = MagicMock()
+        results.object_list = mock_data_list
+
+        mock_reverse.return_value = ""
 
         data_list = format_local_results(results, request)
 
