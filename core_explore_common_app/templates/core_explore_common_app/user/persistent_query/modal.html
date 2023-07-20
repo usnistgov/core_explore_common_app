@@ -6,7 +6,7 @@
 {% block modal_submit_id %}persistent-query-submit{% endblock %}
 {% block modal_extra_content %}
     {% if request.user.is_authenticated %}
-        <div class="row g-3 align-items-center">
+        <div class="row g-3 align-items-center" id="rename_tools">
           <div class="col-auto">
             Do you want to name this query?
           </div>
