@@ -148,8 +148,8 @@ def format_local_results(results, request):
         detail_url = f"{data_detail_url_base}?id={str(data.id)}"
 
         # Use the PID link if the app is installed, and a PID is defined for the document
-        if pid_utils.auto_set_pid_enabled(
-            installed_apps=conf_settings.INSTALLED_APPS
+        if pid_utils.is_auto_set_pid_enabled(
+            installed_apps=conf_settings.INSTALLED_APPS, user=request.user
         ):
             pid_url = pid_utils.get_pid_url(data, request)
             # Ensure the PID is set

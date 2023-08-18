@@ -14,16 +14,17 @@ from core_explore_common_app.components.query.models import Query
 from core_explore_common_app.settings import (
     EXPLORE_ADD_DEFAULT_LOCAL_DATA_SOURCE_TO_QUERY,
 )
+from core_explore_common_app.utils.linked_records import pid as pid_utils
 
 
 class ResultsView(View):
     """Results View"""
 
     def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
         self.assets = self._load_assets()
         self.modals = self._load_modals()
-
-        super().__init__(**kwargs)
 
     @staticmethod
     def build_sorting_context_array(query):
@@ -109,23 +110,20 @@ class ResultsView(View):
             )
 
         # Add assets needed for the PID sharing
-        if "core_linked_records_app" in settings.INSTALLED_APPS:
-            from core_linked_records_app.components.pid_settings import (
-                api as pid_settings_api,
+        if pid_utils.is_auto_set_pid_enabled(
+            settings.INSTALLED_APPS, None, use_system_api=True
+        ):
+            assets["js"].extend(
+                [
+                    {
+                        "path": "core_linked_records_app/user/js/sharing/explore.js",
+                        "is_raw": False,
+                    }
+                ]
             )
-
-            if pid_settings_api.get().auto_set_pid:
-                assets["js"].extend(
-                    [
-                        {
-                            "path": "core_linked_records_app/user/js/sharing/explore.js",
-                            "is_raw": False,
-                        }
-                    ]
-                )
-                assets["css"].append(
-                    "core_linked_records_app/user/css/sharing.css"
-                )
+            assets["css"].append(
+                "core_linked_records_app/user/css/sharing.css"
+            )
 
         return assets
 
@@ -148,15 +146,12 @@ class ResultsView(View):
             modals.append("core_file_preview_app/user/file_preview_modal.html")
 
         # Add PID modal
-        if "core_linked_records_app" in settings.INSTALLED_APPS:
-            from core_linked_records_app.components.pid_settings import (
-                api as pid_settings_api,
+        if pid_utils.is_auto_set_pid_enabled(
+            settings.INSTALLED_APPS, None, use_system_api=True
+        ):
+            modals.append(
+                "core_linked_records_app/user/sharing/explore/modal.html"
             )
-
-            if pid_settings_api.get().auto_set_pid:
-                modals.append(
-                    "core_linked_records_app/user/sharing/explore/modal.html"
-                )
 
         return modals
 

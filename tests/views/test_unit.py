@@ -13,8 +13,12 @@ from core_explore_common_app.views.user.ajax import (
     get_local_data_source,
     get_data_source_results,
     update_local_data_source,
+    get_data_sources_html,
 )
-from core_explore_common_app.views.user.views import ResultQueryRedirectView
+from core_explore_common_app.views.user.views import (
+    ResultQueryRedirectView,
+    ResultsView,
+)
 from core_main_app.access_control.exceptions import AccessControlError
 from core_main_app.utils.tests_tools.MockUser import create_mock_user
 from core_main_app.utils.tests_tools.RequestMock import create_mock_request
@@ -370,6 +374,104 @@ class TestGetDataSourceResults(SimpleTestCase):
         self.assertTrue(mock_send_query.called)
 
 
+class TestGetDataSourceHTML(SimpleTestCase):
+    """TestGetDataSourceHTML"""
+
+    def setUp(self):
+        """setUp
+
+        Returns:
+
+        """
+        self.factory = RequestFactory()
+        self.user1 = create_mock_user(user_id="1")
+
+    @patch(
+        "core_explore_common_app.utils.linked_records.pid.is_auto_set_pid_enabled"
+    )
+    @patch("core_explore_common_app.components.query.api.get_by_id")
+    def test_get_local_data_source_html_checks_pid_settings(
+        self, mock_get_by_id, mock_is_auto_set_pid_enabled
+    ):
+        """test_get_local_data_source_html_checks_pid_settings
+
+        Returns:
+
+        """
+        request = self.factory.post("core_explore_common_data_sources_html")
+        request.user = self.user1
+        request.POST = {"query_id": "1"}
+
+        mock_query = MagicMock()
+        mock_query.content = {}
+
+        mock_data_source = {
+            "name": LOCAL_QUERY_NAME,
+            "url_query": SERVER_URI,
+            "query_options": {},
+            "order_by_field": [],
+            "authentication": {"auth_type": "session"},
+        }
+
+        mock_query.data_sources = [mock_data_source]
+
+        mock_get_by_id.return_value = mock_query
+
+        response = get_data_sources_html(
+            request,
+        )
+        self.assertTrue(response.status_code == 200)
+        self.assertTrue(mock_is_auto_set_pid_enabled.called)
+
+
+class TestResultView(SimpleTestCase):
+    """TestResultView"""
+
+    @patch(
+        "core_explore_common_app.utils.linked_records.pid.is_auto_set_pid_enabled"
+    )
+    def test_result_view_adds_linked_records_assets(
+        self, mock_is_auto_set_pid_enabled
+    ):
+        """test_result_view_adds_linked_records_assets
+
+        Returns:
+
+        """
+        # Act
+        assets = ResultsView()._load_assets()
+
+        # Assert
+        self.assertTrue(mock_is_auto_set_pid_enabled.called)
+        self.assertTrue(
+            "core_linked_records_app/user/css/sharing.css" in assets["css"]
+        )
+        self.assertTrue(
+            "core_linked_records_app/user/js/sharing/explore.js"
+            in [x["path"] for x in assets["js"]]
+        )
+
+    @patch(
+        "core_explore_common_app.utils.linked_records.pid.is_auto_set_pid_enabled"
+    )
+    def test_result_view_adds_linked_records_modals(
+        self, mock_is_auto_set_pid_enabled
+    ):
+        """test_result_view_adds_linked_records_modals
+
+        Returns:
+
+        """
+        # Act
+        modals = ResultsView()._load_modals()
+
+        # Assert
+        self.assertTrue(mock_is_auto_set_pid_enabled.called)
+        self.assertTrue(
+            "core_linked_records_app/user/sharing/explore/modal.html" in modals
+        )
+
+
 class TestResultQueryRedirectView(SimpleTestCase):
     """TestResultQueryRedirectView"""
 
@@ -421,7 +523,7 @@ class TestFormatLocalResults(SimpleTestCase):
         self.user1 = create_mock_user(user_id="1")
 
     @patch(
-        "core_explore_common_app.utils.linked_records.pid.auto_set_pid_enabled"
+        "core_explore_common_app.utils.linked_records.pid.is_auto_set_pid_enabled"
     )
     @patch("core_explore_common_app.utils.result.result.get_template_info")
     @patch("django.urls.reverse")
@@ -457,7 +559,7 @@ class TestFormatLocalResults(SimpleTestCase):
         self.assertTrue("/blob" in data_list[0].blob_url)
 
     @patch(
-        "core_explore_common_app.utils.linked_records.pid.auto_set_pid_enabled"
+        "core_explore_common_app.utils.linked_records.pid.is_auto_set_pid_enabled"
     )
     @patch("core_explore_common_app.utils.result.result.get_template_info")
     @patch("django.urls.reverse")
@@ -493,7 +595,7 @@ class TestFormatLocalResults(SimpleTestCase):
         self.assertIsNone(data_list[0].blob_url)
 
     @patch(
-        "core_explore_common_app.utils.linked_records.pid.auto_set_pid_enabled"
+        "core_explore_common_app.utils.linked_records.pid.is_auto_set_pid_enabled"
     )
     @patch("core_explore_common_app.utils.result.result.get_template_info")
     @patch("django.urls.reverse")

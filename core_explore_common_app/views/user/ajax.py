@@ -38,6 +38,7 @@ from core_main_app.utils.pagination.rest_framework_paginator.rest_framework_pagi
     get_page_number,
 )
 from core_main_app.views.common.views import CommonView
+from core_explore_common_app.utils.linked_records import pid as pid_utils
 
 
 @access_control(explore_common_acl_api.can_access_explore_views)
@@ -144,13 +145,9 @@ def get_data_sources_html(request):
         query = query_api.get_by_id(query_id, request.user)
 
         # Check if 'core_linked_records_app' is installed and activated
-        is_linked_records_installed = False
-        if "core_linked_records_app" in settings.INSTALLED_APPS:
-            from core_linked_records_app.components.pid_settings import (
-                api as pid_settings_api,
-            )
-
-            is_linked_records_installed = pid_settings_api.get().auto_set_pid
+        is_linked_records_installed = pid_utils.is_auto_set_pid_enabled(
+            settings.INSTALLED_APPS, request.user
+        )
 
         # set query in context
         context = {

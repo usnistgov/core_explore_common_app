@@ -4,10 +4,11 @@ from unittest import TestCase
 from unittest.mock import patch, MagicMock
 
 from core_explore_common_app.utils.linked_records.pid import (
-    auto_set_pid_enabled,
+    is_auto_set_pid_enabled,
     get_pid_url,
 )
 from core_main_app.commons.exceptions import ApiError
+from core_main_app.utils.tests_tools.MockUser import create_mock_user
 
 
 class TestAutoSetPidEnabled(TestCase):
@@ -26,11 +27,13 @@ class TestAutoSetPidEnabled(TestCase):
         mock_get_response = MagicMock()
         mock_get_response.auto_set_pid = True
         mock_get.return_value = mock_get_response
+        mock_user = create_mock_user("1")
 
         # Act + Assert
         self.assertTrue(
-            auto_set_pid_enabled(
-                installed_apps=["core_main_app", "core_linked_records_app"]
+            is_auto_set_pid_enabled(
+                installed_apps=["core_main_app", "core_linked_records_app"],
+                user=mock_user,
             )
         )
 
@@ -47,11 +50,13 @@ class TestAutoSetPidEnabled(TestCase):
         mock_get_response = MagicMock()
         mock_get_response.auto_set_pid = False
         mock_get.return_value = mock_get_response
+        mock_user = create_mock_user("1")
 
         # Act + Assert
         self.assertFalse(
-            auto_set_pid_enabled(
-                installed_apps=["core_main_app", "core_linked_records_app"]
+            is_auto_set_pid_enabled(
+                installed_apps=["core_main_app", "core_linked_records_app"],
+                user=mock_user,
             )
         )
 
@@ -68,11 +73,37 @@ class TestAutoSetPidEnabled(TestCase):
         mock_get_response = MagicMock()
         mock_get_response.auto_set_pid = False
         mock_get.return_value = mock_get_response
+        mock_user = create_mock_user("1")
 
         # Act + Assert
         self.assertFalse(
-            auto_set_pid_enabled(installed_apps=["core_main_app"])
+            is_auto_set_pid_enabled(
+                installed_apps=["core_main_app"], user=mock_user
+            )
         )
+
+    @patch("core_linked_records_app.system.pid_settings.api.get")
+    def test_auto_set_pid_calls_system_api_when_set(self, mock_system_get):
+        """test_auto_set_pid_calls_system_api_when_set
+
+        Returns:
+
+        """
+        # Arrange
+        mock_get_response = MagicMock()
+        mock_get_response.auto_set_pid = False
+        mock_system_get.return_value = mock_get_response
+        mock_user = create_mock_user("1")
+
+        # Act
+        is_auto_set_pid_enabled(
+            installed_apps=["core_main_app", "core_linked_records_app"],
+            user=mock_user,
+            use_system_api=True,
+        )
+
+        # Assert
+        self.assertTrue(mock_system_get.called)
 
 
 class TestGetPidUrl(TestCase):
