@@ -44,7 +44,7 @@ def get_result_from_data_id(request):
         data = data_api.get_by_id(data_id, request.user)
 
         # Build a Result
-        result = Result(title=data.title, xml_content=data.xml_content)
+        result = Result(title=data.title, content=data.content)
 
         # Serialize results
         return_value = ResultSerializer(result)

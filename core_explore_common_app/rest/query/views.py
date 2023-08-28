@@ -4,8 +4,8 @@ import json
 import logging
 
 import pytz
-from django.conf import settings as conf_settings
 from django import urls as django_urls
+from django.conf import settings as conf_settings
 
 from core_explore_common_app.components.result.models import Result
 from core_explore_common_app.utils.linked_records import pid as pid_utils
@@ -59,7 +59,7 @@ def build_local_query(query_data):
     # update the criteria with templates information
     if templates is not None and len(templates) > 0:
         list_template_ids = [
-            AbstractExecuteLocalQueryView.parse_id(template["id"])
+            AbstractExecuteLocalQueryView.parse_id(template)
             for template in templates
         ]
         query_builder.add_list_criteria("template", list_template_ids)
@@ -168,7 +168,7 @@ def format_local_results(results, request):
                 blob_url=f"{blob_detail_url_base}?id={blob.id}"
                 if blob_detail_url_base and blob
                 else None,
-                xml_content=data.xml_content,
+                content=data.content,
                 template_info=template_info[template_id],
                 permission_url=f'{url_permission_data}?ids=%5B"{str(data.id)}"%5D',
                 detail_url=detail_url,

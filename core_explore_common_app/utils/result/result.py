@@ -24,6 +24,7 @@ def get_template_info(template, include_template_id=True):
         "id": template.id if include_template_id else "",
         "name": template.display_name,
         "hash": template.hash,
+        "format": template.format,
     }
 
     return return_value
@@ -45,7 +46,7 @@ def get_result_from_rest_data_response(response):
     # Build a Result
     result = Result(
         title=result_serialized.data["title"],
-        xml_content=result_serialized.data["xml_content"],
+        content=result_serialized.data["content"],
     )
     # Serialize results
     return_value = ResultSerializer(result)

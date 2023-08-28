@@ -48,7 +48,9 @@ class AbstractQuery(models.Model):
 
     user_id = models.CharField(blank=False, max_length=200)
     content = models.TextField(blank=True, null=True)
-    templates = models.ManyToManyField(Template, blank=True, default=[])
+    templates = models.ManyToManyField(
+        Template, blank=True, default=[], symmetrical=False
+    )
     data_sources = models.JSONField(blank=True, default=list)
     creation_date = models.DateTimeField(auto_now_add=True)
 

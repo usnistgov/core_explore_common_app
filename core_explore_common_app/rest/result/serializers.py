@@ -22,4 +22,4 @@ class ResultBaseSerializer(ModelSerializer):
         """Meta"""
 
         model = Result
-        fields = ("title", "xml_content")
+        fields = ("title", "content")
