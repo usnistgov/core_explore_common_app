@@ -182,7 +182,7 @@ def can_access_explore_views(func, *args, **kwargs):
 
     """
     request = next((arg for arg in args if isinstance(arg, HttpRequest)), None)
-    access_control_api._check_anonymous_access(
+    access_control_api.check_anonymous_access(
         request.user if request else None
     )
     return func(*args, **kwargs)
