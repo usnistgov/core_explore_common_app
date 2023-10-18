@@ -73,6 +73,10 @@ var get_data_source_results = function(result_page, data_source_url) {
             initDisplayDateToggle();
             // permission api calls for the edit button
             getDataPermission();
+            // highlight data content
+            $('.content-result code').each(function(i, block) {
+                hljs.highlightElement(block);
+            });
             // Add leave notice on links from loaded data
             leaveNotice($("#results_" + nb_results_id.match(/(\d+)/)[0] + " a"));
         },
@@ -108,14 +112,19 @@ var getDataPermission = function() {
                             }());
                         // show the open icon
                         var openLinkElement = inputElement.siblings(".permissions-link-open");
+                        var dataFormat = inputElement.siblings(".data-template-format").val();
                         openLinkElement.css('display', "inline");
                         // add link to text editor
-                        openLinkElement.attr("href", openRecordUrl + '?id=' + id);
+                        if(dataFormat == "XSD") openLinkElement.attr("href", openXMLRecordUrl + '?id=' + id);
+                        else if (dataFormat == "XSD") openLinkElement.attr("href", openJSONRecordUrl + '?id=' + id);
+                        else $.notify("Error while initializing the text editor URL page. Unsupported data format.", 'danger');
+
                     }
                 }
             },
             error: function(data) {
-                console.log(data)
+               var errors = $.parseJSON(data.responseText);
+               $.notify(errors.message, "danger");
             }
         })
     });
@@ -209,7 +218,7 @@ showhideResult = function(event) {
     let button = event.target;
     // find the xml container
     $(button).parents('.result-line-main-container')
-        .find(".xmlResult")
+        .find(".content-result")
         .toggle("blind", 500);
 
     if ($(button).attr("class") === "expand") {

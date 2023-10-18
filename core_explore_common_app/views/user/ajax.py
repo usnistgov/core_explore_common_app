@@ -434,7 +434,6 @@ class ContentPersistentQueryView(CommonView):
                     "is_raw": True,
                 },
             ],
-            "css": ["core_main_app/common/css/highlight.css"],
         }
 
         return self.common_render(
