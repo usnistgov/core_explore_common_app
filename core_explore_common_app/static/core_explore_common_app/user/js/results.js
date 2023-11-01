@@ -116,7 +116,7 @@ var getDataPermission = function() {
                         openLinkElement.css('display', "inline");
                         // add link to text editor
                         if(dataFormat == "XSD") openLinkElement.attr("href", openXMLRecordUrl + '?id=' + id);
-                        else if (dataFormat == "XSD") openLinkElement.attr("href", openJSONRecordUrl + '?id=' + id);
+                        else if (dataFormat == "JSON") openLinkElement.attr("href", openJSONRecordUrl + '?id=' + id);
                         else $.notify("Error while initializing the text editor URL page. Unsupported data format.", 'danger');
 
                     }
