@@ -74,7 +74,7 @@ var get_data_source_results = function(result_page, data_source_url) {
             // permission api calls for the edit button
             getDataPermission();
             // highlight data content
-            $('.content-result code').each(function(i, block) {
+            $('.highlight-content code').each(function(i, block) {
                 hljs.highlightElement(block);
             });
             // Add leave notice on links from loaded data
