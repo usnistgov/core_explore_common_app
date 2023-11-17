@@ -73,9 +73,16 @@ var get_data_source_results = function(result_page, data_source_url) {
             initDisplayDateToggle();
             // permission api calls for the edit button
             getDataPermission();
-            // highlight data content
+            // format and highlight data content
             $('.highlight-content code').each(function(i, block) {
-                hljs.highlightElement(block);
+                if ($(".data-template-format").val() == "JSON"){
+                    var jsonContent = JSON.parse($(block).text());
+                    var highlightedContent = hljs.highlight('json',JSON.stringify(jsonContent, null, 8)).value
+                    $(block).html(highlightedContent);
+                }
+                else {
+                    hljs.highlightElement(block);
+                }
             });
             // Add leave notice on links from loaded data
             leaveNotice($("#results_" + nb_results_id.match(/(\d+)/)[0] + " a"));

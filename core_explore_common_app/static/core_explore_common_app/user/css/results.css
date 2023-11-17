@@ -145,3 +145,10 @@ span.expand {
 #data_sources_selector {
     word-break: break-all;
 }
+
+.highlight-content{
+    max-height:160px !important;
+    overflow:auto;
+    font-size: 18px;
+}
+
