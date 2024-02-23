@@ -29,11 +29,9 @@
                 <a class="permissions-link-open mx-2" href="#" {% if BOOTSTRAP_VERSION|first == "4" %}data-toggle{% elif BOOTSTRAP_VERSION|first == "5" %}data-bs-toggle{% endif %}="tooltip" title="Open in text editor">
                     <i class="fas fa-code" aria-hidden="true"></i>
                 </a>
-                {% if result.template_info.format == 'XSD' %}
                 <a class="permissions-link mx-2" href="#" {% if BOOTSTRAP_VERSION|first == "4" %}data-toggle{% elif BOOTSTRAP_VERSION|first == "5" %}data-bs-toggle{% endif %}="tooltip" title="Edit">
                     <i class="fas fa-pencil-alt permissions-icon edit" aria-hidden="true"></i>
                 </a>
-                {% endif %}
             {% endif %}
             <div title="Last modification date" class="data-info-right-container">
                 {{result.last_modification_date|parse_date|localtime|json_date:"N d Y g:iA"}}
