@@ -238,6 +238,14 @@ def get_data_source_results(request, query_id, data_source_index, page=1):
             has_previous = results.has_previous()
             has_next = results.has_next()
         else:
+            # Check template hash
+            if any(
+                not template["hash"]
+                for template in json.loads(json_query["templates"])
+            ):
+                raise ExploreRequestError(
+                    "Some selected templates are missing the hash value."
+                )
             # send query, and get results from data source
             results = query_utils.send(request, json_query, data_source, page)
             data_list = results["results"]

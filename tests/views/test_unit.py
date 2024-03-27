@@ -373,6 +373,150 @@ class TestGetDataSourceResults(SimpleTestCase):
         self.assertTrue(mock_get_by_id.called)
         self.assertTrue(mock_send_query.called)
 
+    @patch("core_explore_common_app.components.query.api.get_by_id")
+    @patch("core_explore_common_app.utils.query.query.serialize_query")
+    @patch("core_explore_common_app.utils.query.query.send")
+    def test_get_oauth2_data_source_results_filtered_by_template_with_hash(
+        self,
+        mock_send_query,
+        mock_serialize_query,
+        mock_get_by_id,
+    ):
+        """test_get_oauth2_data_source_results_filtered_by_template_with_hash
+
+        Returns:
+
+        """
+        request = self.factory.get("core_explore_common_get_local_data_source")
+        request.user = self.user1
+
+        mock_query = MagicMock()
+        mock_query.content = {}
+
+        mock_data_source = {
+            "name": LOCAL_QUERY_NAME,
+            "url_query": SERVER_URI,
+            "query_options": {},
+            "order_by_field": [],
+            "authentication": {"auth_type": "oauth2"},
+        }
+        mock_serialize_query.return_value = {
+            "query": "{}",
+            "templates": '[{"id": 3, "hash": "a12946eda99c065243a9c02632682928e12a32bd"}]',
+            "options": "{}",
+            "order_by_field": [],
+        }
+
+        mock_query.data_sources = [mock_data_source]
+        mock_get_by_id.return_value = mock_query
+
+        mock_send_query.return_value = {
+            "results": [],
+            "previous": None,
+            "next": None,
+            "count": 1,
+        }
+
+        response = get_data_source_results(
+            request, query_id=1, data_source_index=0
+        )
+        self.assertTrue(response.status_code == 200)
+        self.assertTrue(mock_get_by_id.called)
+        self.assertTrue(mock_serialize_query.called)
+        self.assertTrue(mock_send_query.called)
+
+    @patch("core_explore_common_app.components.query.api.get_by_id")
+    @patch("core_explore_common_app.utils.query.query.serialize_query")
+    def test_get_oauth2_data_source_results_filtered_by_template_without_hash_returns_error(
+        self,
+        mock_serialize_query,
+        mock_get_by_id,
+    ):
+        """test_get_oauth2_data_source_results_filtered_by_template_without_hash_returns_error
+
+        Returns:
+
+        """
+        request = self.factory.get("core_explore_common_get_local_data_source")
+        request.user = self.user1
+
+        mock_query = MagicMock()
+        mock_query.content = {}
+
+        mock_data_source = {
+            "name": LOCAL_QUERY_NAME,
+            "url_query": SERVER_URI,
+            "query_options": {},
+            "order_by_field": [],
+            "authentication": {"auth_type": "oauth2"},
+        }
+        mock_serialize_query.return_value = {
+            "query": "{}",
+            "templates": '[{"id": 3, "hash": null}]',
+            "options": "{}",
+            "order_by_field": [],
+        }
+
+        mock_query.data_sources = [mock_data_source]
+        mock_get_by_id.return_value = mock_query
+
+        response = get_data_source_results(
+            request, query_id=1, data_source_index=0
+        )
+        self.assertTrue(response.status_code == 400)
+        self.assertTrue(mock_get_by_id.called)
+        self.assertTrue(mock_serialize_query.called)
+        self.assertEquals(
+            b"An error occurred while sending the query: Some selected templates are missing the hash value.",
+            response.content,
+        )
+
+    @patch("core_explore_common_app.components.query.api.get_by_id")
+    @patch("core_explore_common_app.utils.query.query.serialize_query")
+    def test_get_oauth2_data_source_results_filtered_by_templates_returns_error_when_hash_missing(
+        self,
+        mock_serialize_query,
+        mock_get_by_id,
+    ):
+        """test_get_oauth2_data_source_results_filtered_by_templates_returns_error_when_hash_missing
+
+        Returns:
+
+        """
+        request = self.factory.get("core_explore_common_get_local_data_source")
+        request.user = self.user1
+
+        mock_query = MagicMock()
+        mock_query.content = {}
+
+        mock_data_source = {
+            "name": LOCAL_QUERY_NAME,
+            "url_query": SERVER_URI,
+            "query_options": {},
+            "order_by_field": [],
+            "authentication": {"auth_type": "oauth2"},
+        }
+        mock_serialize_query.return_value = {
+            "query": "{}",
+            "templates": '[{"id": 3, "hash": null},{"id": 2, "hash": "a12946eda99c065243a9c02632682928e12a32bd"}]',
+            "options": "{}",
+            "order_by_field": [],
+        }
+
+        mock_query.data_sources = [mock_data_source]
+        mock_get_by_id.return_value = mock_query
+
+        response = get_data_source_results(
+            request, query_id=1, data_source_index=0
+        )
+        self.assertTrue(response.status_code == 400)
+        self.assertTrue(mock_get_by_id.called)
+        self.assertTrue(mock_serialize_query.called)
+        self.assertEquals(
+            b"An error occurred while sending the query: Some selected templates are missing the hash value.",
+            response.content,
+        )
+
 
 class TestGetDataSourceHTML(SimpleTestCase):
     """TestGetDataSourceHTML"""
