@@ -20,7 +20,12 @@ def send_get_request(url, access_token):
     Returns:
 
     """
-    return requests_utils.send_get_request_with_access_token(url, access_token)
+    headers = {}
+
+    if access_token:
+        headers["Authorization"] = "Bearer " + access_token
+
+    return requests_utils.send_get_request(url, headers=headers)
 
 
 def send_post_request(url, data, access_token, session_time_zone=None):
@@ -35,11 +40,10 @@ def send_post_request(url, data, access_token, session_time_zone=None):
     Returns:
 
     """
-    # Builds header
-    headers = {
-        "Authorization": "Bearer " + access_token,
-        "TZ": str(session_time_zone),
-    }
+    # Builds headers and add authentication if available.
+    headers = {"TZ": str(session_time_zone)}
+    if access_token:
+        headers["Authorization"] = "Bearer " + access_token
     # post request
     return requests_utils.send_post_request(url, data=data, headers=headers)
 

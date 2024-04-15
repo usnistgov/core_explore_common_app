@@ -2,6 +2,7 @@
 """
 
 import json
+from urllib.parse import urljoin
 
 from django.utils import timezone
 from requests import ConnectionError
@@ -31,7 +32,7 @@ def send(request, json_query, data_source, page):
     """
     try:
         # add page number to query url
-        query_url = f"{data_source['url_query']}/?page={page}"
+        query_url = urljoin(data_source["url_query"], f"?page={page}")
         # send query to data source
         if data_source["authentication"]["auth_type"] == "oauth2":
             response = oauth2.send_post_request(
