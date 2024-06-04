@@ -14,10 +14,8 @@ from core_main_app.access_control.exceptions import AccessControlError
 from core_main_app.commons.constants import DATA_JSON_FIELD
 from core_main_app.commons.exceptions import ApiError
 from core_main_app.components.data import api as data_api
-from core_main_app.rest.data.abstract_views import (
-    AbstractExecuteLocalQueryView,
-)
 from core_main_app.settings import DATA_SORTING_FIELDS, RESULTS_PER_PAGE
+from core_main_app.utils.object import parse_property
 from core_main_app.utils.pagination.django_paginator.results_paginator import (
     ResultsPaginator,
 )
@@ -46,11 +44,13 @@ def build_local_query(query_data):
         raise ApiError("Query should be passed in parameter.")
 
     templates = query_data.get("templates", [])
-    if type(templates) is str:
+    if isinstance(templates, str):
         templates = json.loads(templates)
+
     options = query_data.get("options", {})
-    if type(options) is str:
+    if isinstance(options, str):
         options = json.loads(options)
+
     title = query_data.get("title", None)
 
     # build query builder
@@ -59,8 +59,7 @@ def build_local_query(query_data):
     # update the criteria with templates information
     if templates is not None and len(templates) > 0:
         list_template_ids = [
-            AbstractExecuteLocalQueryView.parse_id(template)
-            for template in templates
+            parse_property(template, "id", int) for template in templates
         ]
         query_builder.add_list_criteria("template", list_template_ids)
     # update the criteria with visibility information
