@@ -5,6 +5,7 @@ import logging
 from django import template as django_template
 
 from core_explore_common_app.components.result.models import Result
+from core_main_app.commons.exceptions import DoesNotExist
 from core_main_app.templatetags.data_to_html import (
     _render_data_html,
     _get_template_html_rendering,
@@ -69,6 +70,9 @@ def result_list_html(result):
             )
         # render result content with list rendering template
         return _render_data_html(template_html_rendering, result_content)
+    except DoesNotExist:
+        # no template html rendering found
+        return None
     except Exception as e:
         logger.error(
             "An error occurred while rendering data to html: " + str(e)
