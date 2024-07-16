@@ -1,3 +1,3 @@
-core_linked_records_app==2.10.*
-core_oaipmh_harvester_app==2.10.*
-core_explore_oaipmh_app==2.10.*
+core_linked_records_app==2.11.*
+core_oaipmh_harvester_app==2.11.*
+core_explore_oaipmh_app==2.11.*
