@@ -1,5 +1,5 @@
 // Sorting multi criteria script
-SORTING_SUBMIT_DELAY = 3000;
+
 /**
  * Init the sorting binding structure and the listener
  */

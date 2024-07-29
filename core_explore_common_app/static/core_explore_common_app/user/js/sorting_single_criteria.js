@@ -1,5 +1,4 @@
 // Sorting single criteria script
-SORTING_SUBMIT_DELAY = 0;
 /**
  * Init the sorting binding structure and the listener
  */
