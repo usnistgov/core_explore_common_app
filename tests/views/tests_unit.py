@@ -466,7 +466,7 @@ class TestGetDataSourceResults(SimpleTestCase):
         self.assertTrue(response.status_code == 400)
         self.assertTrue(mock_get_by_id.called)
         self.assertTrue(mock_serialize_query.called)
-        self.assertEquals(
+        self.assertEqual(
             b"An error occurred while sending the query: Some selected templates are missing the hash value.",
             response.content,
         )
@@ -512,7 +512,7 @@ class TestGetDataSourceResults(SimpleTestCase):
         self.assertTrue(response.status_code == 400)
         self.assertTrue(mock_get_by_id.called)
         self.assertTrue(mock_serialize_query.called)
-        self.assertEquals(
+        self.assertEqual(
             b"An error occurred while sending the query: Some selected templates are missing the hash value.",
             response.content,
         )
