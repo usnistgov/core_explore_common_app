@@ -1,5 +1,6 @@
 """ Url router for the Explore Common application
 """
+
 from django.conf.urls import include
 from django.urls import re_path
 

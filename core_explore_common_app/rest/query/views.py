@@ -1,5 +1,6 @@
 """ REST views for the query API
 """
+
 import json
 import logging
 
@@ -164,9 +165,11 @@ def format_local_results(results, request):
         data_list.append(
             Result(
                 title=data.title,
-                blob_url=f"{blob_detail_url_base}?id={blob.id}"
-                if blob_detail_url_base and blob
-                else None,
+                blob_url=(
+                    f"{blob_detail_url_base}?id={blob.id}"
+                    if blob_detail_url_base and blob
+                    else None
+                ),
                 content=data.content,
                 template_info=template_info[template_id],
                 permission_url=f'{url_permission_data}?ids=%5B"{str(data.id)}"%5D',

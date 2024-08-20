@@ -1,5 +1,6 @@
 """ Abstract Persistent Query model
 """
+
 from django.db import models
 
 from core_explore_common_app.components.abstract_query.models import (

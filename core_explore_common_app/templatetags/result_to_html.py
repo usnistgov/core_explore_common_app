@@ -1,5 +1,6 @@
 """ Convert result to HTML
 """
+
 import logging
 
 from django import template as django_template

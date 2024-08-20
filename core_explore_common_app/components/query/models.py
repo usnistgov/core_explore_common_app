@@ -1,6 +1,7 @@
 """
 Query models
 """
+
 from django.core.exceptions import ObjectDoesNotExist
 
 from core_main_app.commons import exceptions

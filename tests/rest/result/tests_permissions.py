@@ -1,5 +1,6 @@
 """ Authentication tests for Query Results REST API
 """
+
 from collections import OrderedDict
 
 from django.test import SimpleTestCase

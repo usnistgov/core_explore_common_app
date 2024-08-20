@@ -1,6 +1,7 @@
 """
 Constants for core explore common app
 """
+
 from django.conf import settings
 
 LOCAL_QUERY_NAME = settings.CUSTOM_NAME

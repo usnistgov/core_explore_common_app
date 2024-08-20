@@ -1,5 +1,6 @@
 """Explore Common result utils
 """
+
 import json
 
 from core_explore_common_app.components.result.models import Result

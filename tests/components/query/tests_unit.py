@@ -1,5 +1,6 @@
 """ Unit Test Query
 """
+
 from unittest.case import TestCase
 from unittest.mock import patch, MagicMock
 

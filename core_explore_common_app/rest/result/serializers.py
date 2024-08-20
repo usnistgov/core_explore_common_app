@@ -1,5 +1,6 @@
 """Result serializers
 """
+
 from rest_framework.serializers import ModelSerializer
 
 from core_explore_common_app.components.result.models import Result

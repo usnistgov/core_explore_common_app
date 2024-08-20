@@ -1,5 +1,6 @@
 """ Unit test views
 """
+
 from unittest.mock import patch, MagicMock
 
 from django.core.paginator import EmptyPage

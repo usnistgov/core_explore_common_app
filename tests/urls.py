@@ -1,5 +1,6 @@
 """ Url router for the core explore common test application
 """
+
 from django.urls import re_path
 
 from core_explore_common_app.rest.result import views as result_views

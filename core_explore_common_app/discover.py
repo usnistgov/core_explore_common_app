@@ -1,5 +1,6 @@
 """ Auto discovery of explore common app.
 """
+
 import logging
 
 from django.core.exceptions import ObjectDoesNotExist

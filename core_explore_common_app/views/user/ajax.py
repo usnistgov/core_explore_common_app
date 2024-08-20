@@ -1,5 +1,6 @@
 """AJAX Explore common user views
 """
+
 import json
 import math
 from abc import ABCMeta, abstractmethod

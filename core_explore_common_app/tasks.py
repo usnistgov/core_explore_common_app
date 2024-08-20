@@ -1,5 +1,6 @@
 """ Explore Common App tasks
 """
+
 import logging
 
 from celery import shared_task

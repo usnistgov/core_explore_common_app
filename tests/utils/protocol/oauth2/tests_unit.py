@@ -1,5 +1,6 @@
 """ Unit tests for `core_explore_common_app.utils.protocols.oauth2` package.
 """
+
 from unittest import TestCase
 from unittest.mock import patch
 
@@ -76,9 +77,9 @@ class TestSendPostRequest(TestCase):
         self.mock_kwargs["access_token"] = "mock_access_token"
         oauth2_protocol.send_post_request(**self.mock_kwargs)
 
-        self.headers[
-            "Authorization"
-        ] = f"Bearer {self.mock_kwargs['access_token']}"
+        self.headers["Authorization"] = (
+            f"Bearer {self.mock_kwargs['access_token']}"
+        )
 
         mock_requests_utils.send_post_request.assert_called_with(
             self.mock_kwargs["url"],

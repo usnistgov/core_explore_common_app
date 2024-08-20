@@ -1,5 +1,6 @@
 """ Explore Common Views
 """
+
 from abc import ABCMeta, abstractmethod
 
 from django.contrib import messages
