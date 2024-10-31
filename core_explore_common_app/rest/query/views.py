@@ -155,7 +155,7 @@ def format_local_results(results, request):
             # Ensure the PID is set
             detail_url = pid_url if pid_url else detail_url
 
-        # # Get blob attached to data if any
+        # Get blob attached to data if any
         try:
             blob = data.blob(request.user)
         except AccessControlError:

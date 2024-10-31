@@ -23,9 +23,9 @@
             </a>
             {% endif %}
             <span class="template-info-name">{{result.template_info.name}}</span>
+            <input class="data-template-format" type="hidden" value="{{result.template_info.format}}">
             {% if result.permission_url and display_edit_button %}
                 <input class="input-permission-url" type="hidden" value="{{result.permission_url}}">
-                <input class="data-template-format" type="hidden" value="{{result.template_info.format}}">
                 <a class="permissions-link-open mx-2" href="#" {% if BOOTSTRAP_VERSION|first == "4" %}data-toggle{% elif BOOTSTRAP_VERSION|first == "5" %}data-bs-toggle{% endif %}="tooltip" title="Open in text editor">
                     <i class="fas fa-code" aria-hidden="true"></i>
                 </a>
