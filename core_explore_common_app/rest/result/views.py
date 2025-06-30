@@ -1,16 +1,20 @@
 """ REST views for the data API
 """
 
+from drf_spectacular.utils import extend_schema
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
-from core_main_app.commons import exceptions
 import core_main_app.components.data.api as data_api
 from core_explore_common_app.components.result.models import Result
 from core_explore_common_app.rest.result.serializers import ResultSerializer
+from core_main_app.commons import exceptions
 
 
+@extend_schema(
+    exclude=True,
+)
 @api_view(["GET"])
 def get_result_from_data_id(request):
     """Retrieve a Result
