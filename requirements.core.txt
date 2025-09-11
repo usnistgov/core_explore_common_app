@@ -1,1 +1,1 @@
-core-main-app==2.17.*
+core-main-app==2.18.*
