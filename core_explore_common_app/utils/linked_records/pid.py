@@ -1,5 +1,4 @@
-""" Utils for PIDs
-"""
+"""Utils for PIDs"""
 
 from core_main_app.commons.exceptions import ApiError
 from logging import getLogger

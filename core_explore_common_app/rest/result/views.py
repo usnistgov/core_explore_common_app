@@ -1,5 +1,4 @@
-""" REST views for the data API
-"""
+"""REST views for the data API"""
 
 from drf_spectacular.utils import extend_schema
 from rest_framework import status

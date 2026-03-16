@@ -1,5 +1,4 @@
-""" Abstract Persistent Query model
-"""
+"""Abstract Persistent Query model"""
 
 from django.db import models
 

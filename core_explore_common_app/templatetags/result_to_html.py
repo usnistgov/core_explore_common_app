@@ -1,5 +1,4 @@
-""" Convert result to HTML
-"""
+"""Convert result to HTML"""
 
 import logging
 

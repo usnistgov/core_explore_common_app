@@ -1,5 +1,4 @@
-""" Auto discovery of explore common app.
-"""
+"""Auto discovery of explore common app."""
 
 import logging
 

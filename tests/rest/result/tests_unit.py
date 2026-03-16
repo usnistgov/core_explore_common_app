@@ -1,2 +1,1 @@
-""" Unit tests for Explore Common REST API
-"""
+"""Unit tests for Explore Common REST API"""

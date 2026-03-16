@@ -1,5 +1,4 @@
-"""Explore Common result utils
-"""
+"""Explore Common result utils"""
 
 import json
 

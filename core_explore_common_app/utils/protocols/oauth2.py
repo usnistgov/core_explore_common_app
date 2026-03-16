@@ -1,5 +1,4 @@
-""" oauth2 utils
-"""
+"""oauth2 utils"""
 
 from core_main_app.utils.requests_utils import requests_utils
 from core_explore_common_app.commons.exceptions import (

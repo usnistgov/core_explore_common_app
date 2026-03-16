@@ -1,5 +1,4 @@
-""" Core Explore Common exceptions
-"""
+"""Core Explore Common exceptions"""
 
 
 class UsernamePasswordRequiredError(Exception):

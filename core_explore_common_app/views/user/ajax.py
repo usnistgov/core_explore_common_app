@@ -1,5 +1,4 @@
-"""AJAX Explore common user views
-"""
+"""AJAX Explore common user views"""
 
 import json
 import math

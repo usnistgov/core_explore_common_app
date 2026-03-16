@@ -1,5 +1,4 @@
-""" Core explore common apps config
-"""
+"""Core explore common apps config"""
 
 import sys
 

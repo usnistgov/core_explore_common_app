@@ -1,5 +1,4 @@
-""" Common tools for protocols
-"""
+"""Common tools for protocols"""
 
 
 def get_url(protocol, address, port):

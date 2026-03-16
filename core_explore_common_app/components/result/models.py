@@ -1,5 +1,4 @@
-"""Result models
-"""
+"""Result models"""
 
 from django.db import models
 

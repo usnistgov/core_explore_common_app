@@ -1,5 +1,4 @@
-""" OAI-PMH utils test class
-"""
+"""OAI-PMH utils test class"""
 
 from unittest import TestCase
 from unittest.mock import patch, MagicMock

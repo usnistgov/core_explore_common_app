@@ -1,5 +1,4 @@
-""" REST views for the query API
-"""
+"""REST views for the query API"""
 
 import json
 import logging

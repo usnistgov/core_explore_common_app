@@ -1,5 +1,4 @@
-""" Authentication tests for Query Results REST API
-"""
+"""Authentication tests for Query Results REST API"""
 
 from collections import OrderedDict
 

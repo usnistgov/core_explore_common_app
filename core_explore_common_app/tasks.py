@@ -1,5 +1,4 @@
-""" Explore Common App tasks
-"""
+"""Explore Common App tasks"""
 
 import logging
 

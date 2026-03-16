@@ -1,5 +1,4 @@
-""" Custom admin site for the Query model
-"""
+"""Custom admin site for the Query model"""
 
 from django.contrib import admin
 

@@ -1,5 +1,4 @@
-""" Query api
-"""
+"""Query api"""
 
 from core_explore_common_app import settings
 from core_explore_common_app.access_control.api import can_read, can_access

@@ -1,5 +1,4 @@
-"""Result serializers
-"""
+"""Result serializers"""
 
 from rest_framework.serializers import ModelSerializer
 

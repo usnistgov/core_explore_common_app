@@ -1,5 +1,4 @@
-""" Explore Common Views
-"""
+"""Explore Common Views"""
 
 from abc import ABCMeta, abstractmethod
 

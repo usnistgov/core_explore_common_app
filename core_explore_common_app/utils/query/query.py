@@ -1,5 +1,4 @@
-"""Explore Common query utils
-"""
+"""Explore Common query utils"""
 
 import json
 from urllib.parse import urljoin

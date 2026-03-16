@@ -1,5 +1,4 @@
-""" Unit tests for `core_explore_common_app.utils.protocols.oauth2` package.
-"""
+"""Unit tests for `core_explore_common_app.utils.protocols.oauth2` package."""
 
 from unittest import TestCase
 from unittest.mock import patch

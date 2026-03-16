@@ -1,5 +1,4 @@
-""" Url router for the core explore common test application
-"""
+"""Url router for the core explore common test application"""
 
 from django.urls import re_path
 

@@ -1,5 +1,4 @@
-""" Unit tests for local query views
-"""
+"""Unit tests for local query views"""
 
 from unittest.mock import patch, MagicMock
 
